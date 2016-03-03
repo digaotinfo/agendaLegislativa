@@ -1,0 +1,116 @@
+	<?php
+if ($this->Session->read('Auth.User')):
+	if ($userAdmin < 4):
+		?>
+		<ul id="nav-mobile" class="side-nav fixed collapsible collapsible-accordion">
+			<li class="logo">
+				<a href="<?=$this->Html->url(array(
+											'controller' => 'index',
+											'action' => 'index',
+											'admin' => true
+										));?>">
+					<?php echo $this->Html->image('header_logo-abear.png', array('class' => 'responsive-img'));?>
+				</a>
+			</li>
+			<li class="bold no-padding">
+
+				<a class="collapsible-header waves-effect waves-teal <?php if($this->name == 'Index'|| $this->name == 'Pls' || $this->name == 'NotasTecnicas' || ( ($this->name == 'Fluxogramas') && ($this->action == 'admin_fluxoGeralTipo') ) ) echo 'active'?>">
+					Proposições
+					<i class="mdi-navigation-arrow-drop-down right"></i>
+				</a>
+				<div class="collapsible-body">
+					<ul>
+						<li class="<?php if($this->name == 'Index' || $this->name == 'Pls') echo 'active'?>"><?=$this->Html->link('Listar Todas', array('controller' => 'index', 'action' => 'index'))?></li>
+						<li class="<?php if($this->name == 'Fluxogramas' || $this->action == 'admin_fluxoGeralTipo' || $this->action == 'admin_fluxoGeralVerGeral') echo 'active'?>"><?=$this->Html->link('Fluxograma', array('controller' => 'Fluxogramas', 'action' => 'admin_fluxoGeralTipo'))?></li>
+						<li class="<?php if($this->name == 'NotasTecnicas') echo 'active'?>"><?=$this->Html->link('Notas Técnicas', array('controller' => 'notasTecnicas', 'action' => 'index'))?></li>
+					</ul>
+				</div>
+
+			</li>
+			<li class="bold no-padding <?php if($this->name == 'Relatorios') echo 'active'?> ">
+
+				<a class="collapsible-header waves-effect waves-teal <?php if($this->name == 'Relatorios') echo 'active'?>">
+					Relatórios
+					<i class="mdi-navigation-arrow-drop-down right"></i>
+				</a>
+				<div class="collapsible-body">
+					<ul>
+						<li class="<?php if($this->params['action'] == 'admin_index' && $this->name == 'Relatorios') echo 'active'?>"><?=$this->Html->link('Gerar Relatório', array('controller' => 'Relatorios', 'action' => 'index', 'admin' => true))?></li>
+						<li class="<?php if($this->params['action'] == 'admin_historicoRelatorio' && $this->name == 'Relatorios') echo 'active'?>"><?=$this->Html->link('Histórico Relatórios', array('controller' => 'Relatorios', 'action' => 'historicoRelatorio', 'admin' => true))?></li>
+					</ul>
+				</div>
+
+			</li>
+
+
+
+			<li class="bold <?php if($this->name == 'Arquivos') echo 'active'?>">
+				<a href="<?=$this->Html->url(array(
+												'controller' => 'arquivos',
+												'action' => 'index',
+												'admin' => true
+											));?>" class="waves-effect waves-teal">
+												Outros Arquivos
+				</a>
+			</li>
+			<?php
+			if ($userAdmin == 1){
+				?>
+				<li class="bold no-padding">
+					<?php
+						$active = '';
+						if(
+							$this->name == 'User'
+							|| $this->name == 'Empresas'
+							|| $this->name == 'PlTypes'
+							|| $this->name == 'StatusTypes'
+							|| $this->name == 'Temas'
+							|| $this->name == 'AutorRelators'
+							|| $this->name == 'AtualizacaoExternas'
+							// || (($this->name == 'Fluxogramas') && ($this->action == 'admin_fluxogramaTipos' || $this->action == 'admin_fluxoEtapasList' || $this->action == 'admin_fluxoEtapasEdit'))
+						){
+							$active = 'active';
+						}
+					?>
+					<a class="collapsible-header waves-effect waves-teal <?=$active?>">
+						Administrativo
+						<i class="mdi-navigation-arrow-drop-down right"></i>
+					</a>
+					<div class="collapsible-body">
+						<ul>
+							<li class="<?php if($this->params['action'] == 'admin_edit' && $this->name == 'User') echo 'active'?>"><?=$this->Html->link('Meus Dados', array('controller' => 'User', 'action' => 'edit', $current_user['id']))?></li>
+
+							<li class="<?php if(($this->params['action'] == 'admin_index' || $this->params['action'] == 'admin_add') && $this->name == 'User') echo 'active'?>"><?=$this->Html->link('Usuários', array('controller' => 'User', 'action' => 'index'))?></li>
+							<li class="<?php if(($this->params['action'] == 'admin_log') && $this->name == 'User') echo 'active'?>"><?=$this->Html->link('Log de acesso', array('controller' => 'User', 'action' => 'log'))?></li>
+
+							<li class="<?php if($this->name == 'Tarefas') echo 'active'?>"><?=$this->Html->link('Tarefas', array('controller' => 'tarefas', 'action' => 'index', 'admin' => true))?></li>
+							<li class="<?php if($this->name == 'Empresas') echo 'active'?>"><?=$this->Html->link('Empresas', array('controller' => 'empresas', 'action' => 'index'))?></li>
+							<li class="<?php if($this->name == 'PlTypes') echo 'active'?>"><?=$this->Html->link('Tipos', array('controller' => 'PlTypes', 'action' => 'index', 'admin' => true))?></li>
+							<li class="<?php if($this->name == 'StatusTypes') echo 'active'?>"><?=$this->Html->link('Status', array('controller' => 'StatusTypes', 'action' => 'index', 'admin' => true))?></li>
+							<li class="<?php if($this->name == 'AutorRelators') echo 'active'?>"><?=$this->Html->link('Autor/Relator', array('controller' => 'AutorRelators', 'action' => 'index', 'admin' => true))?></li>
+							<li class="<?php if($this->name == 'Temas') echo 'active'?>"><?=$this->Html->link('Temas', array('controller' => 'Temas', 'action' => 'index', 'admin' => true))?></li>
+							<li class="<?php if($this->name == 'AtualizacaoExternaPls') echo 'active'?>"><?=$this->Html->link('Externas', array('controller' => 'AtualizacaoExternaPls', 'action' => 'index', 'admin' => true))?></li>
+							<!-- <li class="<?php if( ($this->name == 'Fluxogramas') && ($this->action == 'admin_fluxogramaTipos' || $this->action == 'admin_fluxoEtapasList' || $this->action == 'admin_fluxoEtapasEdit') ) echo 'active'?>"><?=$this->Html->link('Tipos Fluxo', array('controller' => 'Fluxogramas', 'action' => 'fluxogramaTipos', 'admin' => true))?></li> -->
+						</ul>
+					</div>
+
+				</li>
+				<?php
+			} else {
+				?>
+				<li class="bold <?php if($this->name == 'User') echo 'active'?> ">
+
+					<?=$this->Html->link('Meus Dados', array('controller' => 'user', 'action' => 'edit', $current_user['id']))?>
+
+				</li>
+				<?php
+			}
+			?>
+			<li class="bold">
+				<?=$this->Html->link('Sair', array('controller' => 'user', 'action' => 'logout'), array('class' => 'waves-effect waves-teal'))?>
+			</li>
+		</ul>
+		<?php
+	endif;
+endif;
+?>

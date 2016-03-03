@@ -1,0 +1,238 @@
+<?php
+
+App::uses('AppController', 'Controller');
+
+class IndexController extends AppController {
+	public $name 	= 'Index';
+	public $helpers = array('Html', 'Session', 'Paginator', 'Time', 'Text');
+	public $uses 	= array('User', 'Pl', 'StatusType');
+
+	public $paginate = array(
+		'limit' => 10,
+	);
+
+
+	function beforeFilter() {
+		parent::beforeFilter();
+	}
+
+	public function index() {
+
+	}
+	public function login() {
+	    if ($this->request->is('post')) {
+	        if ($this->Auth->login()) {
+	            return $this->redirect($this->Auth->redirectUrl());
+	        } else {
+	            $this->Session->setFlash(
+	                __('Username or password is incorrect'),
+	                'default',
+	                array(),
+	                'auth'
+	            );
+	        }
+	    }
+	}
+
+
+	///// ADMIN
+	//////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////
+
+	public function admin_index($documentos = null) {
+		// $campo_de_busca = '';
+		$model = 'Pl';
+		$this->set('model', $model);
+		$this->paginate = array(
+			'fields' => array('*'),
+			'conditions' => array(
+				'Pl.ativo' => 1,
+				'Pl.delete' => 0,
+			),
+			'limit' => 10,
+			'order' => array(
+				'Pl.id' => 'DESC'
+			),
+			'recursive' => 2,
+			);
+
+
+		// echo "<pre>";
+		// print_r($this->request);
+		// echo "</pre>";
+		// die();
+
+
+		// if ($this->request->is('post')) {
+		if ($this->request->is('get')) {
+
+			if (!empty($this->request->query['novabusca'])) {
+				if (!empty($this->request->query['search'])) {
+					$this->redirect(
+						'/?search='. $this->request->query['search'] .'&tipo='. $this->request->query['tipo']
+					);
+
+				} else {
+					$this->redirect(
+						'/'
+					);
+
+				}
+			}
+
+			if (!empty($this->request->query['search'])) {
+				// $campo = trim($this->request->data['Pl']['search']);
+				$tipo = $this->request->query['tipo'];
+				$campo = trim($this->request->query['search']);
+				$this->set('busca', $campo);
+
+				$sql_against = "";
+				foreach (explode(" ", $campo) as $palavra) {
+					if (strlen(trim($palavra)) > 0) {
+						if (preg_match('/"/',$palavra)) {
+							$palavra = str_replace('"', '', $palavra);
+							$sql_against = $sql_against . ''. $palavra .' ';
+
+						} else {
+							$sql_against = $sql_against . ''. $palavra .'* ';
+
+						}
+					}
+				}
+				// $sql_against = $campo;
+				$sql_against = rtrim($sql_against, ' ');
+				// echo "<hr>";
+				// print_r($sql_against);
+				// die();
+				$siglaBusca = $campo;
+				if ($tipo == 2) {
+					if(strlen($siglaBusca) >= 4){
+						$resultado_busca = $this->$model->query("
+							SELECT DISTINCT
+								Pl.id
+							FROM
+								tb_pls as Pl
+								left join tb_o_que_e as OqueE on (OqueE.pl_id = Pl.id)
+								left join tb_situacao as Situacao on (Situacao.pl_id = Pl.id)
+								left join tb_nossa_posicao as NossaPosicao on (NossaPosicao.pl_id = Pl.id)
+								left join tb_foco as Foco on (Foco.pl_id = Pl.id)
+								left join tb_autor_relator as Autor on (Autor.id = Pl.autor_id )
+								left join tb_autor_relator as Relator on (Relator.id = Pl.relator_id )
+
+							WHERE
+								Pl.ativo = 1
+								AND (
+									MATCH(Pl.numero_da_pl) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(OqueE.txt, OqueE.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Situacao.txt, Situacao.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(NossaPosicao.txt, NossaPosicao.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Foco.txt, Foco.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Autor.nome) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Relator.nome) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+								)
+						");
+						if (!empty($resultado_busca)) {
+
+							$ids = '';
+							foreach ($resultado_busca as $pl_id) {
+								$ids = $ids . $pl_id['Pl']['id'] . ',';
+							}
+							$ids = rtrim($ids, ',');
+
+
+							$this->paginate['conditions'] = array(
+																'Pl.id in ('. $ids .')'
+															);
+
+
+							$pls = $this->paginate($model);
+							$this->set('pls', $pls);
+						}
+					// <<< strlen($siglaBusca) >= 4
+					}else{
+
+						//>>> strlen($siglaBusca) < 4
+						$resultado_busca = $this->$model->query("
+							SELECT DISTINCT
+								Pl.id
+							FROM
+								tb_pls as Pl
+								left join tb_o_que_e as OqueE on (OqueE.pl_id = Pl.id)
+								left join tb_situacao as Situacao on (Situacao.pl_id = Pl.id)
+								left join tb_nossa_posicao as NossaPosicao on (NossaPosicao.pl_id = Pl.id)
+								left join tb_foco as Foco on (Foco.pl_id = Pl.id)
+								left join tb_pl_types as PlType on (PlType.id = Pl.tipo_id)
+								left join tb_autor_relator as Autor on (Autor.id = Pl.autor_id )
+								left join tb_autor_relator as Relator on (Relator.id = Pl.relator_id )
+
+							WHERE
+								Pl.ativo = 1
+								AND (
+									Pl.numero_da_pl Like '%".$campo."%'
+									OR Autor.nome Like '%".$campo."%'
+									OR Relator.nome Like '%".$campo."%'
+									OR OqueE.txt Like '%".$campo."%'
+									OR OqueE.arquivo Like '%".$campo."%'
+									OR Situacao.txt Like '%".$campo."%'
+									OR Situacao.arquivo Like '%".$campo."%'
+									OR NossaPosicao.txt Like '%".$campo."%'
+									OR NossaPosicao.arquivo Like '%".$campo."%'
+									OR Foco.txt Like '%".$campo."%'
+									OR Foco.arquivo Like '%".$campo."%'
+									OR AutorRelator.nome Like '%".$campo."%'
+									OR PlType.tipo Like '%".$campo."%'
+								)
+						");
+
+
+						if (!empty($resultado_busca)) {
+
+							$ids = '';
+							foreach ($resultado_busca as $pl_id) {
+								$ids = $ids . $pl_id['Pl']['id'] . ',';
+							}
+							$ids = rtrim($ids, ',');
+
+
+							$this->paginate['conditions'] = array(
+																'Pl.id in ('. $ids .')'
+															);
+
+
+							$pls = $this->paginate($model);
+							$this->set('pls', $pls);
+						}
+
+					}
+					//<<< strlen($siglaBusca) < 4
+				} else {
+					$this->paginate['conditions'] = array(
+														'Pl.numero_da_pl like "%'. $campo .'%"'
+													);
+					$pls = $this->paginate($model);
+
+					$this->set('pls', $pls);
+					// echo "AQUI 0";
+				}
+
+			} else {
+				// echo "AQUI 1";
+				$pls = $this->paginate($model);
+				// $this->set('pls', $pls);
+			}
+
+
+		} else {
+			// echo "AQUI 2";
+			$pls = $this->paginate($model);
+			// $this->set('pls', $pls);
+		}
+		// echo "<pre>";
+		// print_r($pls);
+		// echo "</pre>";
+		// die();
+		$this->set('pls', $pls);
+	}
+
+}

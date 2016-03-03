@@ -1,0 +1,458 @@
+<?
+CakePlugin::load('MeioUpload');
+App::uses('CakeEmail', 'Network/Email');
+// App::uses('Sanitize', 'Utility');
+class PlsController extends AppController{
+ 	var $name = "Pls";
+	public $helpers = array('Html', 'Session', 'Form', 'Time', 'Js');
+	public $uses = array('Pl', 'Foco', 'OqueE', 'OndeEsta', 'NossaPosicao', 'StatusType', 'User', 'LogAtualizacaoPl', 'PlType', 'PlSituacao');
+	var $scaffold = 'admin';
+	// var $transformUrl = array('url_amigavel' => 'numero_da_pl');
+
+	var $paginate = array(
+	                        'limit'  => 10,
+                            'order' => array(
+                                'id' => 'DESC'
+                            )
+                        );
+
+    //// Nescessário ter o beforeFilter
+	function beforeFilter() {
+		parent::beforeFilter();
+
+
+		/// Descomentar verificação abaixo apenas quando utilizar Scaffold
+		/*
+		if (isset($this->params['prefix']) && $this->params['prefix'] == 'admin') {
+			$showThisFields	=	array(
+                                    'campo'	  	=> 'Nome do Campo',
+                                    ...
+                                 );
+			$showImage	=	array(
+								''
+							);
+
+			$this->set('showFields', $showThisFields);
+			$this->set('fieldToImg', $showImage);
+
+
+			$this->set('schemaTable', $this->NomeDaModel->schema());
+		}
+		*/
+	}
+
+
+    public function admin_add(){
+        $model = 'Pl';
+		$this->set('model', $model);
+        $tipos = $this->PlType->find('list', array(
+            'fields' => array(
+                'id',
+                'tipo'
+            ),
+            'order' => array(
+                'id' => 'DESC'
+            )
+        ));
+        $this->set('tipos', $tipos);
+        $situacao = $this->PlSituacao->find('list', array(
+            'fields' => array(
+                'id',
+                'situacao'
+            ),
+            'order' => array(
+                'id' => 'DESC'
+            )
+        ));
+        $this->set('situacao', $situacao);
+        $nossaPosicao = $this->StatusType->find('list', array(
+            'fields' => array(
+                'id',
+                'status_name'
+            )
+        ));
+        $this->set('nossaPosicao', $nossaPosicao);
+
+        $result = $this->$model->find('all', array(
+            'fields' => array(
+                'autor', 'relator'
+            )
+        ));
+        $this->set('registros', $result);
+
+		/// Verifica se houve post para salvar as informações
+		if ($this->request->is('post')){
+
+			/// Seta a model com as informações que vieram do post
+			$this->$model->set($this->request->data);
+
+			/// Verifica se a Model está válida.
+			/// OBS.: caso estejamos utilizando algum validate da Model, o Cake irá printar o que há de errado no ELSE deste script
+			if($this->$model->validates()){
+                // print_r($this->request->data);
+                // die();
+
+				/// Gravando dados na Model Pai
+                $pl_salva = $this->$model->save($this->request->data);
+	            if (!empty($pl_salva)){
+                    /// Recuperando último ID da Model principal
+                    $novo_id = $this->$model->getLastInsertId();
+
+                    /// Array com o nome das outras Models Relacionadas
+                    $a_models = array("Foco", "OqueE", "OndeEsta", "NossaPosicao");
+                    foreach ($a_models as $model_r) {
+
+                        /// Setando o ID da Model Principal para criar o relacionamento
+                        $this->request->data[$model_r]['pl_id'] = $novo_id;
+                        /////*********************///////
+                        ///====>>> setar campo da imagem aqui
+                        /////*********************///////
+
+                        /// Salvando a Model Relacionada com o ID da Principal
+                        $this->$model->$model_r->save($this->request->data);
+                    }
+                }
+
+
+				// Inserindo um alerta de sucesso na sessão ativa para ser mostrado ao usuário
+	            $this->Session->setFlash('PL adicionada com sucesso!');
+
+            	// Redirecionando o usuário para a listagem dos registros
+                $this->redirect(array('controller' => 'index', 'action' => 'index', 'admin' => true));
+
+            } else {
+
+				/// Listando os erros que a Model está informando.
+				$erros = $this->$model->validationErrors;
+				$mensagem_erros = '';
+				foreach ($erros as $erro):
+					$index_name = key($erro);
+					$mensagem_erros .= '&bull; ' . $erro[$index_name] . '</br>';
+				endforeach;
+
+				 /// Colocando os erros na sessão ativa para ser mostrado ao usuário
+				$this->Session->setFlash($mensagem_erros, 'default', array('class' => 'alert'));
+
+			}
+        }
+    }
+
+    public function admin_ver_completo($id=null){
+        $model = 'Pl';
+        $this->set('model', $model);
+
+        $tipos = $this->PlType->find('list', array(
+            'fields' => array(
+                'id',
+                'tipo'
+            ),
+            'order' => array(
+                'id' => 'DESC'
+            )
+        ));
+        $this->set('tipos', $tipos);
+
+        $situacao = $this->PlSituacao->find('list', array(
+            'fields' => array(
+                'id',
+                'situacao'
+            ),
+            'order' => array(
+                'id' => 'DESC'
+            )
+        ));
+        $this->set('situacao', $situacao);
+        /// Array com o nome das outras Models Relacionadas
+        $a_models = array("Pl", "Foco", "OqueE", "OndeEsta", "NossaPosicao");
+
+    	/// Verifica se esse ID existe ou não
+		$this->$model->id = $id;
+        if (!$this->$model->exists()) {
+            throw new NotFoundException(__('Registro inexistente'));
+        }
+
+
+        if ($this->request->is('post') || $this->request->is('put')){
+
+			/// Seta a model com as informações que vieram do post
+			$this->$model->set($this->request->data);
+
+			/// Verifica se a Model está válida.
+			/// OBS.: caso estejamos utilizando algum validate da Model, o Cake irá printar o que há de errado no ELSE deste script
+			if($this->$model->validates()):
+                foreach ($a_models as $model_r) {
+                    if(!empty($this->request->data[$model_r])):
+                        /// Setando o ID da Model Principal para criar o relacionamento
+                        $this->request->data[$model_r]['pl_id'] = $id;
+                        if(!empty($this->request->data[$model_r]['txt'])){
+                            $this->request->data[$model_r]['txt'] = $this->request->data[$model_r]['txt'];
+                        }
+                        if(!empty($this->request->data[$model_r]['arquivo'])){
+                            $this->request->data[$model_r]['arquivo'] = $this->request->data[$model_r]['arquivo'];
+                        }
+                        $this->request->data[$model_r]['created'] = date("Y-m-d H:i:s");
+                        $this->request->data[$model_r]['modified'] = date("Y-m-d H:i:s");
+
+                        /// Salvando a Model Relacionada com o ID da Principal
+                        if($model_r == 'Pl'){
+                            $this->request->data[$model_r]['tipo_id'] = $this->request->data[$model_r]['tipo_id'];
+                            $this->$model_r->save($this->request->data);
+                        }else{
+                            $this->$model->$model_r->save($this->request->data);
+                        }
+                    endif;
+                }
+
+
+                // $this->redirect(array('action' => 'ver_completo', 'admin' => true, $id));
+
+            endif;
+        }
+        $this->request->data = $this->$model->read(null, $id);
+
+    }
+
+    public function admin_ver_completo_edit_block($pl_id=null, $nameModel=null, $id=null){
+        $model = $nameModel;
+        $this->autoRender = false;
+    	/// Verifica se esse ID existe ou não
+        if( ($nameModel == 'Foco') || ($nameModel == 'OqueE') ){
+		    $this->$model->id = $id;
+            $limit = 1;
+            // $conditions = array('limit' => 1);
+        }else{
+            $this->request->data[$model]['pl_id'] = $pl_id;
+            $limit = 5;
+        }
+
+        if ($this->request->is('post') || $this->request->is('put')){
+			/// Seta a model com as informações que vieram do post
+			$this->$model->set($this->request->data);
+
+			if($this->$model->validates()):
+                if(!empty($this->request->data[$model]['arquivo'])){
+                    $this->request->data[$model]['arquivo'] = 'uploads/arquivos_PLs/'.$this->request->data[$model]['arquivo'];
+                }
+                if($this->$model->save($this->request->data)){
+                    // >>> LOG
+                    if( ($nameModel == 'Foco') || ($nameModel == 'OqueE') ){
+                        $existe_este_log = $this->LogAtualizacaoPl->find('first', array(
+                            'conditions' => array(
+                                'pl_id' => $pl_id,
+                                'nome_da_model' => $nameModel,
+                                'model_id'  => $id
+                            )
+                        ));
+
+                        if(!empty($existe_este_log)){
+                            $this->LogAtualizacaoPl->id = $existe_este_log['LogAtualizacaoPl']['id'];
+                        }
+
+                        $this->request->data['LogAtualizacaoPl']['pl_id'] = $pl_id;
+                        $this->request->data['LogAtualizacaoPl']['usuario_id'] = $this->Session->read('Auth.User.id');
+                        $this->request->data['LogAtualizacaoPl']['model_id'] = $id;
+                        $this->request->data['LogAtualizacaoPl']['nome_da_model'] = $nameModel;
+                        $this->request->data['LogAtualizacaoPl']['txt'] = $this->request->data[$nameModel]['txt'];
+
+                        $this->LogAtualizacaoPl->save($this->request->data);
+
+                    }else{
+                        $this->request->data['LogAtualizacaoPl']['pl_id'] = $pl_id;
+                        $this->request->data['LogAtualizacaoPl']['usuario_id'] = $this->Session->read('Auth.User.id');
+                        $this->request->data['LogAtualizacaoPl']['model_id'] = $this->$model->getLastInsertId();
+                        $this->request->data['LogAtualizacaoPl']['nome_da_model'] = $nameModel;
+                        $this->request->data['LogAtualizacaoPl']['txt'] = $this->request->data[$nameModel]['txt'];
+                        if(!empty($this->request->data[$nameModel]['arquivo'])):
+                            $this->request->data['LogAtualizacaoPl']['arquivo'] = 'uploads/arquivos_PLs/'.$this->request->data[$nameModel]['arquivo'];
+                        endif;
+
+                        $this->LogAtualizacaoPl->save($this->request->data);
+                    }
+                    // <<< LOG
+
+                    $result = $this->$model->find('all', array(
+                        'fields' => array($model.'.id', $model.'.txt', $model.'.modified', $model.'.arquivo'),
+                        'conditions' => array(
+                            'pl_id' => $pl_id
+                        ),
+                        'limit' => $limit,
+                        'order' => array('id' => 'DESC')
+                    ));
+
+                    return json_encode($result);
+                    die();
+                }else{
+                    echo false;
+                    die();
+                }
+            endif;
+        }
+        $this->request->data = $this->$model->read(null, $id);
+
+    }
+
+    public function admin_autocomplete(){
+        $model = 'Pl';
+        $result = $this->$model->find('all', array(
+            'fields' => array(
+                $model.'.autor', $model.'.relator'
+            )
+        ));
+
+        $a_registros['Pl'] = array();
+        foreach($result as $registro){
+            array_push($a_registros['Pl'], array($registro['Pl']['autor']));
+            array_push($a_registros['Pl'], array($registro['Pl']['relator']));
+        }
+
+        $uniqueRegistro = array_unique($a_registros);
+        echo json_encode($uniqueRegistro);
+    }
+
+    public function admin_enviar_atualizacao_pl_por_email($pl_id=null, $nameModel=null, $idNaModel=null, $nameBlock=null){
+        $this->autoRender = false;
+        $model = $nameModel;
+        $pl = $this->Pl->find('first', array(
+            'conditions' => array(
+                'Pl.id' => $pl_id
+            )
+        ));
+
+        $txtAlterado = $this->$model->find('first', array(
+            'conditions' => array(
+                $model.'.id' => $idNaModel
+            )
+        ));
+
+        $allUsers = $this->User->find('all', array(
+            'fields' => array('id', 'email', 'name'),
+            'conditions' => array(
+                'User.ativo' => 1,
+                'User.email <>' => ''
+            )
+        ));
+
+        $logoTop = 'http://abear.com.br/uploads/img/logo/header_logo-abear.png';
+        $tituloDoEmail = 'Atualização de PL';
+        foreach($allUsers as $user){
+            $email = $user['User']['email'];
+            if($this->validaEmail($email)){
+                $nome = $user['User']['name'];
+                $PlNumero = $pl['Pl']['numero_da_pl'];
+                $PlTxt = $txtAlterado[$model]['txt'];
+                $PlAlteradaEm = date('d/m/Y à\s H:i',strtotime($txtAlterado[$model]['modified']));
+                $PlVerCompleto = Router::url('/ver-pl/'.$pl['Pl']['id'], true);
+
+        		$msg = '
+
+                    <table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+                        <tbody>
+                            <tr>
+                                <td align="left" width="130">
+                                    <img src="'.$logoTop.'">
+                                </td>
+                                <td colspan="2">
+                                    <table style="background-color: #ffd600 !important;" height="115" width="570">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" style="font-size: 24px;text-transform: uppercase;font-weight: 500;color: #000;">
+                                                    <strong>area restrita</strong>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <br>
+            		<br>
+            		<br>
+            		<br>
+            		<br>
+
+
+        			<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+        				<tbody>
+        					<tr>
+        						<td>
+        							<table cellpadding="0" cellspacing="0" width="600" align="center">
+        								<tbody>
+        									<tr>
+        										<td height="100">
+        											<p style="font-size: 18px;color: #000;">
+        												Olá <strong>'.$nome.'.</strong>
+        											</p>
+        											<hr>
+        										</td>
+        									</tr>
+        									<tr>
+        										<td align="center">
+        											<p style="font-size: 16px;color:#747474">
+        												<strong>'.$PlNumero.'</strong> foi alterada.<br>
+        											</p>
+        										</td>
+        									</tr>
+        									<tr>
+        										<td>
+                                                    <p>Alteração realizada em '.$PlAlteradaEm.'</p>
+        											<p style="font-size: 16px;color:#747474">
+        												<strong>'.$nameBlock.'</strong><br><br>
+                                                        '.$PlTxt.'
+        											</p>
+        										</td>
+        									</tr>
+        									<tr>
+        										<td align="center">
+        											<br>
+        											<p>
+        												<a href="'.$PlVerCompleto.'" style="border-style: solid;border-width: 0px;cursor: pointer;font-weight: normal;line-height: normal;margin: 0 0 1.25rem;position: relative;text-decoration: none;text-align: center;display: inline-block;padding-top: 1rem;padding-right: 2rem;padding-bottom: 1.0625rem;padding-left: 2rem;font-size: 1.2rem;background-color: #2E7D32;border-color: #097b61;color: white;-moz-transition: background-color 300ms ease-out;transition: background-color 300ms ease-out;padding-top: 1.0625rem;padding-bottom: 1rem;-webkit-appearance: none;font-weight: normal !important;-moz-border-radius: 10px;-webkit-border-radius: 5px;-moz-border-radius: 5px;border-radius: 5px;">
+        													Ver Alteração
+        												</a>
+        											</p>
+        										</td>
+        									</tr>
+        								</tbody>
+        							</table>
+
+        						</td>
+        					</tr>
+        				</tbody>
+        			</table>
+        		';
+                $this->envio_email($email, $tituloDoEmail, $msg);
+            }else{
+                print_r('$expression');
+                die();
+            }
+        }
+        return true;
+
+    }
+
+    public function envio_email($email_to=null, $title=null, $msg=null) {
+    	$this->autoRender = false;
+
+
+        $Email = new CakeEmail();
+		$Email->emailFormat('html');
+		$Email->from(array('nao-responda@zoio.net.br' => 'Area Restrita ABEAR'));
+		$Email->to($email_to);
+		$Email->subject($title);
+		$Email->send($msg);
+    }
+
+    public function validaEmail($email){
+        $conta = "^[a-zA-Z0-9\._-]+@";
+        $domino = "[a-zA-Z0-9\._-]+.";
+        $extensao = "([a-zA-Z]{2,4})$";
+        $pattern = $conta.$domino.$extensao;
+        if (ereg($pattern, $email)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+}

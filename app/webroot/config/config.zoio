@@ -1,0 +1,43 @@
+$zConfig = array(
+	'Configuracao' => array(
+		'facebook_image_file' => array( 'dir' => 'uploads/img/configuracao/', 'width' => 154, 'height' => 154, 'types' => array('jpg','gif','png', 'jpeg'), 'forceresize' => false, 'forceupload' => array(false,false), 'filename' => '', 'createfolder' => true, 'thumb' => array('width' => 116, 'height' => 116) )
+	),
+	////////////////////////////////////////////////////
+	//esta sendo usado apenas para visualizar as medidas
+	'Galeria' => array(
+		'img_file' => array( 'dir' => 'uploads/img/galerias', 'width' => 1024, 'height' => 768, 'types' => array('jpg','gif','png', 'jpeg'), 'forceresize' => false, 'forceupload' => array(false,false), 'filename' => '', 'createfolder' => true, 'thumb' => array('width' => 116, 'height' => 116) )
+	),
+	'GaleriaManifestacao' => array(
+		'img_file' => array( 'dir' => 'uploads/img/galerias_manifestacoes/', 'width' => 1024, 'height' => 768, 'types' => array('jpg','gif','png', 'jpeg'), 'forceresize' => false, 'forceupload' => array(false,false), 'filename' => '', 'createfolder' => true, 'thumb' => array('width' => 116, 'height' => 116) )
+	),
+	'Mapa' => array(
+		'img_mapa_file' => array( 'dir' => 'uploads/img/mapas/', 'width' => 320, 'height' => 450, 'types' => array('jpg','gif','png', 'jpeg'), 'forceresize' => false, 'forceupload' => array(false,false), 'filename' => '', 'createfolder' => true, 'thumb' => array('width' => 116, 'height' => 116) )
+	),
+	/////////////
+);
+
+
+
+$zInput = array(
+	/*'Hometexto' => array(
+		'titulo_ptbr' => array(
+			'type'		=>		'text',
+			'label'		=>		'Titulo pt-BR',
+			'gtitle'	=>		'Título',
+			'group'		=>		array(
+									'titulo_eng' => array('type' => 'text', 'label' => 'Titulo Eng', 'position' => '2')
+								)
+		),
+		'titulo_eng' => array('group' => false),
+		
+		'texto_ptbr' => array(
+			'type'		=>		'textarea',
+			'label'		=>		'Texto pt-BR',
+			'gtitle'	=>		'Texto',
+			'group'		=>		array(
+									'texto_eng' => array('type' => 'textarea', 'label' => 'Texto Eng', 'position' => '2')
+								)
+		),
+		'texto_eng' => array('group' => false)
+	),*/
+);

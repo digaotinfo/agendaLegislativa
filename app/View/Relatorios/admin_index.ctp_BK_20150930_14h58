@@ -1,0 +1,257 @@
+<?php
+$this->start('script');
+	echo $this->Html->script('jquery.autocomplete.min.js');
+	echo $this->Html->script('currency-autocomplete.js');
+	?>
+	<script charset="utf-8">
+		$('.datepicker').pickadate({
+			selectMonths: true, // Creates a dropdown to control month
+			selectYears: 15, // Creates a dropdown of 15 years to control year
+			monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outobro', 'Novembro', 'Dezembro'],
+			monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+			weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+			weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+			showMonthsShort: undefined,
+			showWeekdaysFull: undefined
+		});
+    </script>
+	<?php
+$this->end();
+?>
+
+<!-- HEADER DA PÁGINA -->
+<div class="row padding-top-20">
+    <div class="col s12">
+        <h3 class="titulo-pagina">
+            Gerando Relatório
+            <a href="javascript: void(0);" onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar"><i class="material-icons">arrow_back</i></a>
+        </h3>
+    </div>
+</div>
+ <!-- / HEADER DA PÁGINA -->
+
+
+<div class="row padding-top-20">
+	<input type="hidden" name="url_autocomplete" id="url_autocomplete" value="<?php echo $this->Html->url(array('controller' => 'Relatorios', 'action' => 'autocomplete', 'admin' => true))?>">
+
+	<?php echo $this->Form->create($model, array('id' => 'gerarRelatorio'));?>
+	 <div class="row">
+			<div class="input-field col s12">
+				<div class="col s12 descricaoPeriodo">
+					<p>Selecione o período de atualização.</p>
+				</div>
+				<div class="input-field col s6">
+					<?php
+					   echo $this->Form->input('data_inicio' ,  array(
+								   'label' => false,
+								   'div' => false,
+								   'type' => 'text',
+								   'class' => 'validate datepicker',
+							   ));
+					?>
+					<label for="nossaposicao_texto">Data de início</label>
+				</div>
+				<div class="input-field col s6">
+					<?php
+					   echo $this->Form->input('data_final' ,  array(
+								   'label' => false,
+								   'div' => false,
+								   'type' => 'text',
+								   'class' => 'validate datepicker',
+							   ));
+					?>
+					<label for="nossaposicao_texto">Data final</label>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="input-field col s8">
+			<?php
+			   echo $this->Form->input('tipo_id',  array(
+						   'label' => false,
+						   'div' => false,
+						   'class' => 'validate',
+						   'options' => $tipos,
+						   'empty' => '',
+					   ));
+			?>
+			<label for="nossaposicao_texto">Tipo</label>
+		</div>
+		<div class="input-field col s4">
+			<?php
+			   echo $this->Form->input('ano' ,  array(
+						   'label' => false,
+						   'div' => false,
+						   'type' => 'text',
+						   'class' => 'validate ano',
+					   ));
+			?>
+			<label for="nossaposicao_texto">Ano</label>
+		</div>
+		<div class="input-field col s12">
+			<?php
+			   echo $this->Form->input('tema_id' ,  array(
+						   'label' => false,
+						   'div' => false,
+						   'type' => 'select',
+						   'class' => 'validate',
+						   'id' => 'selectTema',
+						   'options' => $temas,
+						   'empty' => ' -- Selecione o tema -- ',
+					   ));
+			?>
+			<label for="nossaposicao_texto">Tema:</label>
+		</div>
+		<div class="input-field col s12 m12 l6">
+			<?php
+			   echo $this->Form->input('autor' ,  array(
+						   'label' => false,
+						   'div' => false,
+						   'type' => 'text',
+						   'class' => 'validate autocomplete',
+					   ));
+			?>
+			<label for="nossaposicao_texto">Autor</label>
+		</div>
+		<div class="input-field col s12 m12 l6">
+			<?php
+			   echo $this->Form->input('relator' ,  array(
+						   'label' => false,
+						   'div' => false,
+						   'type' => 'text',
+						   'class' => 'validate autocomplete',
+					   ));
+			?>
+			<label for="nossaposicao_texto">Relator</label>
+		</div>
+
+
+        <div class="input-field col s6">
+            <?php
+                echo $this->Form->input('status_type_id' ,  array(
+                            'label' => false,
+                            'div' => false,
+                            'type' => 'select',
+                            'class' => 'validate',
+                            'options' => $status,
+							'empty' => ' -- Selecione o Status -- '
+                        ));
+            ?>
+            <label for="nossaposicao_texto">Status:</label>
+        </div>
+        <div class="input-field col s6">
+            <div class="row">
+                <div class="input-field col s6 m6 l6 center">
+                    <div class="">Prioridade</div>
+                </div>
+                <div class="input-field col s6 flag-prioridade right">
+                    <div class="switch center-align">
+                        <label>
+                            Não
+                            <?php
+                                echo $this->Form->input('prioridade', array(
+                                    'type' => 'checkbox',
+                                    'label' => false,
+                                    'div' => false
+                                ));
+                            ?>
+                            <span class="lever"></span>
+                            Sim
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+		<div class="padding-top-10">
+			&nbsp;
+		</div>
+
+
+		<div class="input-field col s6">
+            <div class="row">
+                <div class="input-field col s6 m6 l6">
+                    <div>Tipo de Relatório</div>
+                </div>
+                <div class="input-field col s6 flag-prioridade">
+					<?php
+						$options = array(
+						    'completo' => 'Completo',
+						    'resumo' => 'Resumo'
+						);
+
+						$attributes = array(
+						    'legend' => false,
+						    'value' =>  'completo'
+						);
+
+						echo $this->Form->radio('type', $options, $attributes);
+					?>
+                </div>
+            </div>
+        </div>
+
+
+		<a  href="javascript: void(0);" class="btn waves-effect waves-light green darken-3 right margin-left-15 gerarPdf margTop40">
+			<i class="material-icons left">done</i>Gerar Relatório
+		</a>
+		<input type="hidden" name="urlGerarPdf" id="urlGerarPdf" value="<?php echo $this->Html->url(array('controller' => 'Relatorios', 'action' => 'admin_gerarPdf'))?>">
+		<?php echo $this->Form->end();?>
+
+</div>
+
+
+
+ <!-- Modal Structure -->
+<div id="modalRelatorioGerado" class="modal">
+    <div class="modal-footer">
+		<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+    <div class="modal-content">
+		<h4>Relatório gerado com sucesso.</h4>
+		<br>
+		<br>
+		<a href="#" class="waves-effect waves-light btn green darken-3 baixarArquivo"  target="_blank">
+			<i class="material-icons left">file_download</i>Baixar Arquivo
+		</a>
+		<a href="#" class="waves-effect waves-light btn green darken-3 right enviarEmail" data-position='bottom' data-delay='50' data-tooltip="O e-mail será enviado a todos os usuários.">
+			<i class="material-icons left">send</i>Enviar por E-mail
+		</a>
+		<?php echo $this->Form->create('enviarEmail', array('id' => 'enviarRelatorioEmail'));?>
+			<?php
+				echo $this->Form->input('enviarRelatorioEmail', array(
+						'type' => 'hidden',
+						'id'	=> 'enviarRelatorioEmail',
+						'value'	=> $this->Html->url(array('controller' => 'Relatorios', 'action' => 'admin_enviarRelatorioEmail'))
+					));
+				echo $this->Form->input('enviarLinkPdf', array(
+						'type' => 'hidden',
+						'id'	=> 'enviarLinkPdf',
+					));
+			?>
+		<?php echo $this->Form->end();?>
+    </div>
+</div>
+
+<div id="modalEmailEnviado" class="modal">
+    <div class="modal-footer">
+    	<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+	<div class="modal-content">
+		<h4>E-mail enviado com sucesso!</h4>
+		<p>Seu E-mail foi enviado para todos os usuários cadastrados.</p>
+	</div>
+</div>
+
+<div id="modalRelatorioVazio" class="modal">
+    <div class="modal-footer">
+    	<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Fechar</a>
+    </div>
+	<div class="modal-content">
+		<h4>Erro ao gerar relatório.</h4>
+		<p>Nenhuma Proposição encontrada. Verifique os dados do filtro.</p>
+	</div>
+</div>

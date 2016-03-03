@@ -1,0 +1,75 @@
+#### PT-BR
+
+msgid "sobrea" 
+msgstr "Sobre a"
+
+msgid "nossosprodutos" 
+msgstr "Nossos <b>Produtos</b>"
+
+msgid "selecioneoproduto" 
+msgstr "Selecione o Produto"
+
+msgid "listade" 
+msgstr "Lista de "
+
+msgid "produtores" 
+msgstr "Produtores"
+
+msgid "sobre" 
+msgstr "sobre"
+
+msgid "produtos" 
+msgstr "produtos"
+
+msgid "novidades" 
+msgstr "novidades"
+
+msgid "ondeencontrar" 
+msgstr "onde encontrar"
+
+msgid "contato" 
+msgstr "contato"
+
+msgid "leiamais" 
+msgstr "_Leia mais"
+
+msgid "onde" 
+msgstr "Onde"
+
+msgid "encontrar" 
+msgstr "Encontrar"
+
+msgid "email" 
+msgstr "E-mail"
+
+msgid "enviar"
+msgstr "_Enviar"
+
+msgid "formnome"
+msgstr "Nome obrigatório "
+
+msgid "formemail"
+msgstr "E-Mail obrigatório "
+
+msgid "sim"
+msgstr "Sim"
+
+msgid "nao"
+msgstr "Não"
+
+msgid "voce_tem_mais"
+msgstr "Você tem mais"
+
+msgid "de_18_anos"
+msgstr "de 18 anos?"
+
+msgid "desculpe_nao_pode_entrar_no_site"
+msgstr "Desculpe, mas você não tem idade para entrar  neste site."
+
+
+
+
+
+
+
+

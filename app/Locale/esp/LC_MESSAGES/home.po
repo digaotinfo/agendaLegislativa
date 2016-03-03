@@ -1,0 +1,40 @@
+#### ESP
+
+msgid "Área do Cliente" 
+msgstr "Área del Cliente" 
+
+msgid "Intranet" 
+msgstr "Intranet" 
+
+msgid "Blog" 
+msgstr "Blog" 
+
+msgid "Busca" 
+msgstr "Busca" 
+
+msgid "Sobre" 
+msgstr "Acerca"
+
+msgid "Unidades e Serviços" 
+msgstr "Unidades y Servicios"
+
+msgid "Clientes" 
+msgstr "Clientes"
+
+msgid "Cases" 
+msgstr "Casos"
+
+msgid "Responsabilidade Corporativa" 
+msgstr "Responsabilidad Corporativa"
+
+msgid "Notícias" 
+msgstr "Noticias"
+
+msgid "Trabalhe Conosco" 
+msgstr "Trabaja con Nosotros"
+
+msgid "Contato" 
+msgstr "Contacto"
+
+msgid "digite aqui sua pesquisa" 
+msgstr "escriba su búsqueda aquí"

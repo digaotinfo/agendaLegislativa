@@ -1,0 +1,274 @@
+<?php
+$this->start('script');
+	///
+$this->end();
+?>
+	<!-- HEADER DA PÁGINA -->
+	<div class="row padding-top-20">
+		<div class="col s12">
+			 <h3 class="titulo-pagina">
+				 Projetos de Lei
+				 <?php
+	 			if ($userAdmin == 1){
+	 				?>
+
+				 	<a href="<?=$this->Html->url(array(
+	 											'controller' => 'pls',
+	 											'action' => 'add',
+	 											'admin' => true
+	 										));?>" class="btn-floating right  green darken-3 tooltipped" data-position="left" data-delay="50" data-tooltip="Adicionar nova PL"><i class="material-icons">add</i></a>
+					<?php
+				}
+				?>
+			 </h3>
+		 </div>
+	 </div>
+	<!-- / HEADER DA PÁGINA -->
+
+
+
+	<!--- BUSCA -->
+	<div class="row padding-top-20">
+		<div class="col s12">
+
+			<nav class="grey darken-2">
+				<div class="nav-wrapper">
+					<?=$this->Form->create($model)?>
+						<div class="input-field">
+							<!-- <input id="search" type="search" required placeholder="Buscar por PLs"> -->
+							<?php
+							   echo $this->Form->input('search' ,  array(
+										   'label' => false,
+										   'div' => false,
+										   'type' => 'search',
+										   'placeholder' => 'Buscar por PLs'
+									   ));
+							?>
+							<label for="search"><i class="material-icons">search</i></label>
+							<!-- <i class="material-icons">close</i> -->
+						</div>
+					<?=$this->Form->end();?>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<!--- / BUSCA -->
+
+
+
+
+	<!-- MIOLO -->
+	<div class="row padding-top-20">
+		<div class="col s12">
+
+
+			<?php
+			if (!empty($pls)) {
+				?>
+
+				<ul class="collapsible popout" data-collapsible="accordion">
+					<?php foreach ($pls as $pl) :?>
+						<li>
+							<div class="collapsible-header  grey lighten-2">
+								<i class="material-icons">turned_in</i>
+								<span class="black-text">
+									<?php echo $pl[$model]['numero_da_pl']; ?>
+								</span>
+								<span class="ultima-atualizacao hide-on-small-only">
+									<small class="grey-text text-darken-1">| última atualização em <strong><?php echo CakeTime::format($pl[$model]['modified'], '%d/%m/%Y');?></strong></small>
+								</span>
+							</div>
+							<div class="collapsible-body">
+								<table class="table-valign-top">
+									<tr>
+										<td valign="top" width="40%" class="pl">
+											<p>
+												<a href="<?php echo $pl[$model]['link_da_pl']; ?>" class="grey-text" target="_blank">
+													<i class="material-icons left">launch</i>
+													Ver no site da Câmara
+												</a>
+											</p>
+											<p>
+												<strong class="black-text">Autor(a):</strong> <?php echo $pl[$model]['autor']; ?><br>
+												<strong class="black-text">Relator(a):</strong> <?php echo $pl[$model]['relator']; ?><br>
+											</p>
+
+
+											<p class="hide-on-large-only txt">
+												<?php
+													$a_models_relacionadas = array("Foco", "OqueE", "OndeEsta", "NossaPosicao");
+													$a_models_relacionadas_titulos = array("Foco", "O que é?", "Onde está? Com quem está?", "Nossa posição");
+
+													foreach($a_models_relacionadas as $key => $a_model_rel):
+														if(!empty($pl[$a_model_rel][0]['txt'])){
+												?>
+														<strong class="black-text"><?php echo $a_models_relacionadas_titulos[$key]?>:</strong><br>
+														<?php
+															echo $this->Text->truncate(
+																	strip_tags($pl[$a_model_rel][0]['txt']),
+																	100,
+																	array(
+																		'ellipsis' => '...',
+																		'exact' => false
+																	)
+																	);
+															// echo strip_tags($pl[$a_model_rel][0]['txt']);
+														?>
+														<br><br>
+												<?php
+														}
+													endforeach;
+												?>
+											</p>
+
+											<p class="hide-on-large-only center-align">
+												<a href="<?php echo $this->Html->url(array(
+													'controller' => 'pls',
+													'action' => 'ver_completo',
+													'admin' => true,
+													$pl[$model]['id']
+												)) ?>" class="waves-effect waves-light btn green darken-3">
+													<i class="material-icons"></i>Ver Completo
+												</a>
+											</p>
+										</td>
+										<td class="hide-on-med-and-down txt-pl">
+											<p>
+												<?php
+													$a_models_relacionadas = array("Foco", "OqueE", "OndeEsta", "NossaPosicao");
+													$a_models_relacionadas_titulos = array("Foco", "O que é?", "Onde está? Com quem está?", "Nossa posição");
+
+													foreach($a_models_relacionadas as $key => $a_model_rel):
+														if(!empty($pl[$a_model_rel][0]['txt'])){
+												?>
+
+													<strong class="black-text"><?php echo $a_models_relacionadas_titulos[$key]?>:</strong><br>
+													<?php
+														echo $this->Text->truncate(
+																strip_tags($pl[$a_model_rel][0]['txt']),
+																100,
+																array(
+																	'ellipsis' => '...',
+																	'exact' => false
+																)
+																);
+														// echo strip_tags($pl[$a_model_rel][0]['txt']);
+													?>
+
+													<br><br>
+
+												<?php
+														}
+													endforeach;
+												?>
+											</p>
+											<p>
+												<a href="<?php echo $this->Html->url(array(
+													'controller' => 'pls',
+													'action' => 'ver_completo',
+													'admin' => true,
+													$pl[$model]['id']
+												)) ?>" class="waves-effect waves-light btn right green darken-3">
+													<i class="material-icons left"></i>Ver Completo
+												</a>
+											</p>
+										</td>
+									</tr>
+								</table>
+
+							</div>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+
+				<?php
+			} else {
+
+				if (!empty($busca)) {
+					?>
+					<h4 class="busca-nao-encontrada hide-on-med-and-down">
+						Não foi encontrado nenhuma PL com a busca por <u><?=$busca?></u>
+					</h4>
+					<h5 class="busca-nao-encontrada hide-on-large-only">
+						Não foi encontrado nenhuma PL com a busca por <u><?=$busca?></u>
+					</h5>
+
+
+					<?
+				} else {
+					?>
+					<div class="col s12 m6 offset-m3">
+						<div class="card blue-grey darken-1">
+							<div class="card-content white-text">
+								<span class="card-title">Olá!</span>
+								<p>
+									Ainda não temos nenhuma PL cadastrada.<br>
+									Vamos cadastrar a primeira?
+								</p>
+							</div>
+							<div class="card-action">
+								<a href="<?=$this->Html->url(array(
+			    											'controller' => 'pls',
+			    											'action' => 'add',
+			    											'admin' => true
+			    										));?>" data-position="bottom" data-delay="50" data-tooltip="Adicionar nova PL">
+														Começar agora!
+								</a>
+
+							</div>
+						</div>
+					</div>
+					<?
+				}
+			}
+			?>
+
+
+		</div>
+	</div>
+	<!-- /MIOLO -->
+
+
+
+
+
+
+
+	<!-- >>> PAGINATOR -->
+		<?php
+			$paginacao = $this->Paginator->params();
+			if ($paginacao['pageCount'] > 1) {
+				?>
+				<ul class="pagination ">
+					<li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+					<li class="active"><a href="#!">1</a></li>
+					<li class="waves-effect"><a href="#!">2</a></li>
+					<li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+				</ul>
+				<?php
+				// echo $this->Paginator->prev(
+				// 							'ANTERIOR',
+				// 							null,
+				// 							null,
+				// 							array('id' => 'last')
+				// 							);
+				//
+				// echo $this->Paginator->numbers(array(
+				// 									 'separator' => '',
+				// 									 'currentTag' => 'a',
+				// 									 'tag' => 'div',
+				// 									 'class' => 'bt'
+				//
+				// 									));
+				//
+				//
+				// echo $this->Paginator->next(
+				// 							'PRÓXIMO',
+				// 							null,
+				// 							null,
+				// 							array('id' => 'next')
+				// 							);
+			}
+		?>
+
+	<!-- <<< PAGINATOR -->

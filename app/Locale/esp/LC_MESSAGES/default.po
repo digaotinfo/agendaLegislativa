@@ -1,0 +1,134 @@
+#### ESP
+
+msgid "Ãrea do Cliente"
+msgstr "Ãrea del Cliente"
+
+msgid "Intranet"
+msgstr "Intranet"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "Busca"
+msgstr "Busca"
+
+msgid "Sobre"
+msgstr "Acerca"
+
+
+msgid "Grupo Máquina"
+msgstr "Groupo Máquina"
+
+msgid "Visão"
+msgstr "Visión"
+
+msgid "Missão"
+msgstr "Misión"
+
+msgid "Valor"
+msgstr "Valor"
+
+msgid "Grupo <span> Máquina </span>"
+msgstr "Grupo <span> Máquina </span>"
+
+msgid "Equipe"
+msgstr "Equipa"
+
+msgid "Escritórios<br /><span> e </span> Parceiros"
+msgstr "Oficinas<br /><span> y </span> Aliados"
+
+msgid "Prêmios"
+msgstr "Premios"
+
+msgid "Nossos <span> Talentos </span>"
+msgstr "Nuestros <span> Talentos </span>"
+
+msgid "Unidades e Serviços"
+msgstr "Unidades y Servicios"
+
+msgid "unidades e <span> serviços </span>"
+msgstr "unidades y <span> servicios </span>"
+
+msgid "Clientes"
+msgstr "Clientes"
+
+msgid "Cases"
+msgstr "Casos"
+
+msgid "Responsabilidade Corporativa"
+msgstr "Responsabilidad Corporativa"
+
+msgid "responsabilidade <br /> <span> corporativa </span>"
+msgstr "responsabilidad <br /> <span> corporativa </span>"
+
+msgid "Notícias"
+msgstr "Noticias"
+
+msgid "Trabalhe Conosco"
+msgstr "Trabaja con Nosotros"
+
+msgid "trabalhe <br /> <span> conosco </span>"
+msgstr "trabaja con <br /> <span style='margin-left:300px;'> nosotros </span>"
+
+msgid "Contato"
+msgstr "Contacto"
+
+msgid "digite aqui sua pesquisa"
+msgstr "escriba su bÃºsqueda aquÃ­"
+
+msgid "Ãltimos"
+msgstr "Ãltimos"
+
+msgid "Entidades Apoiadas"
+msgstr "Entidades compatibles"
+
+msgid "Relatório <span> Social </span>"
+msgstr "Informe <span> Social </span>"
+
+msgid "Parceiros Internacionais"
+msgstr "Aliados Internacionales"
+
+msgid "Parceiros Nacionais"
+msgstr "Aliados Nacionales"
+
+msgid "Envie seu currículo"
+msgstr "Enviar currículum"
+
+msgid "Vagas disponíveis"
+msgstr "Empleos disponibles"
+
+msgid "Todas as Vagas"
+msgstr "Todos los empleos"
+
+msgid "Nome"
+msgstr "Nombre"
+
+msgid "Assunto"
+msgstr "Tema"
+
+msgid "Site / Portfolio"
+msgstr "Sitio / Cartera"
+
+msgid "Selecione uma Vaga"
+msgstr "Seleccionar um Empleo"
+
+msgid "Mensagem"
+msgstr "Mensaje"
+
+msgid "Todos os direitos reservados"
+msgstr "Reservados todos los derechos"
+
+msgid "Nome deve ser preenchido"
+msgstr "Nombre debe ser llenado"
+
+msgid "E-mail deve ser preenchido"
+msgstr "E-mail debe ser llenado"
+
+msgid "Assunto deve ser preenchido"
+msgstr "El sujeto debe ser completada"
+
+msgid "Mensagem deve ser preenchida"
+msgstr "Mensaje debe ser completada"
+
+msgid "Abrangência Global"
+msgstr "Alcance Global"

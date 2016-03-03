@@ -1,0 +1,677 @@
+<?php
+
+App::uses('AppController', 'Controller');
+App::uses('CakeEmail', 'Network/Email');
+
+class IndexController extends AppController {
+	public $name 	= 'Index';
+	public $helpers = array('Html', 'Session', 'Paginator', 'Time', 'Text');
+	public $uses 	= array('User', 'Pl', 'PlType', 'StatusType', 'Tarefa');
+
+	public $paginate = array(
+		'limit' => 10,
+	);
+
+
+	function beforeFilter() {
+		parent::beforeFilter();
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// //>>> rotina de envio de email para tarefas nao realizadas dentro de um determinado horario
+		// $hourNow = date("H:m");
+		// $hourInicioEnvio = '08:00';
+		// $hourFimEnvio = '16:00';
+		// $hourResetEnvio = '19:00';
+		// if( ($hourNow >= $hourInicioEnvio) && ($hourNow <= $hourFimEnvio) ){
+		// 	$this->verificarTarefas();
+		// }
+		// //>>> apos o horario estipulado($hourResetEnvio), todas flags devem ser zeradas para uma nova validacao
+		// if( $hourNow >= $hourResetEnvio ){
+		// 	$verificarTarefas = $this->Tarefa->find('all', array(
+		// 		'conditions' => array(
+		// 			'Tarefa.delete' => 0,
+		// 			'Tarefa.ativo' => 1,
+		// 			'Tarefa.realizado' => 0,
+		// 			'Tarefa.enviado_por_email' => 1,
+		// 		),
+		// 		'order' => array(
+		// 			'Tarefa.entrega' => 'DESC'
+		// 		),
+		// 		'recursive' => 2
+		// 	));
+		//
+		// 	if( !empty($verificarTarefas) ){
+		// 		foreach( $verificarTarefas as $tarefa ):
+		// 			$this->Tarefa->id = $tarefa['Tarefa']['id'];
+		// 			$this->Tarefa->saveField('enviado_por_email', false);
+		// 		endforeach;
+		// 	}
+		// }
+		// //<<< apos o horario estipulado($hourResetEnvio), todas flags devem ser zeradas para uma nova validacao
+		// //<<< rotina de envio de email para tarefas nao realizadas dentro de um determinado horario
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		// /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	}
+
+	public function index() {
+
+	}
+	public function login() {
+	    if ($this->request->is('post')) {
+	        if ($this->Auth->login()) {
+	            return $this->redirect($this->Auth->redirectUrl());
+	        } else {
+	            $this->Session->setFlash(
+	                __('Username or password is incorrect'),
+	                'default',
+	                array(),
+	                'auth'
+	            );
+	        }
+	    }
+	}
+
+
+	///// ADMIN
+	//////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////
+
+	public function admin_index($documentos = null) {
+		// $campo_de_busca = '';
+		$model = 'Pl';
+		$this->set('model', $model);
+		$this->paginate = array(
+			// 'fields' => array('*'),
+			'conditions' => array(
+				'Pl.ativo' => 1,
+				'Pl.delete' => 0,
+			),
+			'limit' => 10,
+			'order' => array(
+				'Pl.id' => 'DESC'
+			),
+			// 'recursive' => 2,
+			);
+
+		// if ($this->request->is('post')) {
+		if ($this->request->is('get')) {
+
+			if (!empty($this->request->query['novabusca'])) {
+				if (!empty($this->request->query['search'])) {
+					$this->redirect(
+						'/?search='. $this->request->query['search'] .'&tipo='. $this->request->query['tipo']
+					);
+
+				} else {
+					$this->redirect(
+						'/'
+					);
+
+				}
+			}
+
+			if (!empty($this->request->query['search'])) {
+				// $campo = trim($this->request->data['Pl']['search']);
+				$tipo = $this->request->query['tipo'];
+				$campo = trim($this->request->query['search']);
+				$this->set('busca', $campo);
+
+				$sql_against = "";
+				foreach (explode(" ", $campo) as $palavra) {
+					if (strlen(trim($palavra)) > 0) {
+						if (preg_match('/"/',$palavra)) {
+							$palavra = str_replace('"', '', $palavra);
+							$sql_against = $sql_against . ''. $palavra .' ';
+
+						} else {
+							$sql_against = $sql_against . ''. $palavra .'* ';
+
+						}
+					}
+				}
+				// $sql_against = $campo;
+				$sql_against = rtrim($sql_against, ' ');
+				// echo "<hr>";
+				// print_r($sql_against);
+				// die();
+				$siglaBusca = $campo;
+				if ($tipo == 2) {
+					if(strlen($siglaBusca) >= 4){
+						$resultado_busca = $this->$model->query("
+							SELECT DISTINCT
+								Pl.id
+							FROM
+								tb_pls as Pl
+								left join tb_o_que_e as OqueE on (OqueE.pl_id = Pl.id)
+								left join tb_situacao as Situacao on (Situacao.pl_id = Pl.id)
+								left join tb_nossa_posicao as NossaPosicao on (NossaPosicao.pl_id = Pl.id)
+								left join tb_foco as Foco on (Foco.pl_id = Pl.id)
+								left join tb_autor_relator as Autor on (Autor.id = Pl.autor_id )
+								left join tb_autor_relator as Relator on (Relator.id = Pl.relator_id )
+
+							WHERE
+								Pl.ativo = 1
+								AND (
+									MATCH(Pl.numero_da_pl) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(OqueE.txt, OqueE.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Situacao.txt, Situacao.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(NossaPosicao.txt, NossaPosicao.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Foco.txt, Foco.arquivo) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Autor.nome) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+									OR MATCH(Relator.nome) AGAINST ('". $sql_against ."' IN BOOLEAN MODE)
+								)
+						");
+						if (!empty($resultado_busca)) {
+
+							$ids = '';
+							foreach ($resultado_busca as $pl_id) {
+								$ids = $ids . $pl_id['Pl']['id'] . ',';
+							}
+							$ids = rtrim($ids, ',');
+
+
+							$this->paginate['conditions'] = array(
+																'Pl.id in ('. $ids .')'
+															);
+
+
+							$pls = $this->paginate($model);
+							$this->set('pls', $pls);
+						}
+					// <<< strlen($siglaBusca) >= 4
+					}else{
+
+						//>>> strlen($siglaBusca) < 4
+						$resultado_busca = $this->$model->query("
+							SELECT DISTINCT
+								Pl.id
+							FROM
+								tb_pls as Pl
+								left join tb_o_que_e as OqueE on (OqueE.pl_id = Pl.id)
+								left join tb_situacao as Situacao on (Situacao.pl_id = Pl.id)
+								left join tb_nossa_posicao as NossaPosicao on (NossaPosicao.pl_id = Pl.id)
+								left join tb_foco as Foco on (Foco.pl_id = Pl.id)
+								left join tb_pl_types as PlType on (PlType.id = Pl.tipo_id)
+								left join tb_autor_relator as Autor on (Autor.id = Pl.autor_id )
+								left join tb_autor_relator as Relator on (Relator.id = Pl.relator_id )
+								left join tb_tarefas as Tarefa on (Tarefa.pl_id = Pl.id )
+
+							WHERE
+								Pl.ativo = 1
+								AND (
+									Pl.numero_da_pl Like '%".$campo."%'
+									OR Autor.nome Like '%".$campo."%'
+									OR Relator.nome Like '%".$campo."%'
+									OR OqueE.txt Like '%".$campo."%'
+									OR OqueE.arquivo Like '%".$campo."%'
+									OR Situacao.txt Like '%".$campo."%'
+									OR Situacao.arquivo Like '%".$campo."%'
+									OR NossaPosicao.txt Like '%".$campo."%'
+									OR NossaPosicao.arquivo Like '%".$campo."%'
+									OR Foco.txt Like '%".$campo."%'
+									OR Foco.arquivo Like '%".$campo."%'
+									OR AutorRelator.nome Like '%".$campo."%'
+									OR PlType.tipo Like '%".$campo."%'
+									OR Tarefa.titulo Like '%".$campo."%'
+									OR Tarefa.descricao Like '%".$campo."%'
+								)
+						");
+
+
+						if (!empty($resultado_busca)) {
+
+							$ids = '';
+							foreach ($resultado_busca as $pl_id) {
+								$ids = $ids . $pl_id['Pl']['id'] . ',';
+							}
+							$ids = rtrim($ids, ',');
+
+
+							$this->paginate['conditions'] = array(
+																'Pl.id in ('. $ids .')'
+															);
+
+
+							$pls = $this->paginate($model);
+							$this->set('pls', $pls);
+						}
+
+					}
+					//<<< strlen($siglaBusca) < 4
+				} else {
+					$this->paginate['conditions'] = array(
+														'Pl.numero_da_pl like "%'. $campo .'%"'
+													);
+					$pls = $this->paginate($model);
+
+					$this->set('pls', $pls);
+					// echo "AQUI 0";
+				}
+
+			} else {
+				// echo "AQUI 1";
+				$pls = $this->paginate($model);
+				// $this->set('pls', $pls);
+			}
+
+
+		} else {
+			// echo "AQUI 2";
+			$pls = $this->paginate($model);
+		}
+		$this->set('pls', $pls);
+
+
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//>>> rotina de envio de email para tarefas nao realizadas dentro de um determinado horario
+		/*
+		*
+		* tive que colocar tudo junto pq esta fazendo o redirect no envio do email
+		*/
+		$hourNow = date("H:m");
+		$hourInicioEnvio = '08:00';
+		$hourFimEnvio = '12:00';
+		$hourResetEnvio = '13:00';
+		if( ($hourNow >= $hourInicioEnvio) && ($hourNow <= $hourFimEnvio) ){
+			// $this->verificarTarefas();
+			$verificarTarefas = $this->Tarefa->find('all', array(
+				'conditions' => array(
+					'Tarefa.delete' => 0,
+					'Tarefa.ativo' => 1,
+					'Tarefa.realizado' => 0,
+					'Tarefa.enviado_por_email' => 0,
+				),
+				'order' => array(
+					'Tarefa.entrega' => 'DESC'
+				),
+				'recursive' => 2
+			));
+
+			$logoTop = 'http://abear.com.br/uploads/img/logo/header_logo-abear.png';
+			$tituloDoEmail = 'Tarefas que devem ser executadas.';
+
+			$allUsersAdmin = $this->User->find('all', array(
+				'fields' => array('id', 'email', 'name'),
+				'conditions' => array(
+					'User.ativo' => 1,
+					'User.email <>' => '',
+					'User.role_id' => 1,
+				)
+			));
+			$msg = '';
+			if( (!empty($verificarTarefas)) && (!empty($allUsersAdmin)) ){
+				foreach( $allUsersAdmin as $user ):
+					$nome = $user['User']['name'];
+					$msg .= '
+
+							<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+							<tbody>
+							<tr>
+							<td align="left" width="130">
+							<img src="'.$logoTop.'">
+							</td>
+							<td colspan="2">
+							<table style="background-color: #ffd600 !important;" height="115" width="570">
+							<tbody>
+							<tr>
+							<td align="center" style="font-size: 24px;text-transform: uppercase;font-weight: 500;color: #000;">
+							<strong>Agenda Legislativa</strong>
+							</td>
+							</tr>
+							</tbody>
+							</table>
+							</td>
+							</tr>
+							</tbody>
+							</table>
+
+							<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+								<tbody>
+									<tr>
+										<td>
+											<br>
+											<br>
+											<br>
+											<br>
+											<br>
+											<table cellpadding="0" cellspacing="0" width="700" align="center">
+												<tbody>
+													<tr>
+														<td height="100">
+														<p style="font-size: 18px;color: #000;">
+														Olá <strong>'.$nome.'.</strong>
+														</p>
+														<hr>
+														</td>
+													</tr>
+													<tr>
+														<td align="center">
+															<p style="font-size: 16px;color:#747474">
+																Tarefas <strong>NÃO</strong> realizadas.<br><br><br>
+															</p>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+
+											<table width="700">
+												<tbody>
+													<tr>
+														<th>
+															Numero da proposicao
+														</th>
+
+														<th>
+															Acao ABEAR
+														</th>
+
+														<th>
+															Data de Entrega
+														</th>
+													</tr>
+
+													';
+
+													$count=0;
+													foreach($verificarTarefas as $tarefa){
+														$this->Tarefa->id = $tarefa['Tarefa']['id'];
+														$this->Tarefa->saveField('enviado_por_email', true);
+														$poposicao = @$tarefa['Pl']['PlType']['tipo']. ' ' .$tarefa['Pl']['numero_da_pl']. '/' .$tarefa['Pl']['ano'];
+														$linkPl = Router::url('/ver-pl/'.$tarefa['Pl']['id'].'#ver_Tarefa_'.$tarefa['Tarefa']['id'], true);
+														$tarefaTitulo = $tarefa['Tarefa']['titulo'];
+														$tarefaDescricao = $tarefa['Tarefa']['descricao'];
+														$tarefaEntregarDia = date('d/m/Y',strtotime( $tarefa['Tarefa']['entrega']));
+														$tarefaAlterada = date('d/m/Y \á\s H:i',strtotime( $tarefa['Tarefa']['modified']));
+														$logoTop = 'http://abear.com.br/uploads/img/logo/header_logo-abear.png';
+														$tituloDoEmail = 'Tarefas que devem ser executadas.';
+
+														$css = '';
+														if( $count % 2 === 0){
+															$css = 'style="background: #F3F3F3;"';
+														}
+												$msg .= '
+
+														<tr>
+															<td '.$css.' height="40">
+																<a href="'.$linkPl.'" target="_blank" style="text-decoration: none; color: black;">
+																	'.$poposicao.'
+																</a>
+															</td>
+															<td '.$css.' height="40">
+																<a href="'.$linkPl.'" target="_blank" style="text-decoration: none; color: black;">
+																	'.$tarefaTitulo.'
+																</a>
+															</td>
+															<td '.$css.' align="right" height="40">
+																<a href="'.$linkPl.'" target="_blank" style="text-decoration: none; color: black;">
+																	'.$tarefaEntregarDia.'
+																</a>
+															</td>
+														</tr>
+														';
+
+														$count++;
+													}
+												$msg .= '
+												</tbody>
+											</table>
+
+
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+							<br>
+							<br>
+							<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+								<tbody>
+									<tr>
+										<td align="center">
+											<hr>
+											<a href="'.Router::url('/', true).'" style="text-decoration: none; color: black;">
+												Agenda Legislativa
+											</a>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							<br>
+							<br>
+							<br>
+					';
+
+					// $this->envio_email_tarefa($user['User']['email'], $tituloDoEmail, $msg);
+
+					$Email = new CakeEmail();
+						$Email->emailFormat('html');
+						$Email->from(array('nao-responda@zoio.net.br' => 'Agenda Legislativa ABEAR'));
+						$Email->to($user['User']['email']);
+						$Email->subject($tituloDoEmail);
+						$Email->send($msg);
+				endforeach;
+			}
+		}
+		//>>> apos o horario estipulado($hourResetEnvio), todas flags devem ser zeradas para uma nova validacao
+		if( $hourNow >= $hourResetEnvio ){
+			$verificarTarefas = $this->Tarefa->find('all', array(
+				'conditions' => array(
+					'Tarefa.delete' => 0,
+					'Tarefa.ativo' => 1,
+					'Tarefa.realizado' => 0,
+					'Tarefa.enviado_por_email' => 1,
+				),
+				'order' => array(
+					'Tarefa.entrega' => 'DESC'
+				),
+				'recursive' => 2
+			));
+			if( !empty($verificarTarefas) ){
+				foreach( $verificarTarefas as $tarefa ):
+					$this->Tarefa->id = $tarefa['Tarefa']['id'];
+					$this->Tarefa->saveField('enviado_por_email', false);
+				endforeach;
+			}
+		}
+		//<<< apos o horario estipulado($hourResetEnvio), todas flags devem ser zeradas para uma nova validacao
+		//<<< rotina de envio de email para tarefas nao realizadas dentro de um determinado horario
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+	}
+
+	public function verificarTarefas(){
+		// $this->autoRender = false;
+		$model = "Tarefa";
+		$verificarTarefas = $this->Tarefa->find('all', array(
+			'conditions' => array(
+				'Tarefa.delete' => 0,
+				'Tarefa.ativo' => 1,
+				'Tarefa.realizado' => 0,
+				'Tarefa.enviado_por_email' => 0,
+			),
+			'order' => array(
+				'Tarefa.entrega' => 'DESC'
+			),
+			'recursive' => 2
+		));
+
+		$logoTop = 'http://abear.com.br/uploads/img/logo/header_logo-abear.png';
+		$tituloDoEmail = 'Tarefas que devem ser executadas.';
+
+		$allUsersAdmin = $this->User->find('all', array(
+			'fields' => array('id', 'email', 'name'),
+			'conditions' => array(
+				'User.ativo' => 1,
+				'User.email <>' => '',
+				'User.role_id' => 1,
+			)
+		));
+		$msg = '';
+		if( (!empty($verificarTarefas)) && (!empty($allUsersAdmin)) ){
+			foreach( $allUsersAdmin as $user ):
+				$nome = $user['User']['name'];
+				$msg .= '
+
+						<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+						<tbody>
+						<tr>
+						<td align="left" width="130">
+						<img src="'.$logoTop.'">
+						</td>
+						<td colspan="2">
+						<table style="background-color: #ffd600 !important;" height="115" width="570">
+						<tbody>
+						<tr>
+						<td align="center" style="font-size: 24px;text-transform: uppercase;font-weight: 500;color: #000;">
+						<strong>Agenda Legislativa</strong>
+						</td>
+						</tr>
+						</tbody>
+						</table>
+						</td>
+						</tr>
+						</tbody>
+						</table>
+
+						<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+							<tbody>
+								<tr>
+									<td>
+										<br>
+										<br>
+										<br>
+										<br>
+										<br>
+										<table cellpadding="0" cellspacing="0" width="700" align="center">
+											<tbody>
+												<tr>
+													<td height="100">
+													<p style="font-size: 18px;color: #000;">
+													Olá <strong>'.$nome.'.</strong>
+													</p>
+													<hr>
+													</td>
+												</tr>
+												<tr>
+													<td align="center">
+														<p style="font-size: 16px;color:#747474">
+															Tarefas <strong>NÃO</strong> realizadas.<br><br><br>
+														</p>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+
+										<table width="700">
+											<tbody>
+												<tr>
+													<th>
+														Numero da proposicao
+													</th>
+
+													<th>
+														Acao ABEAR
+													</th>
+
+													<th>
+														Data de Entrega
+													</th>
+												</tr>
+
+												';
+
+												$count=0;
+												foreach($verificarTarefas as $tarefa){
+													$this->Tarefa->id = $tarefa['Tarefa']['id'];
+													$this->Tarefa->saveField('enviado_por_email', true);
+													$poposicao = @$tarefa['Pl']['PlType']['tipo']. ' ' .$tarefa['Pl']['numero_da_pl']. '/' .$tarefa['Pl']['ano'];
+													$linkPl = Router::url('/ver-pl/'.$tarefa['Pl']['id'].'#ver_Tarefa_'.$tarefa['Tarefa']['id'], true);
+													$tarefaTitulo = $tarefa['Tarefa']['titulo'];
+													$tarefaDescricao = $tarefa['Tarefa']['descricao'];
+													$tarefaEntregarDia = date('d/m/Y',strtotime( $tarefa['Tarefa']['entrega']));
+													$tarefaAlterada = date('d/m/Y \á\s H:i',strtotime( $tarefa['Tarefa']['modified']));
+													$logoTop = 'http://abear.com.br/uploads/img/logo/header_logo-abear.png';
+													$tituloDoEmail = 'Tarefas que devem ser executadas.';
+
+													$css = '';
+													if( $count % 2 === 0){
+														$css = 'style="background: #F3F3F3;"';
+													}
+											$msg .= '
+
+													<tr>
+														<td '.$css.' height="40">
+															<a href="'.$linkPl.'" target="_blank" style="text-decoration: none; color: black;">
+																'.$poposicao.'
+															</a>
+														</td>
+														<td '.$css.' height="40">
+															<a href="'.$linkPl.'" target="_blank" style="text-decoration: none; color: black;">
+																'.$tarefaTitulo.'
+															</a>
+														</td>
+														<td '.$css.' align="right" height="40">
+															<a href="'.$linkPl.'" target="_blank" style="text-decoration: none; color: black;">
+																'.$tarefaEntregarDia.'
+															</a>
+														</td>
+													</tr>
+													';
+
+													$count++;
+												}
+											$msg .= '
+											</tbody>
+										</table>
+
+
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+						<br>
+						<br>
+						<table cellpadding="0" cellspacing="0" width="700" align="center" style="color:#747474;font-size: 14px;font-family: Verdana;">
+							<tbody>
+								<tr>
+									<td align="center">
+										<hr>
+										<a href="'.Router::url('/', true).'" style="text-decoration: none; color: black;">
+											Agenda Legislativa
+										</a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<br>
+						<br>
+						<br>
+				';
+
+				$this->envio_email_tarefa($user['User']['email'], $tituloDoEmail, $msg);
+			endforeach;
+		}
+	}
+
+	public function envio_email_tarefa($email_to=null, $title=null, $msg=null) {
+		$this->autoRender = false;
+
+		$Email = new CakeEmail();
+			$Email->emailFormat('html');
+			$Email->from(array('nao-responda@zoio.net.br' => 'Agenda Legislativa ABEAR'));
+			$Email->to($email_to);
+			$Email->subject($title);
+			$Email->send($msg);
+	}
+
+}

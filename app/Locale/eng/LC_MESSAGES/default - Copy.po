@@ -1,0 +1,67 @@
+#### ENG
+
+msgid "sobrea" 
+msgstr "About"
+
+msgid "nossosprodutos" 
+msgstr "<b>Products</b>"
+
+msgid "selecioneoproduto" 
+msgstr "Select a Product"
+
+msgid "listade" 
+msgstr "List of "
+
+msgid "produtores" 
+msgstr "Producers"
+
+msgid "sobre" 
+msgstr "about"
+
+msgid "produtos" 
+msgstr "products"
+
+msgid "novidades" 
+msgstr "new stuff"
+
+msgid "ondeencontrar" 
+msgstr "where to find"
+
+msgid "contato" 
+msgstr "contact"
+
+msgid "leiamais" 
+msgstr "_Read more"
+
+msgid "onde" 
+msgstr "Where"
+
+msgid "encontrar" 
+msgstr "to Find"
+
+msgid "email" 
+msgstr "Email"
+
+msgid "nome" 
+msgstr "name"
+
+msgid "email" 
+msgstr "email"
+
+msgid "mensagem" 
+msgstr "mensage"
+
+msgid "enviar" 
+msgstr "_Send"
+
+msgid "senha" 
+msgstr "password"
+
+msgid "form_nome" 
+msgstr "Name required "
+
+msgid "form_email" 
+msgstr "E-Mail required "
+
+msgid "form_email_cadastrado" 
+msgstr "E-Mail in use "

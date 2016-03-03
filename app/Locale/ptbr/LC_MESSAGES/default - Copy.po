@@ -1,0 +1,62 @@
+#### PT-BR
+
+msgid "sobrea" 
+msgstr "Sobre a"
+
+msgid "nossosprodutos" 
+msgstr "Nossos <b>Produtos</b>"
+
+msgid "selecioneoproduto" 
+msgstr "Selecione o Produto"
+
+msgid "listade" 
+msgstr "Lista de "
+
+msgid "produtores" 
+msgstr "Produtores"
+
+msgid "sobre" 
+msgstr "sobre"
+
+msgid "produtos" 
+msgstr "produtos"
+
+msgid "novidades" 
+msgstr "novidades"
+
+msgid "ondeencontrar" 
+msgstr "onde encontrar"
+
+msgid "contato" 
+msgstr "contato"
+
+msgid "leiamais" 
+msgstr "_Leia mais"
+
+msgid "onde" 
+msgstr "Onde"
+
+msgid "encontrar" 
+msgstr "Encontrar"
+
+msgid "email" 
+msgstr "E-mail"
+
+msgid "enviar" 
+msgstr "_Enviar"
+
+#### ..............
+#### 
+####   VALIDACAO 
+#### 
+#### ..............
+
+
+msgid "form_nome" 
+msgstr "Nome obrigatório "
+
+msgid "form_email" 
+msgstr "E-Mail obrigatório "
+
+msgid "form_email_cadastrado" 
+msgstr "E-Mail em uso "

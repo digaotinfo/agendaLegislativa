@@ -1,0 +1,85 @@
+<?
+class Pl extends AppModel{
+	var $useTable = 'tb_pls';
+	var $name = 'Pl';
+
+
+	var $transformUrl = array(
+							'url_amigavel' => 'numero_da_pl'
+						);
+
+    //
+	// public $validate = array(
+	// 	'nome' => array(
+	// 		'required' => array(
+	// 			'rule' => array('notEmpty'),
+	// 			'message' => 'Favor informar o nome da Categoria',
+	// 		)
+	// 	),
+	// );
+
+
+	public $belongsTo = array(
+		'StatusType' => array(
+			'className'             => 'StatusType',
+			'foreignKey'            => 'status_type_id',
+			'dependent' => true,
+		),
+		'PlType' => array(
+			'className'             => 'PlType',
+			'foreignKey'            => 'tipo_id',
+			'dependent' => true,
+		),
+		// 'PlSituacao' => array(
+		// 	'className'             => 'PlSituacao',
+		// 	'foreignKey'            => 'situacao_id',
+		// 	'dependent' => true,
+		// ),
+		'Tema' => array(
+			'className'             => 'Tema',
+			'foreignKey'            => 'tema_id',
+			'dependent' => true,
+		)
+	);
+	public $hasMany = array(
+		'Foco' => array(
+			'className'				=> 'Foco',
+			//tabela do relacionamento
+			// 'joinTable'             => 'tb_pl_foco',
+			'foreignKey'            => 'pl_id',
+			//chave de associação
+			// 'associationForeignKey' => 'pl_id',
+			'dependent' => true,
+		),
+		'OqueE' => array(
+			'className'				=> 'OqueE',
+			'foreignKey'            => 'pl_id',
+			'dependent' => true,
+		),
+		'Situacao' => array(
+			'className'		=> 'Situacao',
+			'foreignKey'	=> 'pl_id',
+			'dependent' 	=> true,
+			'limit'			=> 5,
+			'order'			=> array('id' => 'DESC')
+		),
+		'NossaPosicao' => array(
+			'className'				=> 'NossaPosicao',
+			'foreignKey'            => 'pl_id',
+			'dependent' => true,
+			'limit'			=> 5,
+			'order'			=> array('id' => 'DESC')
+		),
+		'LogAtualizacaoPl' => array(
+			'className'				=> 'LogAtualizacaoPl',
+			'foreignKey'            => 'pl_id',
+			'dependent' => true,
+			// 'limit'			=> 1,
+			'order'			=> array('id' => 'DESC')
+		),
+	);
+
+
+
+	// var $order = array("Categoria.nome" => "ASC");
+}

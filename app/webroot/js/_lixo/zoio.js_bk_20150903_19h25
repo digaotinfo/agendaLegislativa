@@ -1,0 +1,169 @@
+$(document).ready(function() {
+    //////=======
+    /// base ajax
+    // $.ajax({
+    //     url: url,
+    //     data: form.serialize(),
+    //     success: function(data){
+    //         alert(data);
+    //     },
+    //     error: function(data){
+    //         console.log('error');
+    //     }
+    // });
+    /// base ajax
+    //////=======
+
+
+    // var teste = '2015-08-31 15:00:35';
+    // var formattedDate = new Date(teste);
+    // var d = formattedDate.getDate();
+    // if(d){
+    //     d = '0'+d;
+    // }
+    // var m =  formattedDate.getMonth();
+    // m += 1;  // JavaScript months are 0-11
+    // if(m){
+    //     m = '0'+m;
+    // }
+    // var y = formattedDate.getFullYear();
+    // var h =  formattedDate.getHours();
+    // var min =  formattedDate.getMinutes();
+    // console.log(d+'/'+m+'/'+y);
+
+
+    // >>> PlAdminVerCompletoForm
+    $('.formPL .save').click(function(){
+        $('.save').toggleClass('hide');
+        $('.preloader-wrapper').toggleClass('hide');
+        var formLocal = $(this).parent().parent().parent();
+        var formLocal = formLocal.attr('id');
+        var url = $('#url_edit').val();
+        var serializeArray = $('#'+formLocal).serialize();
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: serializeArray,
+            success: function(data){
+                $('.save').toggleClass('hide');
+                $('.preloader-wrapper').toggleClass('hide');
+                alert('PL Alterada');
+            },
+            error: function(data){
+                console.log('error');
+            }
+        });
+
+    });
+    // <<< PlAdminVerCompletoForm
+
+    // >>> SAVE BLOCK
+    $('.form.save').click(function(){
+        var btnAlter = '';
+        var urlCompleto = '';
+        btnAlter = $(this).attr('id');
+        var nameModel = btnAlter.split('form_');
+        nameModel = nameModel[1];
+        var formName = $('#'+nameModel+'AdminVerCompletoForm').attr('id');
+        var url = $('#'+formName+' #url_alter_data').val();
+        var serializeArray = $('#'+formName).serialize();
+
+        if( (nameModel == 'Foco') || (nameModel == 'OqueE') ){
+            urlCompleta = $('.section#'+nameModel+' #url_alter_data').val();
+        }else{
+            urlCompleta = url+'/'+nameModel;
+        }
+
+
+        $.ajax({
+            type: 'POST',
+            url: urlCompleta,
+            data: serializeArray,
+            accepts: {json: 'application/json'},
+            success: function(data){
+                if(data != ''){
+                    //////////////////////////////////////////////////
+                    //////////////////////////////////////////////////
+                    ///>>> gerar o looping do banco atualizado(PARSE JSON PARA JQUERY)
+                    var registros = JSON.parse(data);
+                    if(nameModel == 'Foco' || nameModel == 'OqueE'){
+                        registros = registros;
+                    }else{
+                        registros = registros.reverse();
+                    }
+                    if(eval("registros[0]."+nameModel)){
+                        //>>> FORMATED DATE
+                            var formattedDate = new Date(eval("registros[0]."+nameModel).modified);
+                            var d = formattedDate.getDate();
+                            if(d < 10){
+                                d = '0'+d;
+                            }
+                            var m =  formattedDate.getMonth();
+                            m += 1;  // JavaScript months are 0-11
+                            if(m<10){
+                                m = '0'+m;
+                            }
+                            var y = formattedDate.getFullYear();
+                            var h =  formattedDate.getHours();
+                            if(h<10){
+                                h = '0'+h;
+                            }
+                            var min =  formattedDate.getMinutes();
+                        //<<< FORMATED DATE
+
+                        var htmlAtualizacaoData = d+'/'+m+'/'+y;
+                        var htmlAtualizacaoHora = h+':'+min;
+                        var dataHora = htmlAtualizacaoData+ ' às ' +htmlAtualizacaoHora;
+                        var html = '';
+                        $( "#"+nameModel+" strong#dataHora" ).text(dataHora);
+
+                        //>>> LISTAR TEXTOS
+                            $( "#"+nameModel+" p.text" ).remove();
+
+                            if(nameModel != 'Foco' || nameModel != 'OqueE'){
+                                if($( "#"+nameModel).find('edit-text')){
+                                    $( "#"+nameModel+" .edit-text").toggleClass('hide');
+                                }
+                                $.each(registros, function(index, registro) {
+                                    if($.trim(eval("registro."+nameModel).arquivo) != ''){
+                                        htmlTxt = '<p class="text">'+eval("registro."+nameModel).txt+'<br><a href="'+webroot+eval("registro."+nameModel).arquivo+'" target="_blank" class="waves-effect waves-light btn green darken-3"><i class="material-icons left">file_download</i>Baixar Arquivo</a></p>';
+                                    }else{
+                                        htmlTxt = '<p class="text">'+eval("registro."+nameModel).txt+'</p>';
+                                    }
+
+                                    $( "#"+nameModel ).append(htmlTxt);
+                                });
+                            }
+                        //<<< LISTAR TEXTOS
+
+                        $( "#"+formName ).trigger('reset');//<<< RESET FORM
+                        $('.ajax-file-upload-statusbar').remove();
+                        $('.arquivo_'+nameModel).val('');
+                    }
+                    ///<<< gerar o looping do banco atualizado(PARSE JSON PARA JQUERY)
+                    //////////////////////////////////////////////////
+                    //////////////////////////////////////////////////
+                }else{
+                    alert('erro ao editar texto');
+                }
+            },
+            error: function(data){
+                console.log('error');
+                console.log(data);
+            }
+        });
+    });
+
+    // <<< SAVE BLOCK
+
+    $('.btn-edit').click(function(){
+        var btnLocal = $(this).attr('id');
+        btnLocalId = btnLocal.split('edit_');
+
+        $('.section#'+btnLocalId[1]+' .text').toggleClass('hide');
+        $('.section#'+btnLocalId[1]+' .edit-text').toggleClass('hide');
+    });
+
+
+});

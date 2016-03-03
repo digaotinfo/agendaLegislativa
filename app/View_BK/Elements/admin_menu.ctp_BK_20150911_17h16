@@ -1,0 +1,108 @@
+<?php
+if ($this->Session->read('Auth.User')):
+	if ($userAdmin < 4):
+		?>
+		<ul id="nav-mobile" class="side-nav fixed collapsible collapsible-accordion">
+			<li class="logo">
+				<a href="<?=$this->Html->url(array(
+											'controller' => 'index',
+											'action' => 'index',
+											'admin' => true
+										));?>">
+					<?php echo $this->Html->image('header_logo-abear.png', array('class' => 'responsive-img'));?>
+				</a>
+			</li>
+
+			<!-- <li class="bold <?php if($this->name == 'Index') echo 'active'?>">
+				<a href="<?=$this->Html->url(array(
+											'controller' => 'index',
+											'action' => 'index',
+											'admin' => true
+										));?>" class="waves-effect waves-teal">
+					PLs
+				</a>
+			</li> -->
+			<li class="bold no-padding <?php if($this->name == 'index') echo 'active'?> ">
+
+				<a class="collapsible-header waves-effect waves-teal">
+					Proposições
+					<i class="mdi-navigation-arrow-drop-down right"></i>
+				</a>
+				<div class="collapsible-body">
+					<ul>
+						<li class=""><?=$this->Html->link('Listar Todas', array('controller' => 'index', 'action' => 'index'))?></li>
+						<!-- <li class=""><?=$this->Html->link('Situação', array('controller' => 'PlSituacaos', 'action' => 'index', 'admin' => true))?></li> -->
+						<!-- <li class=""><?=$this->Html->link('Relatório', array('controller' => 'Relatorios', 'action' => 'index', 'admin' => true))?></li>
+						<li class=""><?=$this->Html->link('Histórico Relatórios', array('controller' => 'Relatorios', 'action' => 'historicoRelatorio', 'admin' => true))?></li> -->
+					</ul>
+				</div>
+
+			</li>
+			<li class="bold no-padding <?php if($this->name == 'index') echo 'active'?> ">
+
+				<a class="collapsible-header waves-effect waves-teal">
+					Relatórios
+					<i class="mdi-navigation-arrow-drop-down right"></i>
+				</a>
+				<div class="collapsible-body">
+					<ul>
+						<li class=""><?=$this->Html->link('Gerar Relatório', array('controller' => 'Relatorios', 'action' => 'index', 'admin' => true))?></li>
+						<li class=""><?=$this->Html->link('Histórico Relatórios', array('controller' => 'Relatorios', 'action' => 'historicoRelatorio', 'admin' => true))?></li>
+					</ul>
+				</div>
+
+			</li>
+
+
+
+			<li class="bold <?php if($this->name == 'Arquivos') echo 'active'?>">
+				<a href="<?=$this->Html->url(array(
+												'controller' => 'arquivos',
+												'action' => 'index',
+												'admin' => true
+											));?>" class="waves-effect waves-teal">
+												Outros Arquivos
+				</a>
+			</li>
+			<?php
+			if ($userAdmin == 1){
+				?>
+				<li class="bold no-padding <?php if($this->name == 'User') echo 'active'?> ">
+
+					<a class="collapsible-header waves-effect waves-teal">
+						Administrativo
+						<i class="mdi-navigation-arrow-drop-down right"></i>
+					</a>
+					<div class="collapsible-body">
+						<ul>
+							<li class=""><?=$this->Html->link('Meus Dados', array('controller' => 'user', 'action' => 'edit', $current_user['id']))?></li>
+							<li class=""><?=$this->Html->link('Usuários', array('controller' => 'user', 'action' => 'index'))?></li>
+							<li class=""><?=$this->Html->link('Empresas', array('controller' => 'empresas', 'action' => 'index'))?></li>
+							<li class=""><?=$this->Html->link('Tipos', array('controller' => 'plTypes', 'action' => 'index', 'admin' => true))?></li>
+							<li class=""><?=$this->Html->link('Status', array('controller' => 'StatusTypes', 'action' => 'index', 'admin' => true))?></li>
+							<li class=""><?=$this->Html->link('Temas', array('controller' => 'Temas', 'action' => 'index', 'admin' => true))?></li>
+						</ul>
+					</div>
+
+				</li>
+				<?php
+			} else {
+				?>
+				<li class="bold <?php if($this->name == 'User') echo 'active'?> ">
+
+					<?=$this->Html->link('Meus Dados', array('controller' => 'user', 'action' => 'edit', $current_user['id']))?>
+
+				</li>
+				<?php
+			}
+			?>
+
+
+			<li class="bold">
+				<?=$this->Html->link('Sair', array('controller' => 'user', 'action' => 'logout'), array('class' => 'waves-effect waves-teal'))?>
+			</li>
+		</ul>
+		<?php
+	endif;
+endif;
+?>
