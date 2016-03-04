@@ -10,45 +10,6 @@ $this->start('script');
 	<script>
 		$(document).ready(function(){
 			$('.modal-trigger').leanModal();
-			// // >>> UPLOAD NOTAS TECNICAS
-			// var elementoNotasTecnicas = $(".mulitplefileuploader-notas-tecnicas");
-			// var uploadObjNotasTecnicas = elementoNotasTecnicas.uploadFile({
-			// 	url: webroot+"assets/uploadAjax/upload.php",
-			// 	multiple:false,
-			// 	dragDrop:false,
-			// 	maxFileCount:1,
-			// 	fileName: "myfile",
-			// 	allowedTypes:"jpg,png,gif,doc,pdf,zip,xls,xlsx,doc,docx,ppt",
-			// 	returnType:"json",
-			// 	showFileCounter:false,
-			// 	dragDropStr: "<span><b>Arraste e solte o arquivo aqui</b></span>",
-			// 	abortStr:"abortar",
-			// 	cancelStr:"cancelar",
-			// 	doneStr:"feito",
-			// 	multiDragErrorStr: "Não foi possível subir estes arquivos.",
-			// 	extErrorStr:"Não autorizado. Veja as extensões possíveis: ",
-			// 	sizeErrorStr:"Arquivo muito pesado. O máximo permitido é: ",
-			// 	uploadErrorStr:"Erro ao efetuar o upload",
-			// 	uploadStr:"Anexar arquivo",
-			// 	onSuccess:function(files,data,xhr,pd){
-			// 		$('.arquivo_notas_tecnicas').val(data[0]);
-			// 		$('.arquivoatual').remove();// <<<	REMOVE DIV DO TITULO DO ARQUIVO
-			//
-			// 	},
-			// 	showDelete:true,
-			// 	deleteCallback: function(data,pd){
-			// 		for(var i=0;i<data.length;i++){
-			// 			$.post(webroot+"assets/uploadAjax/delete.php",{op:"delete",name:data[i]},
-			// 			function(resp, textStatus, jqXHR){
-			// 				//Show Message
-			// 				$(".status").append("<div>Arquivo Deletado</div>");
-			// 			});
-			// 		}
-			// 		pd.statusbar.hide(); //You choice to hide/not.
-			// 		$('.arquivo_notas_tecnicas').val('');
-			// 	}
-			// });
-			// // <<< UPLOAD NOTAS TECNICAS
 
 
 			// >>> UPLOAD DOS BLOCKS
@@ -312,8 +273,12 @@ $this->start('script');
 					weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
 					weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
 					showMonthsShort: undefined,
-					showWeekdaysFull: undefined
+					showWeekdaysFull: undefined,
+					today: 'Hoje',
+					clear: 'Limpar',
+					close: 'Fechar'
 				});
+
 
 			});
 
@@ -1564,13 +1529,20 @@ $this->end();
 	?>
 
 
-
+<div class="historico">
 	HISTÓRICO:
 	Veja como esta proposição estava em uma data anterior:
 	<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
-	<?php echo $this->Form->input('data', array(
-		'class' => 'datepicker'
-	)); ?>
+	<?php
+		$dia = CakeTime::format( 'd', date('Y-m-d'));
+		$mes = CakeTime::format( 'F', date('Y-m-d'));
+		$ano = CakeTime::format( 'Y', date('Y-m-d'));
+		echo $this->Form->input('data', array(
+			'class' => 'datepicker',
+			'label' => false,
+			'value' => $dia.' '.$meses[$mes].', '.$ano
+		));
+	?>
 
 	<?php
 		echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
@@ -1581,3 +1553,4 @@ $this->end();
 	?>
 
 	<?php $this->end(); ?>
+</div>

@@ -17,7 +17,10 @@ $this->start('script');
             weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
             weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
             showMonthsShort: undefined,
-            showWeekdaysFull: undefined
+            showWeekdaysFull: undefined,
+			today: 'Hoje',
+			clear: 'Limpar',
+			close: 'Fechar'
         });
 
     });
@@ -344,6 +347,7 @@ $this->end();
             </p>
     <?php endif; ?>
     </div>
+	<hr>
 
     <div class="section" id="OQueE" data-id-registro="">
         <h5>
@@ -362,6 +366,7 @@ $this->end();
             </p>
     <?php endif; ?>
     </div>
+	<hr>
 
     <div class="section" id="NossaPosicao" data-id-registro="">
         <h5>
@@ -380,6 +385,7 @@ $this->end();
             </p>
         <?php endif; ?>
     </div>
+	<hr>
 
 
     <div class="section" id="Situacao" data-id-registro="">
@@ -415,7 +421,7 @@ $this->end();
                     <?php
                         echo $registro['texto'];
                     ?>
-                    <?php if(!empty($registro['arquivo'])): ?>
+                    <?php if(!empty($registro['arquivo']) && $registro['arquivo'] != Router::url('/', true)): ?>
                         <br>
                         <a href="<?php echo $this->webroot.$registro['arquivo']?>" target="_blank" class="waves-effect waves-light btn green darken-3">
                             <i class="material-icons left">file_download</i>Baixar Arquivo
@@ -425,6 +431,7 @@ $this->end();
             </div>
         <?php endforeach; ?>
     </div>
+	<hr>
 
 
 
@@ -443,7 +450,7 @@ $this->end();
 
         <?php if( !empty($proposicao[6]['Tarefa']) ): ?>
             <div class="row">
-                <?php foreach( $proposicao[6]['Tarefa'] as $registro ): ?>
+                <?php foreach( $proposicao[6]['Tarefa'] as $registro ):  ?>
                     <div class="col s12 m12 l6">
 
         				<div class="contentTarefaPl tarefa-nao-realizada">
@@ -474,6 +481,7 @@ $this->end();
         <?php endif; ?>
 
     </div>
+	<hr>
 
 <?php else: ?>
     <!-- HEADER DA PÁGINA -->
@@ -490,22 +498,36 @@ $this->end();
 <?php endif; ?>
 
 
+	<div class="row historico">
+		<div class="col s12">
+			HISTÓRICO:
+			Veja como esta proposição estava em uma data anterior:
+			<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
+			<?php
+			if( !empty($dataFiltro) ){
+				echo $this->Form->input('data', array(
+					'class' => 'datepicker',
+					'label' => false,
+					'value' => $dataFiltro
+				));
+			}else{
+				echo $this->Form->input('data', array(
+					'class' => 'datepicker',
+					'label' => false,
+				));
+			}
+			?>
 
+			<?php
+				echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
+					'type' => 'submit',
+					'div' => true,
+					'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
+					'value' => $dataFiltro
+				));
 
+			?>
 
-	HISTÓRICO:
-	Veja como esta proposição estava em uma data anterior:
-	<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
-	<?php echo $this->Form->input('data', array(
-		'class' => 'datepicker'
-	)); ?>
-
-	<?php
-		echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
-			'type' => 'submit',
-			'div' => true,
-			'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
-		));
-	?>
-
-	<?php $this->end(); ?>
+			<?php $this->end(); ?>
+		</div>
+	</div>

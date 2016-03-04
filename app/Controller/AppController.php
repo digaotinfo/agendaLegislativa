@@ -1068,15 +1068,16 @@ class AppController extends Controller {
 		$ano            = $request['Pl']['ano'];
 		$etapa_id       = $request['Pl']['etapa_id'];
 		$subetapa_id    = $request['Pl']['subetapa_id'];
-		$autor          = $a['autor'];
-		$relator          = $a['relator'];
-		$link_da_pl        = $a['link_da_pl'];
-		$apensados_da_pl        = $a['apensados_da_pl'];
-		$prioridade        = $a['prioridade'];
-		$tema_name        = $a['temaName'];
-		$status_name    = $a['status_type'];
-		$etapa    = $a['etapa'];
-		$subetapa    = $a['subetapa'];
+		$autor          = $request['Autor']['nome'];
+		$relator        = $request['Relator']['nome'];
+		$link_da_pl     = $request['Pl']['link_da_pl'];
+		$apensados_da_pl= $request['Pl']['apensados_da_pl'];
+		$prioridade     = $request['Pl']['prioridade'];
+		$tema_name      = $request[0]['temaName'];
+		$status_name    = $request[0]['status_type'];
+		$etapa    		= $request[0]['etapa'];
+		$subetapa    	= $request[0]['subetapa'];
+
 
 
 
@@ -1131,12 +1132,12 @@ class AppController extends Controller {
 			if($elemento['realizado'] == 1){
 				$realizado = 'SIM';
 			}
-			$tarefa =   $tarefa.'[ID]'.$elemento['id'].'[ID]
+			$tarefa =   $tarefa.'[ID]'.$elemento['id'].'[/ID]
 						[titulo]'.$elemento['titulo'].'[/titulo]
 						[texto]'.$elemento['descricao'].'[/texto]
 						[arquivo] [/arquivo]
 						[entrega]'.$elemento['entrega'].'[/entrega]
-						[realizado]'.$realizado.'[realizado]
+						[realizado]'.$realizado.'[/realizado]
 						[modified] [/modified]';
 		}
 		foreach( $registro['NotasTecnica'] as $elemento ){
@@ -1153,8 +1154,8 @@ class AppController extends Controller {
 		///////////////////////////////////////////////////////////////////////////////////
 
 
-		$this->Fluxograma->create();
-		$a_save['Fluxograma'] = array(
+		// $this->Fluxograma->create();
+		$a_save = array(
 			'pl_id'         => $pl_id,
 			'pl_origem'     => $pl_origem,
 			'tipo_id'       => $tipo_id,
@@ -1178,15 +1179,16 @@ class AppController extends Controller {
 			'apensados_da_pl' => $apensados_da_pl,
 			'prioridade' 	=> $prioridade,
 			'tema_name' 	=> $tema_name,
-			'status_type_id' => $status_name,
+			'status_type' => $status_name,
 			'etapa' 		=> $etapa,
 			'subetapa' 		=> $subetapa,
 		);
 
 		// echo "<pre>";
-		// print_r($a_save);
+		// print_r($request);
 		// echo "</pre>";
 		// die();
+		$this->Fluxograma->create();
 		$this->Fluxograma->save($a_save);
 		/// PREPARAR PRA SALVAR O HISTÓRICO DO FLUXOGRAMA
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1215,13 +1217,9 @@ class AppController extends Controller {
 		foreach($IDInicio as $key => $tratando){
 			if( !empty($IDInicio[$key]) ){
 				$registroID	= explode('[/ID]', $IDInicio[$key]);
-
+				$id = $registroID[0];
 				if( !empty($registroID[1]) ){
 					$restante = $registroID[1];
-					$id = $registroID[0];
-				}else{
-					$restante = $registroID[0];
-					$id = $registroID[0];
 				}
 				$tituloInicio = explode('[titulo]', $restante);
 				if( !empty($tituloInicio[1]) ){
