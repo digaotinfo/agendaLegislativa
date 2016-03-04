@@ -84,8 +84,8 @@ class NotasTecnicasController extends AppController{
                 `Pl`.`id`,
                 (CONCAT(PlType.tipo, ' ', `Pl`.`numero_da_pl`, '/',`Pl`.`ano`)) AS `Pl_concat`
             FROM
-                `tb_pls` AS `Pl`
-                LEFT JOIN `tb_pl_types` AS `PlType` ON (`Pl`.`tipo_id` = `PlType`.`id`)
+                `arearestrita_dev`.`tb_pls` AS `Pl`
+                LEFT JOIN `arearestrita_dev`.`tb_pl_types` AS `PlType` ON (`Pl`.`tipo_id` = `PlType`.`id`)
             WHERE
                 `Pl`.`delete` = '0'
                 AND `Pl`.`ativo` = '1'
@@ -172,8 +172,8 @@ class NotasTecnicasController extends AppController{
                 `Pl`.`id`,
                 (CONCAT(PlType.tipo, ' ', `Pl`.`numero_da_pl`, '/',`Pl`.`ano`)) AS `Pl_concat`
             FROM
-                `tb_pls` AS `Pl`
-                LEFT JOIN `tb_pl_types` AS `PlType` ON (`Pl`.`tipo_id` = `PlType`.`id`)
+                `arearestrita_dev`.`tb_pls` AS `Pl`
+                LEFT JOIN `arearestrita_dev`.`tb_pl_types` AS `PlType` ON (`Pl`.`tipo_id` = `PlType`.`id`)
             WHERE
                 `Pl`.`delete` = '0'
                 AND `Pl`.`ativo` = '1'

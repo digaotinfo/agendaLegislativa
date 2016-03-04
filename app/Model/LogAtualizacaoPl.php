@@ -9,13 +9,6 @@ class LogAtualizacaoPl extends AppModel{
             'dependent' => true,
             'fields'    => array('id', 'numero_da_pl', 'ano'),
         ),
-        'FluxogramaEtapa' => array(
-			'className'		=> 'FluxogramaEtapa',
-			'foreignKey'    => 'etapa_id',
-			'dependent' 	=> true,
-			// 'fields'		=> array('id', 'etapa_id', 'subetapa', 'descricao', 'ordem'),
-			'order'			=> array('ordem' => 'ASC')
-		),
         // 'PlType' => array(
         //     'className'             => 'PlType',
         //     //tabela do relacionamento

@@ -1,0 +1,5 @@
+#### PT-BR
+
+msgid "Últimos" 
+msgstr "Últimos" 
+

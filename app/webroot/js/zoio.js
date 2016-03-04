@@ -858,49 +858,6 @@ $(document).ready(function() {
     //<<< Fluxograma
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if( $('#emailCamara table tr td table td').length  ){
-        urlCamara = $('#atualizacaoCamaraURL').val();
-        // console.log(urlCamara);
-    	var tag1 = $('#emailCamara table tr td table td').text().index;
-        // $.ajax({
-        //     url: urlCamara,
-        //     method: 'POST',
-        //     data: {txt: txt},
-        //     accepts: {json: 'application/json'},
-        //     success: function(data){
-        //         console.log('certo');
-        //         console.log(data);
-        //     },
-        //     error: function(data){
-        //         console.log('error');
-        //         console.log(data);
-        //     }
-        // });
-        // console.log(txt);
-    }
-
-
 });
 
 

@@ -36,7 +36,7 @@ class NotasTecnica extends AppModel{
 	);
 
     function invalidate($field, $value = true){
-        // print_r($value);
+        print_r($value);
         parent::invalidate($field, __d('meio_upload', $value, true));
     }
 	//<<< MEIO UPLOAD

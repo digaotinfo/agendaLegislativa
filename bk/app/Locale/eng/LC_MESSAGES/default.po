@@ -1,0 +1,86 @@
+#### ENG
+
+msgid "sobrea" 
+msgstr "About"
+
+msgid "nossosprodutos" 
+msgstr "<b>Products</b>"
+
+msgid "selecioneoproduto" 
+msgstr "Select a Product"
+
+msgid "listade" 
+msgstr "List of "
+
+msgid "produtores" 
+msgstr "Producers"
+
+msgid "sobre" 
+msgstr "about"
+
+msgid "produtos" 
+msgstr "products"
+
+msgid "novidades" 
+msgstr "new stuff"
+
+msgid "ondeencontrar" 
+msgstr "where to find"
+
+msgid "contato" 
+msgstr "contact"
+
+msgid "leiamais" 
+msgstr "_Read more"
+
+msgid "onde" 
+msgstr "Where"
+
+msgid "encontrar" 
+msgstr "to Find"
+
+msgid "email" 
+msgstr "Email"
+
+msgid "nome" 
+msgstr "name"
+
+msgid "email" 
+msgstr "email"
+
+msgid "mensagem" 
+msgstr "mensage"
+
+msgid "enviar" 
+msgstr "_Send"
+
+msgid "senha" 
+msgstr "password"
+
+msgid "formnome" 
+msgstr "Name required"
+
+msgid "formemail" 
+msgstr "E-Mail required"
+
+msgid "formemailcadastrado" 
+msgstr "E-Mail in use"
+
+
+msgid "sim"
+msgstr "Yes"
+
+msgid "nao"
+msgstr "No"
+
+msgid "voce_tem_mais"
+msgstr "Are you older"
+
+msgid "de_18_anos"
+msgstr " than 21 years?"
+
+msgid "desculpe_nao_pode_entrar_no_site"
+msgstr "Sorry, but you are not old enough to enter this site."
+
+
+

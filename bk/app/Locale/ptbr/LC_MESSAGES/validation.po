@@ -1,0 +1,13 @@
+#### PT-BR
+
+msgid "formnome"
+msgstr "Nome obrigatório "
+
+msgid "formemail"
+msgstr "E-Mail obrigatório "
+
+msgid "formemailcadastrado"
+msgstr "E-Mail em uso"
+
+msgid "nome" 
+msgstr "Nome"

@@ -41,7 +41,6 @@ $this->end();
 	</script>
 <?php
 $this->end();
-
 ?>
 <!-- HEADER DA PÁGINA -->
 <div class="row padding-top-20">

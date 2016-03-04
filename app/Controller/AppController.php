@@ -21,6 +21,7 @@
  */
 
 App::uses('Controller', 'Controller', 'CakeEmail', 'Network/Email');
+App::uses('CakeEmail', 'Network/Email');
 // App::import('Vendor', 'receiveMail/receiveMail');
 // App::uses('CakeEmail', 'Network/Email');
 /**
@@ -1326,7 +1327,6 @@ class AppController extends Controller {
 	public function receiveMail( $date=null ){
 		$this->autoRender = false;
 
-
 		$obj = new receiveMail("sistema@agendalegislativa.abear.com.br", "sistema@123", "sistema@agendalegislativa.abear.com.br", "email-ssl.com.br", "imap", "143",false);
 
         //Connect to the Mail Box
@@ -1334,30 +1334,30 @@ class AppController extends Controller {
 
         // Get Total Number of Unread Email in mail box
         $tot = $obj->getTotalMails(); //Total Mails in Inbox Return integer value
-        // print_r($tot);
-        // echo " Total de e-mails:: {$tot} <br>";
-        // echo "<hr>";
+        print_r($tot);
+        echo " Total de e-mails:: {$tot} <br>";
+        echo "<hr>";
 
         for($i = $tot; $i > 0; $i--) {
             $head = $obj->getHeaders($i);  // Get Header Info Return Array Of Headers **Array Keys are (subject,to,toOth,toNameOth,from,fromName)
-			//
-            // 	echo "Assunto: ".		$head['subject']	."<br>";
-            // 	echo "Para: ".			$head['to']			."<br>";
-            // 	echo "To Other: ".		$head['toOth']		."<br>";
-            // 	echo "ToName Other: ".	$head['toNameOth']	."<br>";
-            // 	echo "Remetente: ".		$head['from']		."<br>";
-            // 	echo "FromName: ".		$head['fromName']	."<br>";
-            // 	echo "<br><br>";
-            // 	echo "<br>*******************************************************************************************<BR>";
-            // echo $obj->getBody($i);  // Get Body Of Mail number Return String Get Mail id in interger
-			//
-            // $str = $obj->GetAttach($i, "./"); // Get attached File from Mail Return name of file in comma separated string  args. (mailid, Path to store file)
-            // $ar = explode(",", $str);
-            // foreach($ar as $key => $value) {
-            // 	echo ($value == "")?"":"Arquivo anexo :: ". $value ."<br>";
-            // }
 
-            // echo "<br>------------------------------------------------------------------------------------------<BR>";
+            	echo "Assunto: ".		$head['subject']	."<br>";
+            	echo "Para: ".			$head['to']			."<br>";
+            	echo "To Other: ".		$head['toOth']		."<br>";
+            	echo "ToName Other: ".	$head['toNameOth']	."<br>";
+            	echo "Remetente: ".		$head['from']		."<br>";
+            	echo "FromName: ".		$head['fromName']	."<br>";
+            	echo "<br><br>";
+            	echo "<br>*******************************************************************************************<BR>";
+            echo $obj->getBody($i);  // Get Body Of Mail number Return String Get Mail id in interger
+
+            $str = $obj->GetAttach($i, "./"); // Get attached File from Mail Return name of file in comma separated string  args. (mailid, Path to store file)
+            $ar = explode(",", $str);
+            foreach($ar as $key => $value) {
+            	echo ($value == "")?"":"Arquivo anexo :: ". $value ."<br>";
+            }
+
+            echo "<br>------------------------------------------------------------------------------------------<BR>";
 
             /*
             *
@@ -1367,7 +1367,6 @@ class AppController extends Controller {
             $remetente 			= $head['from'];
             $assunto 			= $head['subject'];
             $corpo 				= $obj->getBody($i);
-            // $corpo 				= strip_Tags($obj->getBody($i));
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1377,7 +1376,7 @@ class AppController extends Controller {
             * listar tipos e fazer o if para saber qual o tipo foi recebido por email
             */
 
-			if( ($remetente == 'push.materias@senado.gov.br') || ($remetente == 'tramitacao@camara.gov.br') ):
+			if( ($remetente == 'push.materias@senado.gov.br') || ($remetente == 'tramitacao@camara.gov.br') || ($remetente == 'digaot.info@gmail.com') || ($remetente == 'gabriel.rodrigues@zoio.net.br') ):
 	            $a_save = array(
 	                'remetente' 					=> $remetente,
 	                'assunto'	 					=> $assunto,
@@ -1415,7 +1414,6 @@ class AppController extends Controller {
 	                'aHref'			=> $aHref,
 	                'UsuariosEmail' => $users
 	            );
-
 	            $this->trataDadosEmail( $enviarEmail );
 
             /*
@@ -1423,22 +1421,19 @@ class AppController extends Controller {
             * <<< salvar email de atualização da pl
             */
 
-            $movendo = $obj->moveToProcessedBox($i);
-            // echo "Processado? :". $movendo ."<br>";
-            //
-            // echo "<hr>";
 
 
             //$obj->deleteMails($i); // Delete Mail from Mail box
 		endif;
 
         }
+		for($i = $tot; $i > 0; $i--) {
+			$movendo = $obj->moveToProcessedBox($i);
+			echo "Processado? :". $movendo ."<br>";
 
+			echo "<hr>";
+		}
         $obj->close_mailbox();   //Close Mail Box
-
-        // print_r('xgo no metodo');
-        // echo "</pre>";
-        // die();
 
 	}
 
@@ -1526,11 +1521,10 @@ class AppController extends Controller {
 						</tbody>
 					</table>
 				';
-				// $this->send_email($email, $titulo, $msg);
-				// echo "<pre>";
-				// print_r( $msg );
-				// echo "</pre>";
-				// die();
+
+
+
+				$this->admin_sendEmail($email, $titulo, $msg);
 
 			}
 
@@ -1549,5 +1543,18 @@ class AppController extends Controller {
 		$Email->send($msg);
     }
 
+	public function admin_sendEmail($email_to=null, $title=null, $msg=null) {
+        $this->autoRender = false;
+		//
+        // $email_to = 'digaot.info@gmail.com';
+        // $title = 'titulo';
+        // $msg = 'mensagem';
 
+        $Email = new CakeEmail();
+            $Email->emailFormat('html');
+            $Email->from(array('nao-responda@zoio.net.br' => 'Agenda Legislativa ABEAR'));
+            $Email->to($email_to);
+            $Email->subject($title);
+            $Email->send($msg);
+    }
 }

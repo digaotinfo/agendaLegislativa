@@ -1665,4 +1665,20 @@ class PlsController extends AppController{
         }
     }
 
+
+    // public function admin_testeEmail($email_to=null, $title=null, $msg=null) {
+    //     $this->autoRender = false;
+    //
+    //     $email_to = 'digaot.info@gmail.com';
+    //     $title = 'titulo';
+    //     $msg = 'mensagem';
+    //
+    //     $Email = new CakeEmail();
+    //         $Email->emailFormat('html');
+    //         $Email->from(array('nao-responda@zoio.net.br' => 'Agenda Legislativa ABEAR'));
+    //         $Email->to($email_to);
+    //         $Email->subject($title);
+    //         $Email->send($msg);
+    // }
+
 }

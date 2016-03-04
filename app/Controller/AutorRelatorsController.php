@@ -258,98 +258,98 @@ class AutorRelatorsController extends AppController{
     //<<< rodar este sql até o DIE();
     public function admin_alterarAutorRelator(){
         $this->autoRender = false;
-        // die('VERIFIQUE OS COMENTARIOS ANTES DE CONTINUAR');
-        // $model = 'Autor';
-        //
-        // $listAutoresRelatores = $this->Pl->find('all', array(
-        //     'fields' => array(
-        //         'Pl.id',
-        //         'Pl.autor',
-        //         'Pl.relator',
-        //         'Pl.autor_bk',
-        //         'Pl.relator_bk',
-        //     )
-        // ));
-        //
-        //
-        //
-        // /*
-        // * listar todos os autores e relatores
-        // */
-        // foreach( $listAutoresRelatores as $AutorRelator ){
-        //     $this->Pl->id = $AutorRelator['Pl']['id'];
-        //     $autor = $AutorRelator['Pl']['autor'];
-        //     $relator = $AutorRelator['Pl']['relator'];
-        //
-        //     ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //     // ///////
-        //     // //>>> fazer bk dos campos autor/relator_bk
-        //     //     if(!empty($autor)){
-        //     //         $this->Pl->saveField('autor_bk', $autor);
-        //     //     }
-        //     //     if(!empty($relator)){
-        //     //         $this->Pl->saveField('relator_bk', $relator);
-        //     //     }
-        //     // ///////
-        //     ////////////////////////////////////////////////////////////////////////////////////////////////////
-        // }
-        //
-        //
-        //
-        // /*
-        // * 1 - tratar os compos de autor_bk e relator_bk montando em um array() sem registros empty()
-        // * 2 - remover as duplicidades do campo
-        // * 3 - Inserir os dados na tabela da model AutorRelator
-        // * 4 - pegar o Pl.id e salvar em PlAutorRelator.pl_id, se Pl.autor_bk set PlAutorRelator.autor = 1  Pl.relator_bk  set set PlAutorRelator.relator = 1
-        // */
-        // /////////////////////////
-        // // >>> etapa 1
-        // $autor_relator_string = '';
-        // $countElements = count($listAutoresRelatores);
-        // $countAux = 0;
-        // foreach( $listAutoresRelatores as $AutorRelator ){
-        //     $autor = $AutorRelator['Pl']['autor_bk'];
-        //     $relator = $AutorRelator['Pl']['relator_bk'];
-        //     if(end($listAutoresRelatores) !== $AutorRelator){
-        //         $autor_relator_string = $autor_relator_string.$autor.','.$relator.',';
-        //     }else{
-        //         $autor_relator_string = $autor_relator_string.$autor.','.$relator;
-        //     }
-        // }
-        //
-        // $a_autor_relator = explode(",", $autor_relator_string);//<<< transformar conteudo em array()
-        // $a_autor_relator = array_filter($a_autor_relator);//<<< remover conteudo empty
-        //
-        // // <<< etapa 1
-        // /////////////////////////
-        //
-        // /////////////////////////
-        // // >>> etapa 2
-        // $remove_duplicate = array_unique($a_autor_relator);
-        // // <<< etapa 2
-        // /////////////////////////
-        //
-        // /////////////////////////
-        // // >>> etapa 3
-        // foreach($remove_duplicate as $elemet){
-        //     $a_AutorRelatorMigrate['AutorRelator'] = array(
-        //         'nome' => $elemet
-        //     );
-        //     $this->AutorRelator->create();
-        //     $this->AutorRelator->save($a_AutorRelatorMigrate);
-        // }
-        // // <<< etapa 3
-        // /////////////////////////
-        //
-        //
-        //
-        //
-        //
-        //
-        // ///////////////////////////////////////////////////////////////////////////
-        // ///////////////////////////////////////////////////////////////////////////
-        // echo 'Total de nomes migrado: '.count($remove_duplicate). " ";
-        // die();
+        die('VERIFIQUE OS COMENTARIOS ANTES DE CONTINUAR');
+        $model = 'Autor';
+
+        $listAutoresRelatores = $this->Pl->find('all', array(
+            'fields' => array(
+                'Pl.id',
+                'Pl.autor',
+                'Pl.relator',
+                'Pl.autor_bk',
+                'Pl.relator_bk',
+            )
+        ));
+
+
+
+        /*
+        * listar todos os autores e relatores
+        */
+        foreach( $listAutoresRelatores as $AutorRelator ){
+            $this->Pl->id = $AutorRelator['Pl']['id'];
+            $autor = $AutorRelator['Pl']['autor'];
+            $relator = $AutorRelator['Pl']['relator'];
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////
+            //>>> fazer bk dos campos autor/relator_bk
+                if(!empty($autor)){
+                    $this->Pl->saveField('autor_bk', $autor);
+                }
+                if(!empty($relator)){
+                    $this->Pl->saveField('relator_bk', $relator);
+                }
+            ///////
+            ////////////////////////////////////////////////////////////////////////////////////////////////////
+        }
+
+
+
+        /*
+        * 1 - tratar os compos de autor_bk e relator_bk montando em um array() sem registros empty()
+        * 2 - remover as duplicidades do campo
+        * 3 - Inserir os dados na tabela da model AutorRelator
+        * 4 - pegar o Pl.id e salvar em PlAutorRelator.pl_id, se Pl.autor_bk set PlAutorRelator.autor = 1  Pl.relator_bk  set set PlAutorRelator.relator = 1
+        */
+        /////////////////////////
+        // >>> etapa 1
+        $autor_relator_string = '';
+        $countElements = count($listAutoresRelatores);
+        $countAux = 0;
+        foreach( $listAutoresRelatores as $AutorRelator ){
+            $autor = $AutorRelator['Pl']['autor_bk'];
+            $relator = $AutorRelator['Pl']['relator_bk'];
+            if(end($listAutoresRelatores) !== $AutorRelator){
+                $autor_relator_string = $autor_relator_string.$autor.','.$relator.',';
+            }else{
+                $autor_relator_string = $autor_relator_string.$autor.','.$relator;
+            }
+        }
+
+        $a_autor_relator = explode(",", $autor_relator_string);//<<< transformar conteudo em array()
+        $a_autor_relator = array_filter($a_autor_relator);//<<< remover conteudo empty
+
+        // <<< etapa 1
+        /////////////////////////
+
+        /////////////////////////
+        // >>> etapa 2
+        $remove_duplicate = array_unique($a_autor_relator);
+        // <<< etapa 2
+        /////////////////////////
+
+        /////////////////////////
+        // >>> etapa 3
+        foreach($remove_duplicate as $elemet){
+            $a_AutorRelatorMigrate['AutorRelator'] = array(
+                'nome' => $elemet
+            );
+            $this->AutorRelator->create();
+            $this->AutorRelator->save($a_AutorRelatorMigrate);
+        }
+        // <<< etapa 3
+        /////////////////////////
+
+
+
+
+
+
+        ///////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////
+        echo 'Total de nomes migrado: '.count($remove_duplicate). " ";
+        die();
         // DOCS
         /*
         *
@@ -380,15 +380,12 @@ class AutorRelatorsController extends AppController{
                 'Pl.id',
                 'Pl.autor_bk',
                 'Pl.relator_bk',
-                'Pl.numero_da_pl',
             )
         ));
         foreach( $listAutoresRelatores as $AutorRelator ){
             $this->Pl->id = $AutorRelator['Pl']['id'];
-            // $this->Pl->read(null, $AutorRelator['Pl']['id']);
             $autor = $AutorRelator['Pl']['autor_bk'];
             $relator = $AutorRelator['Pl']['relator_bk'];
-            $numeroPl = $AutorRelator['Pl']['numero_da_pl'];
 
             if( !empty($autor) ){
                 $acharAutorRelator = $this->AutorRelator->find('first', array(
@@ -397,8 +394,10 @@ class AutorRelatorsController extends AppController{
                         'AutorRelator.nome' => $autor
                     )
                 ));
+
                 $this->Pl->saveField('autor_id', $acharAutorRelator['AutorRelator']['id']);
-                // $this->Pl->saveField('numero_da_pl', $numeroPl);
+
+
             }
             if( !empty($relator) ){
                 $acharAutorRelator = $this->AutorRelator->find('first', array(
@@ -408,8 +407,13 @@ class AutorRelatorsController extends AppController{
                     )
                 ));
 
+                // $a_plAutorRelator['PlAutorRelator'] = array(
+                //     'pl_id' => $this->Pl->id,
+                //     'autor_relator_id'  => $acharAutorRelator['AutorRelator']['id'],
+                //     'autor' => 0,
+                //     'relator' => 1
+                // );
                 $this->Pl->saveField('relator_id', $acharAutorRelator['AutorRelator']['id']);
-
 
             }
 
