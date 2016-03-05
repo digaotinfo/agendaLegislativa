@@ -1,50 +1,74 @@
 <?php
 $this->start('script');
-	// echo $this->Html->script(array(
-	// 	'../assets/uploadAjax/jquery.uploadfile.min.js',
-	// ));
-	// echo $this->Html->script('jquery.autocomplete.min.js');
-	// echo $this->Html->script('currency-autocomplete.js');
-	// echo $this->Html->script('zoio.js');
 	?>
 	<script>
-    $(document).ready(function(){
-        $('.datepicker').pickadate({
-            selectMonths: true, // Creates a dropdown to control month
-            selectYears: 15, // Creates a dropdown of 15 years to control year
-            monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-            weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-            weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-            showMonthsShort: undefined,
-            showWeekdaysFull: undefined,
-			today: 'Hoje',
-			clear: 'Limpar',
-			close: 'Fechar'
-        });
+	    $(document).ready(function(){
+	        $('.datepicker').pickadate({
+	            selectMonths: true, // Creates a dropdown to control month
+	            selectYears: 15, // Creates a dropdown of 15 years to control year
+	            monthsFull: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+	            monthsShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+	            weekdaysFull: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+	            weekdaysShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+	            showMonthsShort: undefined,
+	            showWeekdaysFull: undefined,
+				today: 'Hoje',
+				clear: 'Limpar',
+				close: 'Fechar'
+	        });
 
-    });
+	    });
     </script>
 
     <?php
 $this->end();
-
-
-
 ?>
 
     <?php if( !empty($proposicao[0]['PlType']) ): ?>
 	<!-- HEADER DA PÁGINA -->
 	<div class="row padding-top-20">
 		<div class="col s12">
-			 <h3 class="titulo-pagina">
+			<h3 class="titulo-pagina">
 				<?php
 					echo $proposicao[0]['PlType']['tipo']. ' ' .$proposicao[0]['Pl']['numero_da_pl'].'/'.$proposicao[0]['Pl']['ano'];
 				?>
 				<a href="javascript: void(0);"  onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar"><i class="material-icons">arrow_back</i></a>
-			 </h3>
-		 </div>
-	 </div>
+			</h3>
+
+
+		</div>
+		<!-- <div class="row historico"> -->
+			<div class="col s12">
+				Os dados abaixo mostram a última atualização desta proposição na data de:
+				<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
+				<?php
+				if( !empty($dataFiltro) ){
+					echo $this->Form->input('data', array(
+						'class' => 'datepicker',
+						'label' => false,
+						'value' => $dataFiltro
+					));
+				}else{
+					echo $this->Form->input('data', array(
+						'class' => 'datepicker',
+						'label' => false,
+					));
+				}
+				?>
+
+				<?php
+				echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
+					'type' => 'submit',
+					'div' => true,
+					'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
+					'value' => $dataFiltro
+				));
+				?>
+
+				<?php $this->end(); ?>
+			</div>
+		<!-- </div> -->
+	</div>
 	<!-- / HEADER DA PÁGINA -->
 
 
@@ -54,22 +78,19 @@ $this->end();
 	<div class="row padding-top-20">
         <?php
 			$disabled = 'disabled';
-			// if ($userAdmin == 1){
-			// 	$disabled = '';
-			// }
 			?>
 			<div class="row">
 
 				<div class="input-field col s12">
                     <?php
-	   				    echo $this->Form->input('tipo_id' ,  array(
+					echo $this->Form->input('tipo_id' ,  array(
 									'label' => false,
 									'div' => false,
 									'type' => 'text',
 									'class' => 'validate',
 									'value' => $proposicao[0]['PlType']['tipo'],
 									$disabled
-	   						   ));
+								));
 	   				?>
 	   				<label for="nossaposicao_texto">Tipo:</label>
 	   			</div>
@@ -496,38 +517,3 @@ $this->end();
     <!-- / HEADER DA PÁGINA -->
 
 <?php endif; ?>
-
-
-	<div class="row historico">
-		<div class="col s12">
-			HISTÓRICO:
-			Veja como esta proposição estava em uma data anterior:
-			<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
-			<?php
-			if( !empty($dataFiltro) ){
-				echo $this->Form->input('data', array(
-					'class' => 'datepicker',
-					'label' => false,
-					'value' => $dataFiltro
-				));
-			}else{
-				echo $this->Form->input('data', array(
-					'class' => 'datepicker',
-					'label' => false,
-				));
-			}
-			?>
-
-			<?php
-				echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
-					'type' => 'submit',
-					'div' => true,
-					'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
-					'value' => $dataFiltro
-				));
-
-			?>
-
-			<?php $this->end(); ?>
-		</div>
-	</div>
