@@ -512,11 +512,9 @@ $(document).ready(function() {
                 nameModel: nameModel,
                 idDaTarefa: idDaTarefa,
                 nameBlock: nameBlock,
-                // serializeArray: serializeArray,
                 titulo: titulo,
                 descricao: descricao,
                 entrega: entrega,
-                // ativo: ativo,
                 realizado: realizado
             },
             accepts: {json: 'application/json'},

@@ -34,40 +34,36 @@ $this->end();
 				?>
 				<a href="javascript: void(0);"  onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar"><i class="material-icons">arrow_back</i></a>
 			</h3>
-
-
 		</div>
-		<!-- <div class="row historico"> -->
-			<div class="col s12">
-				Os dados abaixo mostram a última atualização desta proposição na data de:
-				<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
-				<?php
-				if( !empty($dataFiltro) ){
-					echo $this->Form->input('data', array(
-						'class' => 'datepicker',
-						'label' => false,
-						'value' => $dataFiltro
-					));
-				}else{
-					echo $this->Form->input('data', array(
-						'class' => 'datepicker',
-						'label' => false,
-					));
-				}
-				?>
-
-				<?php
-				echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
-					'type' => 'submit',
-					'div' => true,
-					'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
+		<div class="col s12">
+			Os dados abaixo mostram a última atualização desta proposição na data de:
+			<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
+			<?php
+			if( !empty($dataFiltro) ){
+				echo $this->Form->input('data', array(
+					'class' => 'datepicker',
+					'label' => false,
 					'value' => $dataFiltro
 				));
-				?>
+			}else{
+				echo $this->Form->input('data', array(
+					'class' => 'datepicker',
+					'label' => false,
+				));
+			}
+			?>
 
-				<?php $this->end(); ?>
-			</div>
-		<!-- </div> -->
+			<?php
+			echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
+				'type' => 'submit',
+				'div' => true,
+				'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
+				'value' => $dataFiltro
+			));
+			?>
+
+			<?php $this->end(); ?>
+		</div>
 	</div>
 	<!-- / HEADER DA PÁGINA -->
 
@@ -94,6 +90,38 @@ $this->end();
 	   				?>
 	   				<label for="nossaposicao_texto">Tipo:</label>
 	   			</div>
+				<?php if( !empty($proposicao[0]['Fluxograma']['etapa']) ){ ?>
+					<div class="input-field col s12">
+	                    <?php
+						echo $this->Form->input('etapa' ,  array(
+										'label' => false,
+										'div' => false,
+										'type' => 'text',
+										'class' => 'validate',
+										'id'	=> 'etapa',
+										'value' => $proposicao[0]['Fluxograma']['etapa'],
+										$disabled
+									));
+		   				?>
+		   				<label for="etapa">Etapa:</label>
+		   			</div>
+				<?php } ?>
+				<?php if( !empty($proposicao[0]['Fluxograma']['subetapa']) ){ ?>
+					<div class="input-field col s12">
+	                    <?php
+						echo $this->Form->input('subetapa' ,  array(
+										'label' => false,
+										'div' => false,
+										'type' => 'text',
+										'class' => 'validate',
+										'id'	=> 'subetapa',
+										'value' => $proposicao[0]['Fluxograma']['subetapa'],
+										$disabled
+									));
+		   				?>
+		   				<label for="subetapa">Sub-Etapa:</label>
+		   			</div>
+				<?php } ?>
 				<div class="input-field col s12">
 					<?php
 					   echo $this->Form->input('tema_id' ,  array(
@@ -316,16 +344,18 @@ $this->end();
 		                    //>>> UPLOAD
 		                    ?>
 		                    	<?php
-									if(!empty($proposicao[7]['NotasTecnica'])):
-										foreach($proposicao[7]['NotasTecnica'] as $nota){
+									if(!empty($proposicao[7]['NotasTecnicas'])):
+										foreach($proposicao[7]['NotasTecnicas'] as $nota){
 											if(!empty($nota['arquivo']) ):
 									?>
 											<br>
 
 												<div class="arquivoatual">
-													<a href="<?php echo Router::url('/'.$nota['dir'].'/'.$nota['arquivo'], true);?>" target="_blank">
+													<a href="<?php echo $nota['arquivo'];?>" target="_blank">
 														<?php
-															echo $nota['arquivo'];
+															$arquivo = $nota['arquivo'];
+															$arquivoNome = explode(Router::url('/uploads/notas_tecnicas/', true), $arquivo);
+															echo $arquivoNome[1];
 														?>
 													</a>
 												</div>
@@ -508,12 +538,41 @@ $this->end();
     <!-- HEADER DA PÁGINA -->
     <div class="row padding-top-20">
         <div class="col s12">
-             <h3 class="titulo-pagina">
-                Nenhum registro encontrado nesta data.
-                <a href="javascript: void(0);"  onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar"><i class="material-icons">arrow_back</i></a>
-             </h3>
-         </div>
-     </div>
+            <h3 class="titulo-pagina">
+				Nenhum registro encontrado nesta data.
+				<a href="javascript: void(0);"  onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar"><i class="material-icons">arrow_back</i></a>
+            </h3>
+        </div>
+		<div class="col s12">
+			Os dados abaixo mostram a última atualização desta proposição na data de:
+			<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
+			<?php
+			if( !empty($dataFiltro) ){
+				echo $this->Form->input('data', array(
+					'class' => 'datepicker',
+					'label' => false,
+					'value' => $dataFiltro
+				));
+			}else{
+				echo $this->Form->input('data', array(
+					'class' => 'datepicker',
+					'label' => false,
+				));
+			}
+			?>
+
+			<?php
+			echo $this->Form->button('<i class="material-icons left">done</i>Buscar' ,  array(
+				'type' => 'submit',
+				'div' => true,
+				'class' => 'btn waves-effect waves-light green darken-3 right margin-left-15',
+				'value' => $dataFiltro
+			));
+			?>
+
+			<?php $this->end(); ?>
+		</div>
+    </div>
     <!-- / HEADER DA PÁGINA -->
 
 <?php endif; ?>

@@ -200,6 +200,28 @@ class PlsController extends AppController{
                             $this->$model->$model_r->save($this->request->data);
                         }
                     }
+
+
+                    // salvando log pro historico >>>
+                    $registro = $this->Pl->find('first', array(
+                        'conditions' => array(
+                            'Pl.id' => $lastPlID
+                        )
+                    ));
+                    $temaName = $registro['Tema']['tema_name'];
+                    $status_type_id = $registro['StatusType']['status_name'];
+                    $etapaSave = $registro['FluxogramaEtapa']['etapa'];
+                    $subetapaSave = $registro['FluxogramaSubEtapa']['subetapa'];
+                    $a = array(
+                        'temaName'      => $temaName,
+                        'status_type'   => $status_type_id,
+                        'etapa'         => $etapaSave,
+                        'subetapa'      => $subetapaSave,
+                    );
+                    array_push($registro, $a);
+
+
+                    $this->admin_fluxogramaHistorico($registro);
                 }
 
 
@@ -212,10 +234,10 @@ class PlsController extends AppController{
                 if( !empty($this->request->data[$model]['etapa_id']) ):
                     $etapaAdicionada = $this->FluxogramaEtapa->find('first', array(
                         'fields' => array(
-                            'FLuxogramaEtapa.id',
-                            'FLuxogramaEtapa.etapa',
-                            'FLuxogramaEtapa.descricao',
-                            'FLuxogramaEtapa.ordem',
+                            'FluxogramaEtapa.id',
+                            'FluxogramaEtapa.etapa',
+                            'FluxogramaEtapa.descricao',
+                            'FluxogramaEtapa.ordem',
                         ),
                         'conditions' => array(
                             'FluxogramaEtapa.id' => $this->request->data[$model]['etapa_id']
@@ -537,36 +559,6 @@ class PlsController extends AppController{
                             $subetapaSave = '';
                             $temaName = '';
                             $status_type_id = '';
-                            // salvando log sub-etapa >>>
-                            $temaName = $this->Tema->find('first', array(
-                                'conditions' => array(
-                                    'Tema.id' => $this->request->data['Pl']['tema_id']
-                                )
-                            ));
-                            $temaName = $temaName['Tema']['tema_name'];
-                            $status_type_id = $this->StatusType->find('first', array(
-                                'conditions' => array(
-                                    'StatusType.id' => $this->request->data['Pl']['status_type_id']
-                                )
-                            ));
-                            $status_type_id = $status_type_id['StatusType']['status_name'];
-
-                            $etapa = $this->FluxogramaEtapa->find('first', array(
-                                'conditions' => array(
-                                    'FluxogramaEtapa.id' => $etapa_id
-                                ),
-                                'recursive' => -2
-                            ));
-                            $etapaSave = $etapa['FluxogramaEtapa']['etapa'];
-
-                            $subetapa = $this->FluxogramaSubEtapa->find('first', array(
-                                'conditions' => array(
-                                    'FluxogramaSubEtapa.id' => $subetapa_id
-                                ),
-                                'recursive' => -2
-                            ));
-                            $subetapaSave = $subetapa['FluxogramaSubEtapa']['subetapa'];
-
                             if( $proposicao['Pl']['tipo_id'] == $this->request->data['Pl']['tipo_id'] ){//>>> verificar se foi alterado o tipo da Proposição
                                 if( ($proposicao['Pl']['etapa_id'] != $etapa_id) || ($proposicao['Pl']['subetapa_id'] != $subetapa_id) )://<<< verificar se as estapas foram alteradas
                                     if( !empty($etapa_id) ){//<<< tem etapa_id
@@ -673,10 +665,10 @@ class PlsController extends AppController{
                                                     'pl_type_id'            => $this->request->data['Pl']['tipo_id'],
                                                     'nome_da_model'		    => 'Pl',
                                                     'model_id'			    => $id,
-                                                    'etapa_id'              => $etapa_id,
-                                                    'etapa'                 => $etapa['FluxogramaEtapa']['etapa'],
-                                                    'etapa_descricao'       => $etapa['FluxogramaEtapa']['descricao'],
-                                                    'etapa_ordem'           => $etapa['FluxogramaEtapa']['ordem'],
+                                                    'etapa_id'              => $registro['Pl']['etapa_id'],
+                                                    'etapa'                 => $registro['FluxogramaEtapa']['etapa'],
+                                                    'etapa_descricao'       => $registro['FluxogramaEtapa']['descricao'],
+                                                    'etapa_ordem'           => $registro['FluxogramaEtapa']['ordem'],
                                                     'etapa_vinculada_pl'    => 1,
                                                     'nome_da_model'         => $model_r,
                                                     'name_block'            => '',
@@ -695,23 +687,6 @@ class PlsController extends AppController{
                                 endif;
 
                             }
-                            $a = array(
-                                'temaName'      => $temaName,
-                                'status_type'   => $status_type_id,
-                                'etapa'         => $etapaSave,
-                                'subetapa'      => $subetapaSave,
-                            );
-                            array_push($this->request->data, $a);
-
-                            // echo "<pre>";
-                            // print_r($this->request->data);
-                            // echo "</pre>";
-                            // die();
-                            $this->admin_fluxogramaHistorico($this->request->data, $registro, $a);
-                            // /// PREPARAR PRA SALVAR O HISTÓRICO DO FLUXOGRAMA
-                            // /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                            // $this->admin_fluxogramaHistorico($this->request->data, $registro, $a);
                             /*
                             *
                             * <<< salvar nova etapa do fluxgrama
@@ -724,6 +699,31 @@ class PlsController extends AppController{
                     endif;
                 }
             endif;
+
+
+
+
+            // salvando log pro historico >>>
+            $registro = $this->Pl->find('first', array(
+                'conditions' => array(
+                    'Pl.id' => $id
+                )
+            ));
+            $temaName = $registro['Tema']['tema_name'];
+            $status_type_id = $registro['StatusType']['status_name'];
+            $etapaSave = $registro['FluxogramaEtapa']['etapa'];
+            $subetapaSave = $registro['FluxogramaSubEtapa']['subetapa'];
+            $a = array(
+                'temaName'      => $temaName,
+                'status_type'   => $status_type_id,
+                'etapa'         => $etapaSave,
+                'subetapa'      => $subetapaSave,
+            );
+            array_push($registro, $a);
+
+
+            $this->admin_fluxogramaHistorico($registro);
+
         }
         $this->request->data = $this->$model->read(null, $id);
         $subEtapas = '';
@@ -741,8 +741,6 @@ class PlsController extends AppController{
     }
 
     public function admin_verCompletoHistorico($pl_id=null, $data=null){
-        // print($data);
-        // die();
         if(!empty($data)){
             $this->set('dataFiltro', $data);
         }
@@ -760,17 +758,16 @@ class PlsController extends AppController{
         $conditions['date'] = array();
         $requestDateFilter = $this->formatDateToSQL($data);
 
-        if( !empty($requestDateFilter) ){
-            $conditionsNewDate = array(
-                'Fluxograma.created <= ' => $requestDateFilter
-            );
-            array_push( $conditions['date'], $conditionsNewDate );
-        }
-
+        // if( !empty($requestDateFilter) ){
+        //     $conditionsNewDate = array(
+        //         'Fluxograma.created <= ' => $requestDateFilter
+        //     );
+        //     array_push( $conditions['date'], $conditionsNewDate );
+        // }
         $fluxoHistorico = $this->Fluxograma->find('first', array(
             'conditions' => array(
                 'Fluxograma.pl_id' => $pl_id,
-                'Fluxograma.created <= ' => $requestDateFilter
+                'Fluxograma.created' => $requestDateFilter
             ),
             'order' => array(
                 'Fluxograma.id' => 'DESC'
@@ -780,12 +777,24 @@ class PlsController extends AppController{
             $fluxoHistorico = $this->Fluxograma->find('first', array(
                 'conditions' => array(
                     'Fluxograma.pl_id' => $pl_id,
-                    // 'Fluxograma.created >= ' => $requestDateFilter
+                    'Fluxograma.created <= ' => $requestDateFilter
                 ),
                 'order' => array(
                     'Fluxograma.id' => 'DESC'
                 )
             ));
+
+            if( empty($fluxoHistorico) ){
+                $fluxoHistorico = $this->Fluxograma->find('first', array(
+                    'conditions' => array(
+                        'Fluxograma.pl_id' => $pl_id,
+                        'Fluxograma.created >= ' => $requestDateFilter
+                    ),
+                    'order' => array(
+                        'Fluxograma.id' => 'ASC'
+                    )
+                ));
+            }
         }
         array_push( $todosDadosPl, $fluxoHistorico );
 
@@ -871,22 +880,9 @@ class PlsController extends AppController{
                     $this->request->data[$model]['arquivo'] = $this->request->data[$model]['arquivo'];
                 }
 
-
                 if($this->$model->save($this->request->data)){
                     // >>> LOG
                     if( ($nameModel == 'Foco') || ($nameModel == 'OqueE') || ($nameModel == 'NossaPosicao') ){
-                        // $existe_este_log = $this->LogAtualizacaoPl->find('first', array(
-                        //     'conditions' => array(
-                        //         'pl_id' => $pl_id,
-                        //         'nome_da_model' => $nameModel,
-                        //         'model_id'  => $id
-                        //     )
-                        // ));
-                        //
-                        // if(!empty($existe_este_log)){
-                        //     $this->LogAtualizacaoPl->id = $existe_este_log['LogAtualizacaoPl']['id'];
-                        // }
-
                         $this->request->data['LogAtualizacaoPl']['pl_id'] = $pl_id;
                         $this->request->data['LogAtualizacaoPl']['usuario_id'] = $this->Session->read('Auth.User.id');
                         $this->request->data['LogAtualizacaoPl']['usuario_nome'] = $this->Session->read('Auth.User.name');
@@ -916,6 +912,27 @@ class PlsController extends AppController{
                     }
                     // <<< LOG
 
+                    $registro = $this->Pl->find('first', array(
+                        'conditions' => array(
+                            'Pl.id' => $pl_id
+                        )
+                    ));
+                    // salvando log pro historico >>>
+                    $temaName = $registro['Tema']['tema_name'];
+                    $status_type_id = $registro['StatusType']['status_name'];
+                    $etapaSave = $registro['FluxogramaEtapa']['etapa'];
+                    $subetapaSave = $registro['FluxogramaSubEtapa']['subetapa'];
+                    $a = array(
+                        'temaName'      => $temaName,
+                        'status_type'   => $status_type_id,
+                        'etapa'         => $etapaSave,
+                        'subetapa'      => $subetapaSave,
+                    );
+                    array_push($registro, $a);
+
+
+                    $this->admin_fluxogramaHistorico($registro);
+
                     $result = $this->Foco->LogAtualizacaoPl->find('all', array(
                         'conditions' => array(
                             'pl_id' => $pl_id,
@@ -935,6 +952,9 @@ class PlsController extends AppController{
                     die();
                 }
             endif;
+
+
+
         }
         $this->request->data = $this->$model->read(null, $id);
     }
@@ -943,8 +963,6 @@ class PlsController extends AppController{
         // $model = $nameModel;
         $this->autoRender = false;
 
-        // print_r($this->request->data);
-        // die();
         if( ($this->request->data['nameModel'] == 'Tarefa')  ){
             $model = 'Tarefa';
             $this->request->data['Tarefa'] = $this->request->data;
@@ -952,9 +970,6 @@ class PlsController extends AppController{
             $this->request->data['Tarefa']['entrega'] = $dataEntrega;
             $this->request->data['Tarefa']['pl_id'] = $pl_id;
         }
-
-        // print_r($this->request->data);
-        // die();
 
         if ($this->request->is('post') || $this->request->is('put')){
 			/// Seta a model com as informações que vieram do post
@@ -964,12 +979,7 @@ class PlsController extends AppController{
 
                 if($this->$model->save($this->request->data)){
                     $lastTarefaID = $this->$model->getLastInsertID();
-                    // $a_tarefaPl = array(
-                    //     'tarefa_id' => $lastTarefaID,
-                    //     'pl_id' => $pl_id
-                    // );
-                    // $this->TarefaPl->create();
-                    // $this->TarefaPl->save($a_tarefaPl);
+
                     // >>> LOG
                     if( ($model == 'Tarefa') ){
                         $this->request->data['LogAtualizacaoPl']['pl_id'] = $pl_id;
@@ -983,6 +993,29 @@ class PlsController extends AppController{
 
                         $this->LogAtualizacaoPl->save($this->request->data);
                     }
+
+                    $registro = $this->Pl->find('first', array(
+                        'conditions' => array(
+                            'Pl.id' => $pl_id
+                        )
+                    ));
+                    // salvando log pro historico >>>
+                    $temaName = $registro['Tema']['tema_name'];
+                    $status_type_id = $registro['StatusType']['status_name'];
+                    $etapaSave = $registro['FluxogramaEtapa']['etapa'];
+                    $subetapaSave = $registro['FluxogramaSubEtapa']['subetapa'];
+                    $a = array(
+                        'temaName'      => $temaName,
+                        'status_type'   => $status_type_id,
+                        'etapa'         => $etapaSave,
+                        'subetapa'      => $subetapaSave,
+                    );
+                    array_push($registro, $a);
+
+
+                    $this->admin_fluxogramaHistorico($registro);
+
+
                     // <<< LOG
                     $result = $this->Tarefa->find('all', array(
                         'conditions' => array(
@@ -1010,6 +1043,7 @@ class PlsController extends AppController{
     public function admin_ver_completo_edit_tarefa( $id=null ){
         $this->autoRender = false;
 
+
         $model      = $this->request->data['nameModel'];
         $idTarefa   = $this->request->data['idDaTarefa'];
         $nameBlock  = $this->request->data['nameBlock'];
@@ -1021,7 +1055,7 @@ class PlsController extends AppController{
             $this->request->data['Tarefa'] = $this->request->data;
 
             $dataEntrega = $this->formatDateBD($this->request->data['Tarefa']['entrega']);
-            $this->request->data['Tarefa']['entrega'] = $dataEntrega;
+            $this->request->data['Tarefa']['entrega'] = $dataEntrega.' 00:00:00';
         }
 
         if ($this->request->is('post') || $this->request->is('put')){
@@ -1045,6 +1079,29 @@ class PlsController extends AppController{
                         $this->request->data['LogAtualizacaoPl']['txt'] = $this->request->data['Tarefa']['titulo'];
 
                         $this->LogAtualizacaoPl->save($this->request->data);
+
+                        $registro = $this->Pl->find('first', array(
+                            'conditions' => array(
+                                'Pl.id' => $idProposicao
+                            )
+                        ));
+
+                        // salvando log pro historico >>>
+                        $temaName = $registro['Tema']['tema_name'];
+                        $status_type_id = $registro['StatusType']['status_name'];
+                        $etapaSave = $registro['FluxogramaEtapa']['etapa'];
+                        $subetapaSave = $registro['FluxogramaSubEtapa']['subetapa'];
+                        $a = array(
+                            'temaName'      => $temaName,
+                            'status_type'   => $status_type_id,
+                            'etapa'         => $etapaSave,
+                            'subetapa'      => $subetapaSave,
+                        );
+                        array_push($registro, $a);
+
+
+                        $this->admin_fluxogramaHistorico($registro);
+
                     }
 
                     return json_encode(true);

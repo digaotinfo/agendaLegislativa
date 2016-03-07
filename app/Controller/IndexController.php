@@ -211,7 +211,6 @@ class IndexController extends AppController {
 									OR NossaPosicao.arquivo Like '%".$campo."%'
 									OR Foco.txt Like '%".$campo."%'
 									OR Foco.arquivo Like '%".$campo."%'
-									OR AutorRelator.nome Like '%".$campo."%'
 									OR PlType.tipo Like '%".$campo."%'
 									OR Tarefa.titulo Like '%".$campo."%'
 									OR Tarefa.descricao Like '%".$campo."%'

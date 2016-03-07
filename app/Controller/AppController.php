@@ -1061,8 +1061,13 @@ class AppController extends Controller {
 		$subetapa = '';
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		/// PREPARAR PRA SALVAR O HISTÓRICO DO FLUXOGRAMA
-		$pl_id          = $registro['Pl']['id'];
-		$pl_origem      = $registro['PlType']['tipo']. ' ' .$registro['Pl']['numero_da_pl']. '/' .$registro['Pl']['ano'];
+		$pl_id          = $request['Pl']['id'];
+		if( !empty($request['Pl']['pl_origem']) ){
+			$pl_origem = $request['Pl']['pl_origem'];
+		}else{
+			$pl_origem = $request['PlType']['tipo']. ' ' .$request['Pl']['numero_da_pl']. '/' .$request['Pl']['ano'];
+		}
+		// $pl_origem      = $registro['PlType']['tipo']. ' ' .$registro['Pl']['numero_da_pl']. '/' .$registro['Pl']['ano'];
 		$tipo_id        = $request['Pl']['tipo_id'];
 		$numero_da_pl   = $request['Pl']['numero_da_pl'];
 		$ano            = $request['Pl']['ano'];
@@ -1082,35 +1087,35 @@ class AppController extends Controller {
 
 
 
-		if( !empty($registro['Foco']) ){
-			$foco           =   '[ID]'.$registro['Foco'][0]['id'].'[/ID]
-								[titulo]'.$registro['Foco'][0]['txt'].'[/titulo]
+		if( !empty($request['Foco']) ){
+			$foco           =   '[ID]'.$request['Foco'][0]['id'].'[/ID]
+								[titulo]'.$request['Foco'][0]['txt'].'[/titulo]
 								[texto] [/texto]
-								[modified]' .$registro['Foco'][0]['modified'].'[/modified][arquivo] [/arquivo]
+								[modified]' .$request['Foco'][0]['modified'].'[/modified][arquivo] [/arquivo]
 								[arquivo] [/arquivo]
 								[entrega] [/entrega]
 								[realizado] [/realizado]';
 
 		}
-		if( !empty($registro['OqueE']) ){
-			$oQueE          =   '[ID]'.$registro['OqueE'][0]['id'].'[/ID]
-								[titulo]'.$registro['OqueE'][0]['txt'].'[/titulo]
-								[modified]' .$registro['OqueE'][0]['modified'].'[/modified]
+		if( !empty($request['OqueE']) ){
+			$oQueE          =   '[ID]'.$request['OqueE'][0]['id'].'[/ID]
+								[titulo]'.$request['OqueE'][0]['txt'].'[/titulo]
+								[modified]' .$request['OqueE'][0]['modified'].'[/modified]
 								[arquivo] [/arquivo]
 								[entrega] [/entrega]
 								[realizado] [/realizado]';
 		}
-		if( !empty($registro['NossaPosicao']) ){
-			$nossaPosicao   =   '[ID]'.$registro['NossaPosicao'][0]['id'].'[/ID]
-								[titulo]'.$registro['NossaPosicao'][0]['txt'].'[/titulo]
-								[modified]' .$registro['NossaPosicao'][0]['modified'].'[/modified]
+		if( !empty($request['NossaPosicao']) ){
+			$nossaPosicao   =   '[ID]'.$request['NossaPosicao'][0]['id'].'[/ID]
+								[titulo]'.$request['NossaPosicao'][0]['txt'].'[/titulo]
+								[modified]' .$request['NossaPosicao'][0]['modified'].'[/modified]
 								[arquivo] [/arquivo]
 								[entrega] [/entrega]
 								[realizado] [/realizado]';
 		}
 
-		if( !empty($registro['Justificativa']) ){
-			$justificativa  = $registro['Justificativa'][0]['justificativa'];
+		if( !empty($request['Justificativa']) ){
+			$justificativa  = $request['Justificativa'][0]['justificativa'];
 		}
 
 
@@ -1118,7 +1123,7 @@ class AppController extends Controller {
 		///////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////
 		/// LOOP
-		foreach( $registro['Situacao'] as $elemento ){
+		foreach( $request['Situacao'] as $elemento ){
 			$situacao = $situacao.'[ID]'.$elemento['id'].'[/ID]
 						[titulo][/titulo]
 						[texto] '.$elemento['txt'].' [/texto]
@@ -1127,7 +1132,7 @@ class AppController extends Controller {
 						[realizado] [/realizado]
 						[modified]' .$elemento['modified'].'[/modified]';
 		}
-		foreach( $registro['Tarefa'] as $elemento ){
+		foreach( $request['Tarefa'] as $elemento ){
 			$realizado = 'Não';
 			if($elemento['realizado'] == 1){
 				$realizado = 'SIM';
@@ -1140,11 +1145,11 @@ class AppController extends Controller {
 						[realizado]'.$realizado.'[/realizado]
 						[modified] [/modified]';
 		}
-		foreach( $registro['NotasTecnica'] as $elemento ){
+		foreach( $request['NotasTecnica'] as $elemento ){
 			$notasTecnicas = $notasTecnicas.'[ID]' .$elemento['id']. '[/ID]
 							[titulo]'.$elemento['nome'].'[/titulo]
-							[texto]'.Router::url('/'.$elemento['dir'].'/'.$elemento['arquivo'], true).'[/texto]
-							[arquivo] [/arquivo]
+							[texto][/texto]
+							[arquivo]'.Router::url('/'.$elemento['dir'].'/'.$elemento['arquivo'], true).' [/arquivo]
 							[entrega] [/entrega]
 							[realizado] [/realizado]
 							[modified] [/modified]';
@@ -1152,9 +1157,6 @@ class AppController extends Controller {
 		/// LOOP
 		///////////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////////////////
-
-
-		// $this->Fluxograma->create();
 		$a_save = array(
 			'pl_id'         => $pl_id,
 			'pl_origem'     => $pl_origem,

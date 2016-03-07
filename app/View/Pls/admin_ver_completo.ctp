@@ -1018,8 +1018,8 @@ $this->end();
 															<a href="#!"
 																class="form btnEditTarefa modal-action waves-effect waves-green btn-flat"
 																data-tarefaId="<?=$registro['id']?>"
-																data-proposicaoID="<?=$proposicao[$model]['id']?>?>"
-																data-urlEditTarefa="<?php echo $this->Html->url(array('controller' => 'Pls', 'action' => 'ver_completo_edit_tarefa', 'admin' => true, $registro['id'] ) );?>"
+																data-proposicaoID="<?=$proposicao[$model]['id']?>"
+																data-urlEditTarefa="<?php echo $this->Html->url(array('controller' => 'Pls', 'action' => 'ver_completo_edit_tarefa', 'admin' => true, $proposicao[$model]['id'] ) );?>"
 																data-nameBlock="Ação ABEAR"
 																data-nameModel="<?=$model_rel?>"  >Editar</a>
 														<a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancelar</a>
