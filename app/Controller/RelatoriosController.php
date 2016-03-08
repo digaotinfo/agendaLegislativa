@@ -9,7 +9,7 @@ App::uses('CakeEmail', 'Network/Email');
 class RelatoriosController extends AppController{
  	var $name = "Relatorios";
 	public $helpers = array('Html', 'Session', 'Form', 'Time');
-	public $uses = array('Relatorio', 'PlType', 'PlSituacao', 'Pl', 'LogAtualizacaoPl', 'Foco', 'OqueE', 'Situacao', 'NossaPosicao', 'User', 'Tema', 'StatusType', 'AutorRelator', 'PlAutorRelator', 'Tarefa');
+	public $uses = array('Relatorio', 'PlType', 'PlSituacao', 'Pl', 'LogAtualizacaoPl', 'Foco', 'OqueE', 'Situacao', 'NossaPosicao', 'User', 'Tema', 'StatusType', 'AutorRelator', 'PlAutorRelator', 'Tarefa', 'FluxogramaEtapa');
 	var $scaffold = 'admin';
 	// var $transformUrl = array('url_amigavel' => 'numero_da_pl');
 
@@ -96,6 +96,15 @@ class RelatoriosController extends AppController{
             )
         ));
         $this->set('usuariosLista', $usuariosLista);
+
+
+        $etapas = $this->FluxogramaEtapa->find('list', array(
+            'fields' => array(
+                'FluxogramaEtapa.id',
+                'FluxogramaEtapa.etapa',
+            )
+        ));
+        $this->set('etapas', $etapas);
 
 	}
 	/* END LIST */
@@ -280,6 +289,18 @@ class RelatoriosController extends AppController{
                 $this->request->data[$model]['prioridade'] = $registros[$model]['prioridade'];
             }
 
+            if( !empty($registros[$model]['etapa_id']) ){
+                $conditionsNew = " ".$registros['Relatorio']['etapa_e_ou']." Pl.etapa_id = ".$registros[$model]['etapa_id'];
+                array_push($conditions['filtro'], $conditionsNew);
+                $this->request->data[$model]['etapa_id'] = $registros[$model]['etapa_id'];
+            }
+
+            if( !empty($registros[$model]['subetapa_id']) ){
+                $conditionsNew = " ".$registros['Relatorio']['subetapa_e_ou']." Pl.subetapa_id = ".$registros[$model]['subetapa_id'];
+                array_push($conditions['filtro'], $conditionsNew);
+                $this->request->data[$model]['subetapa_id'] = $registros[$model]['subetapa_id'];
+            }
+
             $sqlWhereCond = "";
             foreach($conditions['filtro'] as $cond){
                 $sqlWhereCond = $sqlWhereCond.$cond;
@@ -293,7 +314,11 @@ class RelatoriosController extends AppController{
             if( !empty($conditions['filtroRelator'][0]) ){
                 $relatorSelect = $conditions['filtroRelator'][0];
             }
-            // print_r($conditions);
+
+
+
+
+            // print_r( $conditions );
             // die();
             if( $this->request->data['Relatorio']['type'] == 'agp' ){
                 $resultQuery = $this->$model->query("
@@ -381,8 +406,7 @@ class RelatoriosController extends AppController{
                                                 ORDER BY Pl.id DESC
                                                 ");
             }
-            // print_r($this->request->data);
-            // die();
+
 
             /*
             *
@@ -575,13 +599,13 @@ class RelatoriosController extends AppController{
                         $tratarDataEntrega = explode(' às ', $entrega);
                         $entrega = $tratarDataEntrega[0];
     	                $timeAcaoAbear = $this->formatSQLtoDate($acaoAbear['Tarefa']['modified']);
-                        $realizado = 'Não';
-                        if( $acaoAbear['Tarefa']['realizado'] == 1 ){ $realizado = 'Sim'; }
+                        $realizado = 'Pendente';
+                        if( $acaoAbear['Tarefa']['realizado'] == 1 ){ $realizado = 'Realizado'; }
 
                         $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.'*'.$titulo.strip_tags( nl2br("\n") );
                         $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.'    '.$descricao.strip_tags( nl2br("\n") );
                         $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.'    '.$entrega.' - ';
-                        $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.$realizado.' realizado'.strip_tags( nl2br("\n") ).strip_tags( nl2br("\n") );
+                        $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.$realizado.' '.strip_tags( nl2br("\n") ).strip_tags( nl2br("\n") );
                     endforeach;
                     if( empty($textoCompletoAcaoAbear) ){
                         $textoCompletoAcaoAbear = utf8_decode(strip_tags("<br><br><br>")).strip_tags( nl2br("\n") ).strip_tags( nl2br("\n") );
@@ -801,8 +825,8 @@ class RelatoriosController extends AppController{
                         $tratarDataEntrega = explode(' às ', $entrega);
                         $entrega = $tratarDataEntrega[0];
     	                $timeAcaoAbear = $this->formatSQLtoDate($acaoAbear['Tarefa']['modified']);
-                        $realizado = 'Não';
-                        if( $acaoAbear['Tarefa']['realizado'] == 1 ){ $realizado = 'Sim'; }
+                        $realizado = 'Pendente';
+                        if( $acaoAbear['Tarefa']['realizado'] == 1 ){ $realizado = 'Realizado'; }
 
                         $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.' Titulo: '.$titulo;
                         $textoCompletoAcaoAbear = $textoCompletoAcaoAbear.' Descrição: '.$descricao;
@@ -1180,5 +1204,5 @@ class RelatoriosController extends AppController{
         }
     }
 
-    
+
 }

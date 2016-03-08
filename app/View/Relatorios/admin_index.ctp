@@ -15,41 +15,58 @@ $this->start('script');
 			showWeekdaysFull: undefined
 		});
 
+		$(document).ready(function(){
+			// SETTAR SUBETAPAS >>>
+			$('#selectEtapa').change(function(){
+				var valorEtapaID = $('#selectEtapa').val();
+				var selectDropdownSub = $("#selectSubEtapa");
+				selectDropdownSub.empty();
+				selectDropdownSub.html(' ');
 
+				selectDropdownSub.append($("<option value='0'>Selecione a Sub-Etapa</option>"));
+				selectDropdownSub.material_select();
+				// $('.select-fluxogramaSubEtapa  span.caret').remove();
+					$.ajax({
+						type: "POST",
+						url: "<?=$this->Html->url(array(
+													'controller' => 'Fluxogramas',
+													'action' => 'verificarSubEtapasDesteTipo',
+													'admin' => 'true',
+												))?>/"+ (valorEtapaID),
+						dataType: 'json',
+						success: function(subData){
+							var selectDropdownSub = $("#selectSubEtapa");
 
+							selectDropdownSub.empty();
+							selectDropdownSub.html(' ');
 
-		//+++++++ JUSTIFICATIVA ++++++++++++++++++++++++++++++++++++++//
-		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++//
+							selectDropdownSub.append($("<option value='0'>Selecione a Sub-Etapa</option>"));
+							selectDropdownSub.material_select();
+							// $('.select-fluxogramaSubEtapa span.caret').remove();
+							if (subData != '') {
+								$.each(subData, function(index, subEtapa){
+									selectDropdownSub.append($("<option>",{
+										value: subEtapa['FluxogramaSubEtapa']['id'],
+										text: subEtapa['FluxogramaSubEtapa']['subetapa']
+									}));
+								});
+								selectDropdownSub.material_select();
+								$('.select-fluxogramaSubEtapa span.caret').remove();
 
-		// >>> VERIFICAR EXIGENCIA DE JUSTIFICATIVA
-		// $(document).ready(function(){
-		// 	$('#status_type_id').change(function(){
-		// 		var valor = $('#status_type_id').val();
-		// 		if (valor == 3) {
-		// 			$('#modaljustificativa').openModal({dismissible: false});
-		// 			$('#justificativa_txt').focus();
-		// 		}else{
-		// 			$('#justificativa').val('');
-		// 			$('#justificativa_txt').val('');
-		//
-		// 		}
-		// 		$('.cancelar-justificativa').click(function(){
-		// 			$('#justificativa').val('');
-		// 			$('#justificativa_txt').val('');
-		// 			retornaStatusOriginal();
-		// 		});
-		// 	});
-		//
-		// 	$('.form.save-justifica').click(function() {
-		// 		var txtJustificativa = $('#justificativa_txt').val();
-		// 		if( txtJustificativa != '' ){
-		// 			$('#justificativa').val(txtJustificativa);
-		// 			$('#modaljustificativa').closeModal();
-		// 		}else{
-		// 			alert('Adicione uma justificativa.');
-		// 		}
-		// 	});
-		// });
+								$('.select-fluxogramaSubEtapa').removeClass('hide');
+							}else{
+								// $('.select-fluxogramaSubEtapa').addClass('hide');
+							}
+						},
+						error: function(subData){
+							console.log('deu erro');
+							console.log(data);
+						},
+					});
+				});
+				// <<< SETTAR SUBETAPAS
+
+		});
 
 		function retornaStatusOriginal() {
 			$('#status_type_id').val(0);
@@ -58,7 +75,7 @@ $this->start('script');
 			$('#status_type_id').material_select();
 
 			//===> Eliminando sujeira do Materi
-			$('.select-status > span.caret').remove();
+			$('.select-status span.caret').remove();
 		}
 // <<< VERIFICAR EXIGENCIA DE JUSTIFICATIVA
 
@@ -173,6 +190,7 @@ $this->end();
 		//<<< Conditions datas_tipo
 		/////////////////////////////////////////////////////////////////////
 	?>
+
 	<div class="input-field col s12 m7">
 		<?php
 		   echo $this->Form->input('tipo_id',  array(
@@ -219,6 +237,93 @@ $this->end();
 		?>
 		<label for="nossaposicao_texto">Ano</label>
 	</div>
+
+
+
+
+	<?php
+		/////////////////////////////////////////////////////////////////////
+		//>>> Conditions etapa
+	?>
+	<div class="col s12 center-on-small-only conditions meio">
+		<a href="javascript:void(0);" class='tooltipped etapa legend_OR hide' data-position="bottom" data-delay="50" data-tooltip="Click aqui para trocar a condição do Filtro">
+			e
+		</a>
+		<a href="javascript:void(0);" class='tooltipped etapa legend_AND'  data-position="bottom" data-delay="50" data-tooltip="Click aqui para trocar a condição do Filtro">
+			ou
+		</a>
+		<?php
+			echo $this->Form->input('etapa_e_ou' ,  array(
+					   'type' => 'hidden',
+					   'value' => 'OR',
+					   'id' => 'type_option_etapa'
+			));
+		?>
+	</div>
+	<div class="input-field col s12 m12">
+		<?php
+		   echo $this->Form->input('etapa_id' ,  array(
+					   'label' => false,
+					   'div' => false,
+					   'type' => 'text',
+					   'class' => 'validate etapa',
+					   'id' => 'selectEtapa',
+					   'type' => 'select',
+					   'options' => $etapas,
+					   'empty' => ' -- Selecione a Etapa -- '
+				   ));
+		?>
+		<label for="etapa">Etapa</label>
+	</div>
+	<?php
+		//<<< Conditions etapa
+		/////////////////////////////////////////////////////////////////////
+	?>
+
+	<?php
+		/////////////////////////////////////////////////////////////////////
+		//>>> Conditions Sub-etapa
+	?>
+	<div class="select-fluxogramaSubEtapa hide">
+		<div class="col s12 center-on-small-only conditions meio">
+			<a href="javascript:void(0);" class='tooltipped subetapa legend_OR hide' data-position="bottom" data-delay="50" data-tooltip="Click aqui para trocar a condição do Filtro">
+				e
+			</a>
+			<a href="javascript:void(0);" class='tooltipped subetapa legend_AND'  data-position="bottom" data-delay="50" data-tooltip="Click aqui para trocar a condição do Filtro">
+				ou
+			</a>
+			<?php
+			echo $this->Form->input('subetapa_e_ou' ,  array(
+				'type' => 'hidden',
+				'value' => 'OR',
+				'id' => 'type_option_subetapa'
+			));
+			?>
+		</div>
+		<div class="input-field col s12 m12 ">
+			<?php
+			echo $this->Form->input('subetapa_id' ,  array(
+				'label' => false,
+				'div' => false,
+				'type' => 'text',
+				'class' => 'validate etapa',
+				'id'		=> 'selectSubEtapa',
+				'type' => 'select',
+				'empty' => ' -- Selecione a Sub-Etapa -- ',
+			));
+			?>
+			<label for="etapa">Sub-Etapa</label>
+		</div>
+	</div>
+
+	<?php
+		//<<< Conditions Sub-etapa
+		/////////////////////////////////////////////////////////////////////
+	?>
+
+
+
+
 	<?php
 		/////////////////////////////////////////////////////////////////////
 		//>>> Conditions ano_tema
