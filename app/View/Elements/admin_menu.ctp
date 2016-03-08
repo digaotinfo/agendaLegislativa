@@ -66,8 +66,7 @@ if ($this->Session->read('Auth.User')):
 							|| $this->name == 'StatusTypes'
 							|| $this->name == 'Temas'
 							|| $this->name == 'AutorRelators'
-							|| $this->name == 'AtualizacaoExternas'
-							// || (($this->name == 'Fluxogramas') && ($this->action == 'admin_fluxogramaTipos' || $this->action == 'admin_fluxoEtapasList' || $this->action == 'admin_fluxoEtapasEdit'))
+							|| $this->name == 'AtualizacaoExternaPl'
 						){
 							$active = 'active';
 						}
@@ -89,8 +88,7 @@ if ($this->Session->read('Auth.User')):
 							<li class="<?php if($this->name == 'StatusTypes') echo 'active'?>"><?=$this->Html->link('Status', array('controller' => 'StatusTypes', 'action' => 'index', 'admin' => true))?></li>
 							<li class="<?php if($this->name == 'AutorRelators') echo 'active'?>"><?=$this->Html->link('Autor/Relator', array('controller' => 'AutorRelators', 'action' => 'index', 'admin' => true))?></li>
 							<li class="<?php if($this->name == 'Temas') echo 'active'?>"><?=$this->Html->link('Temas', array('controller' => 'Temas', 'action' => 'index', 'admin' => true))?></li>
-							<li class="<?php if($this->name == 'AtualizacaoExternaPls') echo 'active'?>"><?=$this->Html->link('Externas', array('controller' => 'AtualizacaoExternaPls', 'action' => 'index', 'admin' => true))?></li>
-							<!-- <li class="<?php if( ($this->name == 'Fluxogramas') && ($this->action == 'admin_fluxogramaTipos' || $this->action == 'admin_fluxoEtapasList' || $this->action == 'admin_fluxoEtapasEdit') ) echo 'active'?>"><?=$this->Html->link('Tipos Fluxo', array('controller' => 'Fluxogramas', 'action' => 'fluxogramaTipos', 'admin' => true))?></li> -->
+							<li class="<?php if($this->name == 'AtualizacaoExternaPl') echo 'active'?>"><?=$this->Html->link('Externas', array('controller' => 'AtualizacaoExternaPls', 'action' => 'index', 'admin' => true))?></li>
 						</ul>
 					</div>
 
