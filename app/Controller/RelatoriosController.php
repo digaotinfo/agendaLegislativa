@@ -294,7 +294,7 @@ class RelatoriosController extends AppController{
                     $conditionsNew = " ".$registros[$model]['prioridade_tarefas_e_ou']." Tarefa.titulo != '' ";
                 }
                 if($registros[$model]['tarefa'] == 'nao'){
-                    $conditionsNew = " ".$registros[$model]['prioridade_tarefas_e_ou']." Tarefa.titulo == '' ";
+                    $conditionsNew = " ".$registros[$model]['prioridade_tarefas_e_ou']." Tarefa.titulo IS NULL ";
                 }
                 array_push($conditions['filtro'], $conditionsNew);
                 $this->request->data[$model]['tarefa'] = $registros[$model]['tarefa'];
@@ -420,8 +420,7 @@ class RelatoriosController extends AppController{
 
                                                 GROUP BY Pl.id
                                                 ORDER BY Pl.id DESC
-                                                "
-                                            );
+                                                ");
             }
 
             // echo "<pre>";
@@ -433,26 +432,29 @@ class RelatoriosController extends AppController{
             * prepara array e inserir ação abear >>>
             */
             $result = array();
-            $resultAcaoAbear['Tarefa'] = array();
-            foreach( $resultQuery as $row ){
-                $resultAcaoAbear = $this->Tarefa->find('all', array(
-                    'fields' => array(
-                        'Tarefa.id',
-                        'Tarefa.titulo',
-                        'Tarefa.descricao',
-                        'Tarefa.entrega',
-                        'Tarefa.realizado',
-                        'Tarefa.enviado_por_email',
-                        'Tarefa.modified'
-                    ),
-                    'conditions' => array(
-                        'Tarefa.pl_id' => $row['Pl']['id']
-                    ),
-                    'recursive' => -2
-                ));
+            if( !empty($resultQuery) ){
+                $resultAcaoAbear['Tarefa'] = array();
+                foreach( $resultQuery as $row ){
+                    $resultAcaoAbear = $this->Tarefa->find('all', array(
+                        'fields' => array(
+                            'Tarefa.id',
+                            'Tarefa.titulo',
+                            'Tarefa.descricao',
+                            'Tarefa.entrega',
+                            'Tarefa.realizado',
+                            'Tarefa.enviado_por_email',
+                            'Tarefa.modified'
+                        ),
+                        'conditions' => array(
+                            'Tarefa.pl_id' => $row['Pl']['id']
+                        ),
+                        'recursive' => -2
+                    ));
 
-                array_push( $row, $resultAcaoAbear );
-                array_push( $result, $row );
+                    array_push( $row, $resultAcaoAbear );
+                    array_push( $result, $row );
+
+                }
 
             }
 
