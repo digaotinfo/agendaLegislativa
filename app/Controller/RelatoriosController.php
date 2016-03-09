@@ -289,6 +289,17 @@ class RelatoriosController extends AppController{
                 $this->request->data[$model]['prioridade'] = $registros[$model]['prioridade'];
             }
 
+            if( $registros[$model]['tarefa'] != 'todas' ){
+                if($registros[$model]['tarefa'] == 'sim'){
+                    $conditionsNew = " ".$registros[$model]['prioridade_tarefas_e_ou']." Tarefa.titulo != '' ";
+                }
+                if($registros[$model]['tarefa'] == 'nao'){
+                    $conditionsNew = " ".$registros[$model]['prioridade_tarefas_e_ou']." Tarefa.titulo == '' ";
+                }
+                array_push($conditions['filtro'], $conditionsNew);
+                $this->request->data[$model]['tarefa'] = $registros[$model]['tarefa'];
+            }
+
             if( !empty($registros[$model]['etapa_id']) ){
                 $conditionsNew = " ".$registros['Relatorio']['etapa_e_ou']." Pl.etapa_id = ".$registros[$model]['etapa_id'];
                 array_push($conditions['filtro'], $conditionsNew);
@@ -383,7 +394,8 @@ class RelatoriosController extends AppController{
                                                     Etapa.etapa,
                                                     Etapa.descricao as etapa_descricao,
                                                     SubEtapa.subetapa,
-                                                    SubEtapa.descricao as subetapa_descricao
+                                                    SubEtapa.descricao as subetapa_descricao,
+                                                    Tarefa.titulo
 
                                                 FROM
 
@@ -401,6 +413,7 @@ class RelatoriosController extends AppController{
                                                     left join tb_notas_tecnicas as NotasTecnica on (NotasTecnica.pl_id = Pl.id )
                                                     left join tb_fluxo_etapa as Etapa on (Etapa.id = Pl.etapa_id)
                                                     left join tb_fluxo_subetapa as SubEtapa on (SubEtapa.id = Pl.subetapa_id)
+                                                    left join tb_tarefas as Tarefa on (Tarefa.pl_id = Pl.id)
 
                                                 WHERE
                                                     ".$sqlWhereCond."

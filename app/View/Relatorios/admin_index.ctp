@@ -543,7 +543,7 @@ $this->end();
 		//<<< Conditions notasTecnicas_prioridade
 		/////////////////////////////////////////////////////////////////////
 	?>
-	<div class="input-field col s12 m6 l6">
+	<div class="input-field col s12 m5 l5">
 		<?php
 			$options = array(
 				'todas' => 'Mostrar Ambos',
@@ -561,7 +561,49 @@ $this->end();
 		<label for="nossaposicao_texto">Prioridade:</label>
 	</div>
 
-	<div class="input-field col s12 m6 l6">
+	<?php
+		/////////////////////////////////////////////////////////////////////
+		//>>> Conditions prioridade_tarefas
+	?>
+	<div class="col s2  center conditions meio">
+		<a href="javascript:void(0);" class='tooltipped prioridade_tarefas legend_OR hide' data-position="bottom" data-delay="50" data-tooltip="Click aqui para trocar a condição do Filtro">
+			e
+		</a>
+		<a href="javascript:void(0);" class='tooltipped prioridade_tarefas legend_AND' data-position="bottom" data-delay="50" data-tooltip="Click aqui para trocar a condição do Filtro">
+			ou
+		</a>
+		<?php
+			echo $this->Form->input('prioridade_tarefas_e_ou' ,  array(
+					   'type' => 'hidden',
+					   'value' => 'OR',
+					   'id' => 'type_option_prioridade_tarefas'
+			));
+		?>
+	</div>
+	<?php
+		//<<< Conditions prioridade_tarefas
+		/////////////////////////////////////////////////////////////////////
+	?>
+	<div class="input-field col s12 m5 l5">
+		<?php
+			$options = array(
+				'todas' => 'Mostrar Ambos',
+				'sim' => 'Com Ação ABEAR',
+				'nao' => 'Sem Ação ABEAR',
+			);
+			echo $this->Form->input('tarefa' ,  array(
+						'label' => false,
+						'div' => false,
+						'type' => 'select',
+						'class' => 'validate',
+						'options' => $options,
+					));
+		?>
+		<label for="tarefa_texto">Ação ABEAR:</label>
+	</div>
+
+
+	<div class="input-field col s12">
 		<?php
 			$options = array(
 				'completoPDF' => 'PDF Completo',
