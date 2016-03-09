@@ -86,7 +86,7 @@
 
 
 
-ALTER TABLE `arearestrita_dev`.`tb_log_atualizacao_pl` 
+ALTER TABLE `arearestrita_dev`.`tb_log_atualizacao_pl`
         CHANGE COLUMN `id` `id` INT(11) NOT NULL ,
         ADD COLUMN `fluxograma` INT NULL AFTER `enviado_por_email`,
         ADD COLUMN `etapa_id` INT NULL AFTER `fluxograma`,
@@ -173,5 +173,7 @@ ALTER TABLE `arearestrita_dev`.`tb_log_atualizacao_pl`
 *
 * <<< Alterações feitas entre os dias 19/02/16 à 01/03/2016
 */
+ALTER TABLE `arearestrita_dev`.`tb_pls`
+ADD COLUMN `pl_origem_numero` VARCHAR(45) NULL AFTER `pl_origem`;
 
 ?>

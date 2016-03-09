@@ -268,11 +268,11 @@ class RelatoriosController extends AppController{
 
             if( $registros[$model]['arquivo'] != 'todas' ){
                 if( $registros[$model]['arquivo'] == 'sim' ){
-                    $conditionsNew = " ".$registros['Relatorio']['status_notasTecnicas_e_ou']." Pl.arquivo != '' ";
+                    $conditionsNew = " ".$registros['Relatorio']['status_notasTecnicas_e_ou']." NotasTecnica.arquivo != '' ";
                 }
 
                 if( $registros[$model]['arquivo'] == 'nao' ){
-                    $conditionsNew = " ".$registros['Relatorio']['status_notasTecnicas_e_ou']." Pl.arquivo = '' ";
+                    $conditionsNew = " ".$registros['Relatorio']['status_notasTecnicas_e_ou']." NotasTecnica.arquivo = '' ";
                 }
                 array_push($conditions['filtro'], $conditionsNew);
                 $this->request->data[$model]['arquivo'] = $registros[$model]['arquivo'];
@@ -378,6 +378,8 @@ class RelatoriosController extends AppController{
                                                     Relator.nome as relator,
                                                     Justificativa.justificativa,
                                                     Justificativa.modified,
+                                                    NotasTecnica.id,
+                                                    NotasTecnica.arquivo,
                                                     Etapa.etapa,
                                                     Etapa.descricao as etapa_descricao,
                                                     SubEtapa.subetapa,
@@ -396,18 +398,23 @@ class RelatoriosController extends AppController{
                                                     left join tb_autor_relator as Autor on (Autor.id = Pl.autor_id )
                                                     left join tb_autor_relator as Relator on (Relator.id = Pl.relator_id )
                                                     left join tb_justificativas as Justificativa on (Justificativa.pl_id = Pl.id )
-                                                    left join tb_fluxo_etapa as Etapa on (Etapa.id = Pl.etapa_id AND Etapa.pl_type_id = Pl.tipo_id )
-                                                    left join tb_fluxo_subetapa as SubEtapa on (SubEtapa.id = Pl.subetapa_id AND SubEtapa.etapa_id = Etapa.id )
+                                                    left join tb_notas_tecnicas as NotasTecnica on (NotasTecnica.pl_id = Pl.id )
+                                                    left join tb_fluxo_etapa as Etapa on (Etapa.id = Pl.etapa_id)
+                                                    left join tb_fluxo_subetapa as SubEtapa on (SubEtapa.id = Pl.subetapa_id)
 
                                                 WHERE
                                                     ".$sqlWhereCond."
 
                                                 GROUP BY Pl.id
                                                 ORDER BY Pl.id DESC
-                                                ");
+                                                "
+                                            );
             }
 
-
+            // echo "<pre>";
+            // print_r($resultQuery);
+            // echo "</pre>";
+            // die();
             /*
             *
             * prepara array e inserir ação abear >>>
@@ -523,7 +530,7 @@ class RelatoriosController extends AppController{
                     if(!empty($registro['Tema']['tema_name'])){
                         $tema = $registro['Tema']['tema_name'];
                     }
-                    if(!empty($registro['Pl']['arquivo'])){
+                    if(!empty($registro['NotasTecnica']['arquivo'])){
                         $notasTecnicas = 'Sim';
                     }
 
@@ -813,7 +820,7 @@ class RelatoriosController extends AppController{
                     $relator    = ( !empty($registro['Relator']['relator']) ? $registro['Relator']['relator'] : "" );
                     $status     = ( !empty($registro['StatusType']['status_name']) ? $registro['StatusType']['status_name'] : "" );
                     $tema       = ( !empty($registro['Tema']['tema_name']) ? $registro['Tema']['tema_name'] : "" );
-                    $arquivo    = ( !empty($registro['Pl']['arquivo']) ? (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] .$this->webroot.$registro['Pl']['arquivo'] : "" );
+                    $arquivo    = ( !empty($registro['NotasTecnica']['arquivo']) ? (!empty($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] .$this->webroot.$registro['NotasTecnica']['arquivo'] : "" );
                     $foco       = ( !empty($registro['Foco']['txt']) ? $registro['Foco']['txt'].' - modificado em '.$timeFoco : "" );
                     $oQueE      = ( !empty($registro['OqueE']['txt']) ? $registro['OqueE']['txt'].' - modificado em '.$timeOqueE : "" );
                     $acoesAbear = $registro[0];

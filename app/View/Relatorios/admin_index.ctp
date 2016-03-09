@@ -25,7 +25,7 @@ $this->start('script');
 
 				selectDropdownSub.append($("<option value='0'>Selecione a Sub-Etapa</option>"));
 				selectDropdownSub.material_select();
-				// $('.select-fluxogramaSubEtapa  span.caret').remove();
+				$('.select-fluxogramaSubEtapa > span.caret').remove();
 					$.ajax({
 						type: "POST",
 						url: "<?=$this->Html->url(array(
@@ -42,7 +42,7 @@ $this->start('script');
 
 							selectDropdownSub.append($("<option value='0'>Selecione a Sub-Etapa</option>"));
 							selectDropdownSub.material_select();
-							// $('.select-fluxogramaSubEtapa span.caret').remove();
+							$('.select-fluxogramaSubEtapa > span.caret').remove();
 							if (subData != '') {
 								$.each(subData, function(index, subEtapa){
 									selectDropdownSub.append($("<option>",{
@@ -55,7 +55,7 @@ $this->start('script');
 
 								$('.select-fluxogramaSubEtapa').removeClass('hide');
 							}else{
-								// $('.select-fluxogramaSubEtapa').addClass('hide');
+								$('.select-fluxogramaSubEtapa').addClass('hide');
 							}
 						},
 						error: function(subData){
@@ -63,6 +63,7 @@ $this->start('script');
 							console.log(data);
 						},
 					});
+
 				});
 				// <<< SETTAR SUBETAPAS
 
@@ -266,7 +267,7 @@ $this->end();
 					   'label' => false,
 					   'div' => false,
 					   'type' => 'text',
-					   'class' => 'validate etapa',
+					   'class' => 'validate etapaSelect',
 					   'id' => 'selectEtapa',
 					   'type' => 'select',
 					   'options' => $etapas,
@@ -306,7 +307,7 @@ $this->end();
 				'label' => false,
 				'div' => false,
 				'type' => 'text',
-				'class' => 'validate etapa',
+				'class' => 'validate subetapaSelect',
 				'id'		=> 'selectSubEtapa',
 				'type' => 'select',
 				'empty' => ' -- Selecione a Sub-Etapa -- ',

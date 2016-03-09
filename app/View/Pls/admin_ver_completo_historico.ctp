@@ -36,7 +36,8 @@ $this->end();
 			</h3>
 		</div>
 		<div class="col s12">
-			Os dados abaixo mostram a última atualização desta proposição na data de:
+			<?php echo $txtExplicativo; ?>
+			Os dados abaixo são referente ao dia: <?php echo CakeTime::format($proposicao[0]['Fluxograma']['modified'], '%d/%m/%Y');; ?>
 			<?=$this->Form->create('FormScreen', array('type' => 'file', 'class' => 'col s12 formulario formPL'));?>
 			<?php
 			if( !empty($dataFiltro) ){

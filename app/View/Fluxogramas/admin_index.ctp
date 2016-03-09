@@ -5,80 +5,43 @@ $this->start('css');
                                 '/assets/js-graph-it/sf-homepage.css',
                             ));
 ?>
-<style media="screen">
-    .link{
-        text-decoration: none;
-        color: #9a9a9a !important;
-    }
-    .adicionar-mais-ordem,
-    .adicionar-mais-etapas{
-        background-color: #2E7D32 !important;
-        border: none !important;
-        background-color: transparent !important;
-    }
-        .adicionar-mais-ordem a,
-        .adicionar-mais-etapas a{
-            /*color: #FFFFFF !important;*/
-        }
-
-    .container .main_table .modal p, div{
-        font-size: 15px !important;
-    }
-
-</style>
 <?php
 $this->end();
 
 $this->start('script');
+
+// echo $this->Html->script('printThis.js');
+echo $this->Html->script('jquery-print.js');
+echo $this->Html->script('montaFluxograma.js');
 ?>
-    <script>
-        <!--
-            function onLoad()
-            {
-                // setMenu();
-                resizeCanvas();
-                initPageObjects();
-            }
 
-            /**
-             * Resizes the main canvas to the maximum visible height.
-             */
-            function resizeCanvas()
-            {
-                var divElement = document.getElementById("mainCanvas");
-                var screenHeight = window.innerHeight || document.body.offsetHeight;
-                divElement.style.height = (screenHeight - 16) + "px";
-            }
-
-            /**
-             * Strips the file extension and everything after from a url
-             */
-            function stripExtension(url)
-            {
-                var lastDotPos = url.lastIndexOf('.');
-                if(lastDotPos > 0)
-                    return url.substring(0, lastDotPos - 1);
-                else
-                    return url;
-            }
-
-            /**
-             * this function opens a popup to show samples during explanations.
-             */
-            function openSample(url)
-            {
-                var popup = window.open(url, "sampleWindow", "width=400,height=300");
-                popup.focus();
-                return false;
-            }
-        //-->
-    </script>
 <?php
     echo $this->Html->script('/assets/js-graph-it/js-graph-it.js');
 ?>
     <script type="text/javascript">
         $(document).ready(function(){
             $('.modal-trigger').leanModal();
+
+            //PRINT
+        	$('#btn').bind('click', function(p){
+                var url = $('#urlSaveHtml').val();
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: {
+                        table: $('#fluxoMain').html()
+                    },
+                    accepts: {json: 'application/json'},
+                    success: function(data){
+                        console.log(data);
+                    },
+                    error: function(data){
+                        console.log('error');
+                    }
+                });
+
+        	});
+
         });
     </script>
 <?php
@@ -96,13 +59,19 @@ $this->end();
                 <a href="javascript: void(0);" onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar">
                     <i class="material-icons">arrow_back</i>
                 </a>
+                <a href="javascript: void(0);" id="btn" class="btn-floating right green darken-3 tooltipped print hide" style="margin: 0 5px;" data-position="left" data-delay="50" data-tooltip="Imprimir">
+                    <i class="material-icons">print</i>
+                </a>
             </h3>
         </div>
     </div>
     <!-- / HEADER DA PÁGINA -->
 
-    <div class="row">
-        <div class="col s12 center-align">
+    <input type="hidden" name="urlSaveHtml" id="urlSaveHtml" value="<?php echo $this->Html->url(array('controller' => 'Fluxogramas', 'action' => 'admin_fluxohtml')); ?>">
+    <input type="hidden" name="componetFluxograma" id="componetFluxograma" value="<?php echo Router::url('/assets/js-graph-it/js-graph-it.js', true); ?>">
+
+    <div class="row" id="fluxoMain">
+        <div class="col s11 offset-s1 center-align">
             <table class="main_table fluxograma" style="height: 100%;" >
         		<tr>
         			<td style="vertical-align: top; padding: 0px;">
@@ -425,9 +394,9 @@ $this->end();
                                                 ?>
                                             <?php
                                             if( $h_marginTopSubEtapa != 0 ){
-                                                $h_marginTopEtapa = $h_marginTopSubEtapa+200;
+                                                $h_marginTopEtapa = $h_marginTopSubEtapa+150;
                                             }else{
-                                                $h_marginTopEtapa = $h_marginTopEtapa+200;
+                                                $h_marginTopEtapa = $h_marginTopEtapa+150;
                                             }
                                         endforeach;
                                     }

@@ -342,6 +342,9 @@ $this->end();
 				<input type="hidden" name="enviar_pl_email_generico" id='enviar_pl_email_generico' value="<?php echo $this->Html->url(array('controller' => 'Pls', 'action' => 'enviar_atualizacao_pl_generica_por_email', 'admin' => true, $proposicao[$model]['id']));?>">
 				 <a href="javascript: void(0);"  onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar"><i class="material-icons">arrow_back</i></a>
 			 </h3>
+			<?php if( !empty($proposicao['Pl']['pl_origem_numero']) ){ ?>
+				<h6>Antigo: <?php echo $proposicao['Pl']['pl_origem_numero'] ?></h6>
+			<?php } ?>
 		 </div>
 	 </div>
 	<!-- / HEADER DA PÁGINA -->
@@ -621,35 +624,17 @@ $this->end();
 		                    //////////////////////////////////////////////////////////////////////
 		                    //>>> UPLOAD
 		                    ?>
-		                        <!-- <div class="mulitplefileuploader-notas-tecnicas" data-return='arquivo_notas_tecnicas'>Upload</div> -->
 								<?php
 									if(!empty($proposicao['NotasTecnica'])):
 										foreach($proposicao['NotasTecnica'] as $nota){
 											if(!empty($nota['arquivo']) ):
-									?>
-											<br>
+												?>
+												<br>
 
-											<a href="javascript:void(0);" onclick='deleteNT("<?=$this->Html->url(array('controller' => 'pls' , 'action' => 'deleteNT', 'admin' => true,$nota['id'] , $proposicao['Pl']['id']))?>")' class="btn-floating red  right" data-position="bottom" data-delay="50" data-tooltip="Excluir esta Nota Tecnica">
-												<i class="material-icons prefix ">delete</i>
-											</a>
-											<?php
-												// echo $this->Form->postLink(
-												// '<i class="material-icons">delete</i>',
-												// array(
-												// 	'controller' => 'Pls',
-												// 	'action' => 'admin_deleteNT',
-												// 	$nota['id'],
-												// 	$proposicao['Pl']['id']
-												// ),
-												// array(
-												// 	'confirm' => 'Tem certeza que deseja excluir esta Nota Tecnica?',
-												// 	'class' => 'btn-floating red  right',
-												// 	'data-position' => 'bottom',
-												// 	'data-delay' => 50,
-												// 	'data-tooltip' => "Apagar Nota Tecnica",
-												// 	'escape'=>false
-												// ));
-											?>
+												<a href="javascript:void(0);" onclick='deleteNT("<?=$this->Html->url(array('controller' => 'pls' , 'action' => 'deleteNT', 'admin' => true,$nota['id'] , $proposicao['Pl']['id']))?>")' class="btn-floating red  right" data-position="bottom" data-delay="50" data-tooltip="Excluir esta Nota Tecnica">
+													<i class="material-icons prefix ">delete</i>
+												</a>
+
 												<div class="arquivoatual">
 
 													<a href="<?=$this->Html->url(array('controller' => 'notasTecnicas' , 'action' => 'edit', 'admin' => true, $nota['id']))?>" class="green-text textd-darken-3 tooltipped btn-edit" data-position="bottom" data-delay="50" data-tooltip="Editar esta Nota Tecnica">
@@ -662,17 +647,11 @@ $this->end();
 													</a>
 												</div>
 												<hr>
-								<?php
+												<?php
 											endif;
 										}
 									endif;
 								?>
-		                    <?php
-		                        // echo $this->Form->input('arquivo', array(
-		                        //     'type' => 'hidden',
-		                        //     'class' => 'arquivo_notas_tecnicas',
-		                        // ));
-			                ?>
 		                    <?php
 		                    //<<< UPLOAD
 		                    //////////////////////////////////////////////////////////////////////

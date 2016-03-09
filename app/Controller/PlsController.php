@@ -630,7 +630,21 @@ class PlsController extends AppController{
                             else{
                                 if( $proposicao['Pl']['tipo_id'] != $this->request->data['Pl']['tipo_id'] ):
                                     $plTypeID = $this->request->data[$model]['tipo_id'];
+                                    $this->Pl->id = $id;
+                                    $typeHistorico = $this->PlType->find('first', array(
+                                        'conditions' => array(
+                                            'PlType.id' => $this->request->data['Pl']['tipo_id']
+                                        ),
+                                        'recursive' => -2
+                                    ));
 
+                                    $propOrigemSave = $typeHistorico['PlType']['tipo']. ' '. $proposicao['Pl']['numero_da_pl']. '/'. $proposicao['Pl']['ano'];
+                                    // echo "<pre>";
+                                    // print_r($propOrigemSave);
+                                    // echo "</pre>";
+                                    // die();
+                                    $this->Pl->saveField('pl_origem', 1);
+                                    $this->Pl->saveField('pl_origem_numero', $propOrigemSave);
 
                                     if( ($proposicao['Pl']['etapa_id'] != $etapa_id) || ($proposicao['Pl']['subetapa_id'] != $subetapa_id) )://<<< verificar se as estapas foram alteradas
                                         if( !empty($etapa_id) ){//<<< tem etapa_id
@@ -758,12 +772,7 @@ class PlsController extends AppController{
         $conditions['date'] = array();
         $requestDateFilter = $this->formatDateToSQL($data);
 
-        // if( !empty($requestDateFilter) ){
-        //     $conditionsNewDate = array(
-        //         'Fluxograma.created <= ' => $requestDateFilter
-        //     );
-        //     array_push( $conditions['date'], $conditionsNewDate );
-        // }
+        $txtExplicativo = '';
         $fluxoHistorico = $this->Fluxograma->find('first', array(
             'conditions' => array(
                 'Fluxograma.pl_id' => $pl_id,
@@ -795,6 +804,8 @@ class PlsController extends AppController{
                     )
                 ));
             }
+            $txtExplicativo = 'Não houve atualização na data solicitada.';
+            $this->set('txtExplicativo', $txtExplicativo);
         }
         array_push( $todosDadosPl, $fluxoHistorico );
 

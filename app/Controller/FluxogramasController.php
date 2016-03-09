@@ -868,30 +868,34 @@ class FluxogramasController extends AppController {
 
 
 
+	public function admin_fluxohtml(){
+		echo "<pre>";
+		$htmlFluxoPrint = '
+			<html class="no-js" lang="en">
+			    <head>
+			        <meta charset="utf-8">
+			    	<link rel="stylesheet" type="text/css" href="'.Router::url('/css/materialize.min.css', true).'">
+			    	<link rel="stylesheet" type="text/css" href="'.Router::url('/css/zoio.css', true).'">
 
-	/*
-	*
-	* Salvar log >>>
-	*/
-	// public function admin_fluxoHistorico($a_dados=null){
-	// 	echo "<pre>";
-	// 	print_r($a_dados);
-	// 	echo "</pre>";
-	// 	die();
-	// 	$a_save['FluxogramaHistorico'] = array(
-	// 		'pl_id' 		=> $a_dados['pl_id'],
-	// 		'pl_origem' 	=> $a_dados['pl_origem'],
-	// 		'tipo_id' 		=> $a_dados['pl_type_id'],
-	// 		'numero_da_pl' 	=> $a_dados['numero_da_pl'],
-	// 		'ano' 			=> $a_dados['ano'],
-	// 		'etapa_id' 		=> $a_dados['etapa_id'],
-	// 		'subetapa_id' 	=> $a_dados['subetapa_id']
-	// 	);
-	// }
-	/*
-	*
-	* <<< Salvar log
-	*/
+
+
+			    	<link rel="stylesheet" type="text/css" href="'.Router::url('/assets/js-graph-it/js-graph-it.css', true).'">
+			    	<link rel="stylesheet" type="text/css" href="'.Router::url('/assets/js-graph-it/sf-homepage.css', true).'">
+					<script type="text/javascript" src="'.Router::url('/js/jquery-print.js', true).'"></script>
+					<script type="text/javascript" src="'.Router::url('/js/printThis.js', true).'"></script>
+				</head>
+				<body>
+					<main>';
+
+				$htmlFluxoPrint .= $this->request->data['table'];
+				$htmlFluxoPrint .= '</main>
+			    </body>
+			</html>';
+
+
+		$this->set('registro', $htmlFluxoPrint);
+		// die();
+	}
 
 
 
