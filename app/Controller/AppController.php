@@ -1063,7 +1063,7 @@ class AppController extends Controller {
 		/// PREPARAR PRA SALVAR O HISTÓRICO DO FLUXOGRAMA
 		$pl_id          = $request['Pl']['id'];
 		if( !empty($request['Pl']['pl_origem']) ){
-			$pl_origem = $request['Pl']['pl_origem'];
+			$pl_origem = $request['Pl']['pl_origem_numero'];
 		}else{
 			$pl_origem = $request['PlType']['tipo']. ' ' .$request['Pl']['numero_da_pl']. '/' .$request['Pl']['ano'];
 		}

@@ -633,12 +633,13 @@ class PlsController extends AppController{
                                     $this->Pl->id = $id;
                                     $typeHistorico = $this->PlType->find('first', array(
                                         'conditions' => array(
-                                            'PlType.id' => $this->request->data['Pl']['tipo_id']
+                                            'PlType.id' => $proposicao['Pl']['tipo_id']
                                         ),
                                         'recursive' => -2
                                     ));
 
                                     $propOrigemSave = $typeHistorico['PlType']['tipo']. ' '. $proposicao['Pl']['numero_da_pl']. '/'. $proposicao['Pl']['ano'];
+                                    
                                     // echo "<pre>";
                                     // print_r($propOrigemSave);
                                     // echo "</pre>";
