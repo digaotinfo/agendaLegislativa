@@ -122,6 +122,13 @@ $this->end();
                                                         }
                                                     ?>
                                                 </span>
+                                                <span class="dataAtualizacaoPosicaoAtual">
+                                                    <?php
+                                                        if( $proposicao['Pl']['etapa_id'] == $etapaID ){
+                                                            echo '<p>'.CakeTime::format('d/m/Y à\s H:i\h\s', $proposicao['Pl']['modified']). '</p>';
+                                                        }
+                                                    ?>
+                                                </span>
                                                 <strong>
                                                     <?php echo $etapaTitulo; ?>:
                                                 </strong>
@@ -165,6 +172,13 @@ $this->end();
                                                                 }
                                                                 ?>
                                                             </span>
+                                                            <span class="dataAtualizacaoPosicaoAtual">
+                                                                <?php
+                                                                    if( $proposicao['Pl']['subetapa_id'] == $subEtapaID ){
+                                                                        echo '<p>'.CakeTime::format('d/m/Y à\s H:i\h\s', $proposicao['Pl']['modified']). '</p>';
+                                                                    }
+                                                                ?>
+                                                            </span>
                                                             <strong>
                                                                 <?php echo $subEtapaTitulo.':';?>
                                                             </strong>
@@ -176,13 +190,6 @@ $this->end();
                                                         </a>
                                                     </div>
                                                     <div class="connector <?php echo $classEtapaID; ?> <?php echo $classSubEtapaID;?>">
-                                                        <label class="destination-label">
-                                                            <?php
-                                                                if( $proposicao['Pl']['subetapa_id'] == $subEtapaID ){
-                                                                    echo '<p>'.CakeTime::format('d/m/Y à\s H:i\h\s', $proposicao['Pl']['modified']). '</p>';
-                                                                }
-                                                            ?>
-                                                        </label>
                                                         <img class="connector-end" src="<?=$this->webroot?>assets/js-graph-it/arrow.gif">
                                                     </div>
                                                     <?php
@@ -199,13 +206,6 @@ $this->end();
                                         ?>
 
                                         <div class="connector <?php echo $tituloTipoID; ?> <?php echo $classEtapaID; ?> <?php echo $classSubEtapaID; ?>">
-                                            <label class="destination-label">
-                                                <?php
-                                                    if( $proposicao['Pl']['etapa_id'] == $etapaID ){
-                                                        echo '<p>'.CakeTime::format('d/m/Y à\s H:i\h\s', $proposicao['Pl']['modified']). '</p>';
-                                                    }
-                                                ?>
-                                            </label>
                                             <img class="connector-end" src="<?=$this->webroot?>assets/js-graph-it/arrow.gif">
                                         </div>
 
@@ -251,10 +251,6 @@ $this->end();
                                     foreach($historicoRegistros as $registros){
                                         foreach( $registros['FluxogramaEtapa'] as $etapaKey => $logFluxograma ):
                                             $h_nomeTipo = $logFluxograma['PlType']['tipo'];
-                                            // echo "<pre>";
-                                            // print_r( $logFluxograma );
-                                            // echo "</pre>";
-                                            // die();
                                             if( $etapaKey == 0 ):
                                                 $h_tituloTipoID = 'h_title_tipo_'.$logFluxograma['PlType']['id'];
                                                 ?>

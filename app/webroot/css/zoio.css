@@ -442,7 +442,7 @@ p.titulo-tarefa {
     }
     .fluxograma .etapa{
         text-align: center;
-        left: 355px;
+        left: 270px;
         width: 240px;
     }
         .fluxograma .etapa strong,
@@ -451,12 +451,22 @@ p.titulo-tarefa {
             float: left;
             text-align: left;
         }
+        .fluxograma .etapa small,
+        .fluxograma .subEtapa small{
+            cursor: help;
 
+        }
+        .fluxograma .etapa .dataAtualizacaoPosicaoAtual p,
+        .fluxograma .subEtapa .dataAtualizacaoPosicaoAtual p{
+            color: #9e9e9e;
+            margin-top: -10px;
+            margin-bottom: 10px;
+        }
 
 
     .fluxograma .subEtapa{
         text-align: center;
-        left: 840px;
+        left: 730px;
         padding-left: 10px;
         padding-right: 10px;
         width: 240px;
