@@ -639,7 +639,6 @@ class PlsController extends AppController{
                                     ));
 
                                     $propOrigemSave = $typeHistorico['PlType']['tipo']. ' '. $proposicao['Pl']['numero_da_pl']. '/'. $proposicao['Pl']['ano'];
-                                    
                                     // echo "<pre>";
                                     // print_r($propOrigemSave);
                                     // echo "</pre>";
