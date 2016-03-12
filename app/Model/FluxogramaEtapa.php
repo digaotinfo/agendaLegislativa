@@ -30,15 +30,4 @@ class FluxogramaEtapa extends AppModel{
         	'dependent'    => true,
         ),
 	);
-
-	// public $hasAndBelongsToMany = array(
-	// 	'FluxogramaEtapaSubEtapaLog' 	 => array(
-	// 		'className'              => 'FluxogramaSubEtapa',
-	// 		'joinTable' 			 => 'tb_fluxo_logetapa_subetapa',
-	// 		'foreignKey'             => 'logetapa_id',
-	// 		'associationForeignKey'  => 'subetapa_id',
-	// 		'fields'				 => array('id', 'subetapa', 'descricao', 'ordem'),
-	// 		// 'order'					 => array('FluxogramaEtapaSubEtapaLog.ordem' => 'ASC')
-	// 	),
-	// );
 }

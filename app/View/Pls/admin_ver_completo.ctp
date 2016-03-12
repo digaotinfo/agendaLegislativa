@@ -829,19 +829,21 @@ $this->end();
 										<small class="atualizacao-realizada">
 											<?php
 												if($contador != 0){
-													$logAtualizacao = $proposicao["LogAtualizacaoPl"][$contador-1];
-													?>
-													<span class="">
-									                    atualizado por:
-									                    <?php echo $logAtualizacao['usuario_nome']; ?>
-									                        em
-															<strong id="dataHoraAtualizado">
-									                            <?php
-									                                echo CakeTime::format($logAtualizacao['created'], '%d/%m/%Y às %H:%M');
-									                            ?>
-															</strong>
-									                </span>
-													<?php
+													if( !empty($proposicao["LogAtualizacaoPl"][$contador-1]) ):
+														$logAtualizacao = $proposicao["LogAtualizacaoPl"][$contador-1];
+														?>
+														<span class="">
+										                    atualizado por:
+										                    <?php echo $logAtualizacao['usuario_nome']; ?>
+										                        em
+																<strong id="dataHoraAtualizado">
+										                            <?php
+										                                echo CakeTime::format($logAtualizacao['created'], '%d/%m/%Y às %H:%M');
+										                            ?>
+																</strong>
+										                </span>
+														<?php
+													endif;
 												}
 												$contador++;
 											?>

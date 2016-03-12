@@ -35,13 +35,6 @@ class Arquivo extends AppModel{
 	   )
 	);
 
-
-    // public $defaultValidations = array(
-    //     'arquivo' => array(
-    //         'FieldName' => array(
-    //             'rule' => array('teste')
-    //         )
-    // ));
     function invalidate($field, $value = true){
         print_r($value);
         parent::invalidate($field, __d('meio_upload', $value, true));

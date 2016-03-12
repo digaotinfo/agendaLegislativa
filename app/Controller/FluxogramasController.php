@@ -3,8 +3,6 @@ class FluxogramasController extends AppController {
 	public $name 	= 'Fluxogramas';
 	public $helpers = array('Html', 'Session', 'Paginator', 'Time', 'Text');
 	public $uses 	= array('Fluxograma', 'Pl', 'PlType', 'FluxogramaEtapa', 'FluxogramaSubEtapa', 'LogAtualizacaoPl');
-	// public $uses 	= array('Fluxograma', 'FluxogramaEtapa', 'FluxogramaEtapaLogFluxo', 'FluxogramaSubEtapa', 'TbFluxoLogOrigemPlTbFluxoEtapa', 'FluxogramaEtapaLogFluxoNotRelashionship', 'Pl', 'PlType', 'FluxogramaSubEtapa','TbFluxoLogetapaSubetapa');
-	// public $uses 	= array('Fluxograma', 'FluxogramaEtapa', 'FluxogramaEtapaLogFluxo', 'TbFluxoEtapaTbFluxoSubetapa', 'FluxogramaSubEtapa', 'Pl', 'PlType');
 
 	public $paginate = array(
 		'limit' => 10,
@@ -46,17 +44,13 @@ class FluxogramasController extends AppController {
 			'recursive' => -2
 		));
 		$this->set('proposicao', $prop);
-		// echo "<pre>";
-		// print_r($prop);
-		// echo "</pre>";
-		// die();
-		$registros = $this->PlType->find('first', array(
+
+			$registros = $this->PlType->find('first', array(
 			'fields' => array(
 				'PlType.id',
 				'PlType.tipo',
 			),
 			'conditions' => array(
-				// 'Pl.id' => 257
 				'PlType.id' => $prop['PlType']['id']
 			),
 			'recursive' => 2,
@@ -126,25 +120,6 @@ class FluxogramasController extends AppController {
 		$this->set(array(
 			'historicoRegistros' => $historicoRegistros,
 		));
-
-		// foreach($historicoRegistros as $registros){
-		// 	echo "<pre>";
-		// 	print_r($registros);
-		// 	echo "</pre>";
-		// 	foreach( $registros['FluxogramaEtapa'] as $etapaKey => $logFluxograma ):
-		//
-		// 	endforeach;
-		// }
-		// die();
-		// foreach( $historicoRegistros as $hist ){
-		//
-		// }
-		// $log = $this->LogAtualizacaoPl->find('all', array(
-		// 	'conditions' => array(
-		// 		'LogAtualizacaoPl.pl_id' => $pl_id,
-		// 		// 'LogAtualizacaoPl.pl_id' => $prop['Pl']['etapa_id'],
-		// 	)
-		// ));
 
 		$settarUltimaPosicaoOrdem = 0;
 		if( $this->request->is('post') ){
@@ -266,7 +241,6 @@ class FluxogramasController extends AppController {
 			'order' => array(
 				'id' => 'DESC'
 			),
-			// 'recursive' => -2
 		);
 		// >>> FILTRO
         $conditions = array();
@@ -322,7 +296,6 @@ class FluxogramasController extends AppController {
 
 
 		$tipo = $this->PlType->find('first', array(
-			// 'fields' => array('PlType.id', 'Pltype.tipo'),
 			'conditions' => array(
 				'PlType.id' => $tipo_id
 			),
@@ -363,10 +336,6 @@ class FluxogramasController extends AppController {
         $this->set('model', $model);
 
 		$tipo = $this->PlType->find('first', array(
-			// 'fields' => array(
-			// 	'Pltype.id',
-			// 	'Pltype.tipo'
-			// ),
 			'conditions' => array(
 				'PlType.id' => $tipo_id
 			)
@@ -894,7 +863,6 @@ class FluxogramasController extends AppController {
 
 
 		$this->set('registro', $htmlFluxoPrint);
-		// die();
 	}
 
 
@@ -976,15 +944,6 @@ class FluxogramasController extends AppController {
 		);
 		array_push( $todosDadosPl, $notasTecnicas );
 		//<<< MONTAR 1 ARRAY() COMPLETA COM TUDO
-
-		// echo "<pre>";
-		// print_r($todosDadosPl);
-		// echo "</pre>";
-		// echo "<pre>";
-		// // print_r($foco );
-		// echo "</pre>";
-		// die();
-
 		/*
 		*
 		* <<< localizar data no historico
@@ -1002,7 +961,7 @@ class FluxogramasController extends AppController {
     * como ja existem proposições criadas, precisamos coloca-las na tabela do Fluxograma.php
     */
     public function admin_cargaFluxograma(){
-        // die('Este método deve ser usado apenas pegar o ponto de partida do fluxograma.');
+        die('Este método deve ser usado apenas pegar o ponto de partida do fluxograma.');
 
         $this->autoRender = false;
         $model = 'Fluxograma';
@@ -1049,16 +1008,5 @@ class FluxogramasController extends AppController {
         }
         die('Ok!');
     }
-
-
-
-
-
-
-
-
-
-
-
 }
 ?>

@@ -4,8 +4,8 @@ class Relator extends AppModel{
 
     public $hashMany = array(
         'Pl' => array(
-            'className'				=> 'Pl',
-            'foreignKey'            => 'relator_id',
+            'className'	=> 'Pl',
+            'foreignKey'=> 'relator_id',
             'dependent' => true,
         )
     );

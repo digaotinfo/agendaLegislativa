@@ -4,8 +4,8 @@ class Autor extends AppModel{
 
     public $hashMany = array(
         'Pl' => array(
-            'className'				=> 'Pl',
-            'foreignKey'            => 'autor_id',
+            'className'	=> 'Pl',
+            'foreignKey'=> 'autor_id',
             'dependent' => true,
         )
     );

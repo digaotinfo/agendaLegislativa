@@ -773,20 +773,24 @@ class PlsController extends AppController{
         $requestDateFilter = $this->formatDateToSQL($data);
 
         $txtExplicativo = '';
+        $txtExplicativo = '';
+        $requestDateFilterNotTime = explode(' ', $requestDateFilter);
+        $requestDateFilter = $requestDateFilterNotTime[0];
         $fluxoHistorico = $this->Fluxograma->find('first', array(
             'conditions' => array(
                 'Fluxograma.pl_id' => $pl_id,
-                'Fluxograma.created' => $requestDateFilter
+                'Fluxograma.created LIKE' => $requestDateFilter.'%'
             ),
             'order' => array(
                 'Fluxograma.id' => 'DESC'
             )
         ));
+
         if( empty($fluxoHistorico) ){
             $fluxoHistorico = $this->Fluxograma->find('first', array(
                 'conditions' => array(
                     'Fluxograma.pl_id' => $pl_id,
-                    'Fluxograma.created <= ' => $requestDateFilter
+                    'Fluxograma.created <= ' => $requestDateFilter.'%'
                 ),
                 'order' => array(
                     'Fluxograma.id' => 'DESC'
@@ -797,7 +801,7 @@ class PlsController extends AppController{
                 $fluxoHistorico = $this->Fluxograma->find('first', array(
                     'conditions' => array(
                         'Fluxograma.pl_id' => $pl_id,
-                        'Fluxograma.created >= ' => $requestDateFilter
+                        'Fluxograma.created >= ' => $requestDateFilter.'%'
                     ),
                     'order' => array(
                         'Fluxograma.id' => 'ASC'
@@ -805,9 +809,9 @@ class PlsController extends AppController{
                 ));
             }
             $txtExplicativo = 'Não houve atualização na data solicitada.';
-            $this->set('txtExplicativo', $txtExplicativo);
         }
         array_push( $todosDadosPl, $fluxoHistorico );
+        $this->set('txtExplicativo', $txtExplicativo);
 
         //>>> MONTAR 1 ARRAY() COMPLETA COM TUDO
         $focoTrata = $this->trataRegsitroLogTexto( $fluxoHistorico['Fluxograma']['foco'] );

@@ -22,8 +22,6 @@
 
 App::uses('Controller', 'Controller', 'CakeEmail', 'Network/Email');
 App::uses('CakeEmail', 'Network/Email');
-// App::import('Vendor', 'receiveMail/receiveMail');
-// App::uses('CakeEmail', 'Network/Email');
 /**
  * Application Controller
  *
@@ -848,33 +846,6 @@ class AppController extends Controller {
 		$tema_name = '';
 		$status_type_id = '';
 
-		// if( !empty($a_dados['status_type_id']) ){
-		// 	$status_type_id = $a_dados['status_type_id'];
-		// }
-		//
-		// if( !empty($a_dados['tema_name']) ){
-		// 	$tema_name = $a_dados['tema_name'];
-		// }
-		//
-		// if( !empty($a_dados['prioridade']) ){
-		// 	$prioridade = $a_dados['prioridade'];
-		// }
-		//
-		// if( !empty($a_dados['apensados_da_pl']) ){
-		// 	$apensados_da_pl = $a_dados['apensados_da_pl'];
-		// }
-		//
-		// if( !empty($a_dados['relator']) ){
-		// 	$relator = $a_dados['relator'];
-		// }
-		//
-		// if( !empty($a_dados['link_da_pl']) ){
-		// 	$link_da_pl = $a_dados['link_da_pl'];
-		// }
-		//
-		// if( !empty($a_dados['autor']) ){
-		// 	$autor = $a_dados['autor'];
-		// }
 		if( !empty($a_dados['pl_id']) ){
 			$pl_id = $a_dados['pl_id'];
 		}
@@ -976,10 +947,6 @@ class AppController extends Controller {
 			$fluxogramaSubEtapaDelete = $a_dados['fluxo_subetapa_delete'];
 		}
 
-		// echo "<pre>";
-		// print_r($a_dados);
-		// echo "</pre>";
-		// die();
 		$this->request->data[$model]['usuario_id'] = $this->Session->read('Auth.User.id');
 		$this->request->data[$model]['usuario_nome'] = $this->Session->read('Auth.User.name');
 		$this->request->data[$model]['usuario_username'] = $this->Session->read('Auth.User.username');
@@ -1009,29 +976,12 @@ class AppController extends Controller {
 		$this->request->data[$model]['fluxo_subetapa_delete'] = $fluxogramaSubEtapaDelete;
 		$this->request->data[$model]['name_block'] = $name_block;
 		$this->request->data[$model]['txt'] = $txt;
-		// $this->request->data[$model]['autor'] = $autor;
-		// $this->request->data[$model]['relator'] = $relator;
-		// $this->request->data[$model]['link_da_pl'] = $link_da_pl;
-		// $this->request->data[$model]['apensados_da_pl'] = $apensados_da_pl;
-		// $this->request->data[$model]['prioridade'] = $prioridade;
-		// $this->request->data[$model]['tema_name'] = $tema_name;
-		// $this->request->data[$model]['status_type_id'] = $status_type_id;
-		// echo "<pre>";
-		// print_r($this->request->data['LogAtualizacaoPl']);
-		// echo '###############';
-		// echo "</pre>";
-		// die();
-		// $this->$model->save($this->request->data);
 
 		$this->$model->create();
 		$this->$model->save($this->request->data);
 	}
 
 	public function admin_fluxogramaHistorico($request=null, $registro=null, $a=null){
-		// echo "<pre>";
-		// print_r($registro);
-		// echo "</pre>";
-		// die();
 		$autor = '';
 		$relator = '';
 		$status_name = '';
@@ -1186,10 +1136,6 @@ class AppController extends Controller {
 			'subetapa' 		=> $subetapa,
 		);
 
-		// echo "<pre>";
-		// print_r($request);
-		// echo "</pre>";
-		// die();
 		$this->Fluxograma->create();
 		$this->Fluxograma->save($a_save);
 		/// PREPARAR PRA SALVAR O HISTÓRICO DO FLUXOGRAMA
@@ -1234,9 +1180,6 @@ class AppController extends Controller {
 					$textoFim = explode( '[/texto]', $textoInicio[1] );
 					$texto = $textoFim[0];
 				}
-				// echo "<pre>";
-				// print_r( $id	 );
-				// echo "</pre>";
 
 				$arquivoInicio 	= explode( '[arquivo]', $restante );
 				if( !empty($arquivoInicio[1]) ){
@@ -1275,7 +1218,6 @@ class AppController extends Controller {
 			}
 		}
 
-		// die();
 		return $a_registros;
 	}
 
@@ -1521,9 +1463,6 @@ class AppController extends Controller {
 						</tbody>
 					</table>
 				';
-
-
-
 				$this->admin_sendEmail($email, $titulo, $msg);
 
 			}
@@ -1545,11 +1484,7 @@ class AppController extends Controller {
 
 	public function admin_sendEmail($email_to=null, $title=null, $msg=null) {
         $this->autoRender = false;
-		//
-        // $email_to = 'digaot.info@gmail.com';
-        // $title = 'titulo';
-        // $msg = 'mensagem';
-
+		
         $Email = new CakeEmail();
             $Email->emailFormat('html');
             $Email->from(array('nao-responda@zoio.net.br' => 'Agenda Legislativa ABEAR'));

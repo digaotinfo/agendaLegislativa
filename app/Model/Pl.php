@@ -37,16 +37,12 @@ class Pl extends AppModel{
 		'FluxogramaEtapa' => array(
 		    'className'             => 'FluxogramaEtapa',
 		    'foreignKey'            => 'etapa_id',
-		    'dependent' 			=> true,
-			// 'order'					=> array('id' => 'ASC'),
-			// 'fields'				=> array('id', 'pl_origem', 'tipo_id', 'numero_da_pl', 'ano', 'created'),
+		    'dependent' 			=> true
 		),
 		'FluxogramaSubEtapa' => array(
 		    'className'             => 'FluxogramaSubEtapa',
 		    'foreignKey'            => 'subetapa_id',
-		    'dependent' 			=> true,
-			// 'order'					=> array('id' => 'ASC'),
-			// 'fields'				=> array('id', 'pl_origem', 'tipo_id', 'numero_da_pl', 'ano', 'created'),
+		    'dependent' 			=> true
 		),
 	);
 
@@ -67,7 +63,6 @@ class Pl extends AppModel{
 			'className'		=> 'Situacao',
 			'foreignKey'	=> 'pl_id',
 			'dependent' 	=> true,
-			// 'limit'			=> 5,
 			'order'			=> array('id' => 'ASC'),
 			'fields'		=> array('id', 'txt', 'arquivo', 'dir', 'modified')
 		),
@@ -83,9 +78,7 @@ class Pl extends AppModel{
 			'className'				=> 'LogAtualizacaoPl',
 			'foreignKey'            => 'pl_id',
 			'dependent' 			=> true,
-			// 'limit'				=> 1,
-			'order'					=> array('id' => 'ASC'),
-			// 'fields'				=> array('id')
+			'order'					=> array('id' => 'ASC')
 		),
 		'Justificativa' => array(
             'className'             => 'Justificativa',
@@ -108,16 +101,7 @@ class Pl extends AppModel{
 		    'dependent' 			=> true,
 			'order'					=> array('id' => 'DESC'),
 			'fields'				=> array('id', 'nome', 'arquivo', 'dir')
-		),
-		// 'AtualizacaoExternaPl' => array(
-		//     'className'             => 'AtualizacaoExternaPl',
-		//     'foreignKey'            => 'pl_id',
-		//     'dependent' 			=> true,
-		// 	'order'					=> array('id' => 'DESC'),
-		// 	// 'fields'				=> array('id', 'nome', 'arquivo', 'dir')
-		// ),
-
-
+		)
 	);
 
 

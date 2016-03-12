@@ -14,8 +14,8 @@ class OqueE extends AppModel{
 
 	public $hasMany = array(
 		'LogAtualizacaoPl' => array(
-			'className'				=> 'LogAtualizacaoPl',
-			'foreignKey'            => 'model_id',
+			'className'	=> 'LogAtualizacaoPl',
+			'foreignKey'=> 'model_id',
 			'dependent' => true,
 		),
 	);

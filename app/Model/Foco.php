@@ -12,12 +12,8 @@ class Foco extends AppModel{
 	);
 	public $hasMany = array(
 		'LogAtualizacaoPl' => array(
-			'className'				=> 'LogAtualizacaoPl',
-			//tabela do relacionamento
-			// 'joinTable'             => 'tb_pl_foco',
-			'foreignKey'            => 'model_id',
-			//chave de associação
-			// 'associationForeignKey' => 'pl_id',
+			'className'	=> 'LogAtualizacaoPl',
+			'foreignKey'=> 'model_id',
 			'dependent' => true,
 		),
 	);

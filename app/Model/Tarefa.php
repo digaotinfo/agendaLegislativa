@@ -8,10 +8,9 @@ class Tarefa extends AppModel{
 
 	public $belongsTo = array(
         'Pl' => array(
-            'className'     => 'Pl',
-            'foreignKey'    => 'pl_id',
-            'dependent'     => true,
-			// 'fields'		=> array('id'),
+            'className' => 'Pl',
+            'foreignKey'=> 'pl_id',
+            'dependent'	=> true,
         ),
     );
 }

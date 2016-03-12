@@ -4,12 +4,8 @@ class Empresa extends AppModel{
 
     public $hasMany = array(
 		'User' => array(
-			'className'				=> 'User',
-			//tabela do relacionamento
-			//'joinTable'             => 'tb_conteudo_empresas',
-			'foreignKey'            => 'empresa_id',
-			//chave de associação
-			//'associationForeignKey' => 'id',
+			'className'	=> 'User',
+			'foreignKey'=> 'empresa_id',
 			'dependent' => true,
 		),
 	);

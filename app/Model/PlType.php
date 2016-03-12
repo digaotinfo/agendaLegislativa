@@ -14,13 +14,5 @@ class PlType extends AppModel{
             'fields'     => array('id', 'etapa', 'descricao', 'ordem')
 		),
 	);
-
-    // public $belongsTo = array(
-        // 'FluxogramaOrdem' => array(
-        // 	'className'	   => 'FluxogramaOrdem',
-        // 	'foreignKey'   => 'pl_type_id',
-        // 	'dependent'    => true,
-        // ),
-    // );
 }
 ?>
