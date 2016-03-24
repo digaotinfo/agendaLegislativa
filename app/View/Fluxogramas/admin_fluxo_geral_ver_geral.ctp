@@ -20,7 +20,6 @@ $this->start('script');
             $('.modal-trigger').leanModal();
             $('#selectTipo').change(function(){
                 $('.preloader-wrapper, .main_table.fluxograma').toggleClass('hide');
-                // $(this).toggleClass('hide');
 				var valor = $('#selectTipo').val();
                 var urlRedirectTipo = "<?php echo $this->Html->url(array('controller' => 'Fluxogramas', 'action' => 'admin_fluxoGeralVerGeral'))?>/"+valor;
                 window.location.replace(urlRedirectTipo);
@@ -95,14 +94,14 @@ $this->end();
                                 $marginTopEtapa     = 0;
                                 $marginTopSubEtapa  = 0;
 
+                                // echo "<pre>";
+                                // print_r($registros['FluxogramaEtapa']);
+                                // echo "</pre>";
+                                // die();
                                 foreach( $registros['FluxogramaEtapa'] as $etapaKey => $logFluxograma ):
                                     $nomeTipo = $registros['PlType']['tipo'];
                                     if( $etapaKey == 0 ):
                                         $tituloTipoID = 'title_tipo_'.$logFluxograma['PlType']['id'];
-                                        // echo "<pre>";
-                                        // print_r($logFluxograma['Pl']);
-                                        // echo "</pre>";
-                                        // die();
                                         ?>
                                         <h1 id="<?php echo $tituloTipoID;?>" class="block draggable">
                                             <?php echo $nomeTipo; ?>
@@ -136,6 +135,7 @@ $this->end();
 
                                             <small class="propAdicionadas">
                                                 <strong>Prop. Existentes: </strong>
+                                                <br>
                                                 <br>
                                                 <p>
                                                     <?php
@@ -195,6 +195,7 @@ $this->end();
                                                             <small class="propAdicionadas">
                                                                 <strong>Prop. Existentes: </strong>
                                                                 <br>
+                                                                <br>
                                                                 <p>
                                                                     <?php
                                                                     foreach( $logFluxograma['Pl'] as $proposicao ){
@@ -243,10 +244,10 @@ $this->end();
                                         */
                                         ?>
                                     <?php
-                                    if( $marginTopSubEtapa != 0 ){
-                                        $marginTopEtapa = $marginTopSubEtapa+150;
+                                    if( !empty($subEtapas) ){
+                                        $marginTopEtapa = $marginTopSubEtapa+200;
                                     }else{
-                                        $marginTopEtapa = $marginTopEtapa+150;
+                                        $marginTopEtapa = $marginTopEtapa+200;
                                     }
                                 endforeach;
                                 ?>

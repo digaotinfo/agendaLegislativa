@@ -30,7 +30,7 @@
 				<div class="container">
 					<div class="nav-wrapper">
 						<div class="col s12 m6 center-align">
-							<a class="page-title black-text">Agenda Legislativa - Teste</a>
+							<a class="page-title black-text">Agenda Legislativa</a>
 
 						</div>
 					</div>

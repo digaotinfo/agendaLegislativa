@@ -1,6 +1,7 @@
 <?
 class FluxogramaEtapa extends AppModel{
 	var $useTable = 'tb_fluxo_etapa';
+	var $order = array('FluxogramaEtapa.ordem' => 'ASC');
 
 	public $belongsTo = array(
 		'PlType' => array(
@@ -16,7 +17,7 @@ class FluxogramaEtapa extends AppModel{
 			'foreignKey'    => 'etapa_id',
 			'dependent' 	=> true,
 			'fields'		=> array('id', 'etapa_id', 'subetapa', 'descricao', 'ordem'),
-			'order'			=> array('ordem' => 'ASC')
+			'order' 		=> array( 'FluxogramaSubEtapa.ordem ASC')
 		),
 
 		'Pl' => array(

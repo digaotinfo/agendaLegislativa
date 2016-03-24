@@ -11,7 +11,8 @@ class PlType extends AppModel{
 			'className'	 => 'FluxogramaEtapa',
 			'foreignKey' => 'pl_type_id',
 			'dependent'  => true,
-            'fields'     => array('id', 'etapa', 'descricao', 'ordem')
+            'fields'     => array('id', 'etapa', 'descricao', 'ordem'),
+            'order'      => array( 'FluxogramaEtapa.ordem ASC')
 		),
 	);
 }

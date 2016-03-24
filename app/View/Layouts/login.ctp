@@ -63,10 +63,11 @@ $cakeDescription = __d('cake_dev', 'App TalkingHUB');
 		<!-- CONTENT -->
 		<main class="login">
             <div class="container">
-				<?php
-				echo $this->Session->flash();
 
-				echo $this->fetch('content');
+				<?php
+					echo $this->Session->flash();
+
+					echo $this->fetch('content');
 				?>
 			</div>
 		</main>

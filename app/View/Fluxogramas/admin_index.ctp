@@ -218,8 +218,8 @@ $this->end();
                                         */
                                         ?>
                                     <?php
-                                    if( $marginTopSubEtapa != 0 ){
-                                        $marginTopEtapa = $marginTopSubEtapa+200;
+                                    if( !empty($subEtapas) ){
+                                        $marginTopEtapa = $marginTopSubEtapa+190;
                                     }else{
                                         $marginTopEtapa = $marginTopEtapa+150;
                                     }
@@ -389,7 +389,7 @@ $this->end();
                                                 */
                                                 ?>
                                             <?php
-                                            if( $h_marginTopSubEtapa != 0 ){
+                                            if( !empty($subEtapas) ){
                                                 $h_marginTopEtapa = $h_marginTopSubEtapa+150;
                                             }else{
                                                 $h_marginTopEtapa = $h_marginTopEtapa+150;
