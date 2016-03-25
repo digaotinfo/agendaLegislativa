@@ -397,7 +397,7 @@ $this->end();
 	   				<label for="nossaposicao_texto">Tipo:</label>
 	   			</div>
 				<?php if( $userAdmin == 1 ): ?>
-				<div class="row fluxograma <?php if( empty($proposicao['Pl']['etapa_id']) ){ echo 'hide'; }?>">
+				<div class="row fluxograma <?php if( empty($proposicao["PlType"]["FluxogramaEtapa"])){ echo 'hide'; }?>">
 					<div class="input-field col s12 select-fluxograma">
 						<?php
 							echo $this->Form->input('etapa_id' ,  array(

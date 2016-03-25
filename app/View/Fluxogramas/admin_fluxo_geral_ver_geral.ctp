@@ -31,36 +31,36 @@ $this->start('script');
 $this->end();
 ?>
 
-    <!-- HEADER DA PÁGINA -->
-    <div class="row padding-top-20">
-        <div class="col s12 center-align">
-            <div class="input-field col s12">
-                <?php
-                echo $this->Form->input('tipo_id' ,  array(
-                    'label' => false,
-                    'div' => false,
-                    'type' => 'select',
-                    'class' => 'browser-default',
-                    'id' => 'selectTipo',
-                    'options' => $tipos,
-                    'empty' => 'Escolha o Tipo',
-                    'default'   => $registros['PlType']['id']
-                ));
-                ?>
-                <h3 class="titulo-pagina">
-                    Fluxograma <?php echo $registros['PlType']['tipo']; ?>
+<!-- HEADER DA PÁGINA -->
+<div class="row padding-top-20">
+    <div class="col s12 center-align">
+        <div class="input-field col s12">
+            <?php
+            echo $this->Form->input('tipo_id' ,  array(
+                'label' => false,
+                'div' => false,
+                'type' => 'select',
+                'class' => 'browser-default',
+                'id' => 'selectTipo',
+                'options' => $tipos,
+                'empty' => 'Escolha o Tipo',
+                'default'   => $registros['PlType']['id']
+            ));
+            ?>
+            <h3 class="titulo-pagina">
+                Fluxograma <?php echo $registros['PlType']['tipo']; ?>
 
-                    <a href="javascript: void(0);" onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar">
-                        <i class="material-icons">arrow_back</i>
-                    </a>
-                    <a href="javascript: void(0);" id="btn" class="btn-floating right green darken-3 tooltipped print hide" style="margin: 0 5px;" data-position="left" data-delay="50" data-tooltip="Imprimir">
-                        <i class="material-icons">print</i>
-                    </a>
-                </h3>
-            </div>
+                <a href="javascript: void(0);" onclick='window.history.back();' class="btn-floating right grey darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Voltar">
+                    <i class="material-icons">arrow_back</i>
+                </a>
+                <a href="javascript: void(0);" id="btn" class="btn-floating right green darken-3 tooltipped print hide" style="margin: 0 5px;" data-position="left" data-delay="50" data-tooltip="Imprimir">
+                    <i class="material-icons">print</i>
+                </a>
+            </h3>
         </div>
     </div>
-    <!-- / HEADER DA PÁGINA -->
+</div>
+<!-- / HEADER DA PÁGINA -->
 
 <div class="row">
     <div class="col s11 offset-s1 center-align">
@@ -244,10 +244,21 @@ $this->end();
                                         */
                                         ?>
                                     <?php
-                                    if( !empty($subEtapas) ){
-                                        $marginTopEtapa = $marginTopSubEtapa+200;
+                                    $contador = count($logFluxograma['Pl']);
+                                    if( ($contador < 4) && $contador > 0 ){
+                                        $contador = $contador*40;
                                     }else{
-                                        $marginTopEtapa = $marginTopEtapa+200;
+                                        if( $contador == 0 ){
+                                            $contador = 30;
+                                        }else{
+                                            $contador = $contador*7;
+                                        }
+
+                                    }
+                                    if( !empty($subEtapas) ){
+                                        $marginTopEtapa = $marginTopSubEtapa+$contador+150;
+                                    }else{
+                                        $marginTopEtapa = $marginTopEtapa+$contador+150;
                                     }
                                 endforeach;
                                 ?>
