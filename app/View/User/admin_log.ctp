@@ -57,7 +57,8 @@ $this->end();
 					<th data-field="data" width="200"><?=$this->Paginator->sort('url', 'Data');?></th>
 					<th data-field="nome"><?=$this->Paginator->sort('username', 'Usuário');?></th>
 					<th data-field="arquivp"><?=$this->Paginator->sort('User.Role.title', 'Tipo');?></th>
-					<th data-field="url"><?=$this->Paginator->sort('url', 'URL');?></th>
+					<!-- <th data-field="url"><?=$this->Paginator->sort('url', 'URL');?></th> -->
+					<th data-field="contador">Contador</th>
 				</tr>
 			</thead>
 
@@ -65,10 +66,12 @@ $this->end();
 
 				<?php foreach ($users as $registro): ?>
 					<tr>
-						<td><?=CakeTime::format($registro[$model]['created'], '%d/%m/%Y às %H:%M');?></td>
+						<td><?=$registro[0]['acessadoEm'];?></td>
+						<!-- <td><?=CakeTime::format($registro[$model]['created'], '%d/%m/%Y às %H:%M');?></td> -->
 						<td><?=$registro['User']['username']?></td>
 						<td><?=$registro['User']['Role']['title']?></td>
-						<td><?=$registro[$model]['url']?></td>
+						<td><?php echo $registro[0]['contador']." Acesso(s)."?>
+						</td>
 					</tr>
 				<?php endforeach; ?>
 

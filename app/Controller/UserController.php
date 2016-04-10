@@ -88,10 +88,30 @@ class UserController extends AppController {
 		$this->set('model', $model);
 		//==----------------------------------------
 
-		$this->paginate['limit'] = 20;
-		$this->paginate['recursive'] = 2;
-		$this->paginate['order'] = array(
-			"{$model}.created" => "DESC"
+		// $this->paginate['limit'] = 20;
+		// $this->paginate['recursive'] = 2;
+		// $this->paginate['fields'] = 'Loguser.*, User.created as data, COUNT(usuario_id) as contador';
+		// $this->paginate['group'] = "Loguser.created";
+		// $this->paginate['order'] = array(
+		// 	"{$model}.created" => "DESC"
+		// );
+		$this->paginate = array(
+			'fields' => array(
+				'Loguser.*',
+				'DATE_FORMAT(Loguser.created, "%d/%m/%Y") as acessadoEm',
+				'User.*',
+				'COUNT(Loguser.usuario_id) as contador'
+			),
+			'limit' => 20,
+			'recursive' => 2,
+			'order' => array(
+				"{$model}.created" => "DESC"
+			),
+			'group' => array(
+				'Loguser.usuario_id',
+				// 'User.id',
+				'DATE_FORMAT(Loguser.created, "%d/%m/%Y")'
+			)
 		);
 
 		// >>> FILTRO

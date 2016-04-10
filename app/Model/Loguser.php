@@ -4,9 +4,9 @@ class Loguser extends AppModel {
 
 	var $belongsTo = array(
 		'User' => array(
-			'className'             => 'User',
-			'foreignKey'            => 'usuario_id',
-			'dependent' => true,
+			'className'     => 'User',
+			'foreignKey'    => 'usuario_id',
+			'dependent' 	=> true,
 		),
 	);
 

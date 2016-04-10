@@ -14,6 +14,14 @@ class User extends AppModel {
 		   'dependent' => true,
 	   ),
      );
+     var $hashMany = array(
+		'Loguser' => array(
+			'className'  	=> 'Loguser',
+			'foreignKey'    => 'usuario_id',
+			'dependent'		=> true,
+			// 'order'			=> array('Loguser.id' => 'asc'),
+		)
+     );
 
 
 	public $validate = array(

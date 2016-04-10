@@ -15,7 +15,7 @@ $this->end();
 			 <?php
  			if ($userAdmin == 1){
  				?>
-	             <a href="<?=$this->Html->url(array('controller' => 'Fluxogramas', 'action' => 'fluxoEtapasAdd', 'admin' => true, $tipo['PlType']['id']))?>" class="btn-floating right  green darken-3 tooltipped" data-position="left" data-delay="50" data-tooltip="Adicionar uma nova empresa"><i class="material-icons">add</i></a>
+	             <a href="<?=$this->Html->url(array('controller' => 'Fluxogramas', 'action' => 'fluxoEtapasAdd', 'admin' => true, $tipo['PlType']['id']))?>" class="btn-floating right  green darken-3 tooltipped" data-position="left" data-delay="50" data-tooltip="Adicionar uma nova etapa"><i class="material-icons">add</i></a>
 				 <?php
 			 }
 			?>
