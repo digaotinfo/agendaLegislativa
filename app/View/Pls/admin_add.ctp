@@ -235,7 +235,7 @@ $this->end();
 									'id' 		=> 'selectEtapa',
 									'type' 		=> 'select',
 									'class' 	=> 'validate',
-									'empty' 	=> 'Selcione a Etapa',
+									'empty' 	=> 'Selecione a Etapa',
 								));
 					?>
 					<label for="selectEtapa">Add Nova Etapa ao Fluxograma:</label>
@@ -248,7 +248,7 @@ $this->end();
 									'id' 		=> 'selectSubEtapa',
 									'type' 		=> 'select',
 									'class' 	=> 'validate',
-									'empty' 	=> 'Selcione a Sub-Etapa',
+									'empty' 	=> 'Selecione a Sub-Etapa',
 								));
 					?>
 					<label for="selectSubEtapa">Add nova Sub-Etapa ao Fluxograma:</label>
