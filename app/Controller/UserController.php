@@ -109,7 +109,6 @@ class UserController extends AppController {
 			),
 			'group' => array(
 				'Loguser.usuario_id',
-				// 'User.id',
 				'DATE_FORMAT(Loguser.created, "%d/%m/%Y")'
 			)
 		);
@@ -130,13 +129,8 @@ class UserController extends AppController {
 		}
 
 		$registros = $this->paginate($model);
-		// echo "<pre>";
-		// print_r($registros);
-		// echo "</pre>";
-		// die();
 
         $this->set(array('users' => $registros));
-
     }
 
 

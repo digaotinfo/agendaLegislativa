@@ -260,6 +260,10 @@ class FluxogramasController extends AppController {
 	public function admin_fluxoGeralVerGeral( $tipo_id=null ){
 		$model = 'PlType';
 
+		//// settar mais memoria
+		set_time_limit(0);
+		ini_set('memory_limit','2048M');
+
 		$registros = $this->$model->find('first', array(
 			'conditions' => array(
 				'PlType.id' => $tipo_id
