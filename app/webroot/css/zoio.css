@@ -508,3 +508,11 @@ p.titulo-tarefa {
 .print{
     margin: 0 5px;
 }
+input[type=search]{
+    height: 67px !important;
+}
+@media only screen and (max-width: 600px) {
+    input[type=search]{
+        height: 55px !important;
+    }
+}
