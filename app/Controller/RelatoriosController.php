@@ -331,6 +331,7 @@ class RelatoriosController extends AppController{
 
             // print_r( $conditions );
             // die();
+            $result = array();
             if( $this->request->data['Relatorio']['type'] == 'agp' ){
                 $resultQuery = $this->$model->query("
                                                 SELECT
@@ -347,7 +348,7 @@ class RelatoriosController extends AppController{
                                                     ) as pauta_minima
 
                                                 FROM
-                                                    arearestrita_dev.tb_pls as Pl
+                                                    tb_pls as Pl
                                                     left join tb_tema as Tema on (Tema.id = Pl.tema_id )
 
                                                 WHERE
@@ -423,39 +424,41 @@ class RelatoriosController extends AppController{
                                                 ");
             }
 
-            // echo "<pre>";
-            // print_r($resultQuery);
-            // echo "</pre>";
-            // die();
+//             echo "<pre>";
+//             print_r($resultQuery);
+//             echo "</pre>";
+//             die();
             /*
             *
             * prepara array e inserir ação abear >>>
             */
-            $result = array();
             if( !empty($resultQuery) ){
-                $resultAcaoAbear['Tarefa'] = array();
-                foreach( $resultQuery as $row ){
-                    $resultAcaoAbear = $this->Tarefa->find('all', array(
-                        'fields' => array(
-                            'Tarefa.id',
-                            'Tarefa.titulo',
-                            'Tarefa.descricao',
-                            'Tarefa.entrega',
-                            'Tarefa.realizado',
-                            'Tarefa.enviado_por_email',
-                            'Tarefa.modified'
-                        ),
-                        'conditions' => array(
-                            'Tarefa.pl_id' => $row['Pl']['id']
-                        ),
-                        'recursive' => -2
-                    ));
-
-                    array_push( $row, $resultAcaoAbear );
-                    array_push( $result, $row );
-
-                }
-
+            	if( $this->request->data['Relatorio']['type'] != 'agp' ){
+	                $resultAcaoAbear['Tarefa'] = array();
+	                foreach( $resultQuery as $row ){
+	                    $resultAcaoAbear = $this->Tarefa->find('all', array(
+	                        'fields' => array(
+	                            'Tarefa.id',
+	                            'Tarefa.titulo',
+	                            'Tarefa.descricao',
+	                            'Tarefa.entrega',
+	                            'Tarefa.realizado',
+	                            'Tarefa.enviado_por_email',
+	                            'Tarefa.modified'
+	                        ),
+	                        'conditions' => array(
+	                            'Tarefa.pl_id' => $row['Pl']['id']
+	                        ),
+	                        'recursive' => -2
+	                    ));
+	
+	                    array_push( $row, $resultAcaoAbear );
+	                    array_push( $result, $row );
+	
+	                }
+            	}else{
+            		$result = $resultQuery;
+            	}
             }
 
             /*
@@ -479,8 +482,10 @@ class RelatoriosController extends AppController{
                     $this->admin_gerarPdf($result);
                 }
                 if( ($this->request->data[$model]['type'] == 'completoExcel') || ($this->request->data[$model]['type'] == 'resumoExcel') || ($this->request->data['Relatorio']['type'] == 'agp')){
+                	$type = "";
                     if($this->request->data['Relatorio']['type'] == 'agp'){
                         $nameFile = date('Ymd_his').'__'.$this->Session->read('Auth.User.id').'___agp.xls';
+                        $type = "agp";
                     }else{
                         $nameFile = date('Ymd_his').'__'.$this->Session->read('Auth.User.id').'.xls';
                     }
@@ -760,7 +765,7 @@ class RelatoriosController extends AppController{
         endif;
 	}
 
-    public function admin_gerarExcel($result=null){
+    public function admin_gerarExcel($result=null, $type=null){
         $model = 'Relatorio';
         $root = $_SERVER['DOCUMENT_ROOT'].$this->webroot."app/webroot/";
 
@@ -1006,6 +1011,11 @@ class RelatoriosController extends AppController{
         endif;
     }
 
+    
+    
+    
+    
+    
 	public function admin_historicoRelatorio(){
         $model = 'Relatorio';
         $this->set('model', $model);
