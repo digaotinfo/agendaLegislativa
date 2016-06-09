@@ -482,10 +482,8 @@ class RelatoriosController extends AppController{
                     $this->admin_gerarPdf($result);
                 }
                 if( ($this->request->data[$model]['type'] == 'completoExcel') || ($this->request->data[$model]['type'] == 'resumoExcel') || ($this->request->data['Relatorio']['type'] == 'agp')){
-                	$type = "";
                     if($this->request->data['Relatorio']['type'] == 'agp'){
                         $nameFile = date('Ymd_his').'__'.$this->Session->read('Auth.User.id').'___agp.xls';
-                        $type = "agp";
                     }else{
                         $nameFile = date('Ymd_his').'__'.$this->Session->read('Auth.User.id').'.xls';
                     }
